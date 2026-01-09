@@ -1,0 +1,19 @@
+# Slurm logs
+*.out
+*.err
+slurm-*.out
+
+# FastQC / QC outputs
+fastqc/
+multiqc_out/
+
+# Large / raw sequence data
+fq_raw/
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+
+# Common junk
+.DS_Store
+*~
