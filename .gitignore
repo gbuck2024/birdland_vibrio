@@ -2,6 +2,7 @@
 *.out
 *.err
 slurm-*.out
+trimmomatic/logs/slurm/
 
 # FastQC / QC outputs
 fastqc/
@@ -13,7 +14,22 @@ fq_raw/
 *.fastq.gz
 *.fq
 *.fq.gz
+fastqc_review/
+
+# Trimmomatic outputs
+trimmomatic/copied_reads/
+trimmomatic/trimmed_reads/
+trimmomatic/unpaired_reads/
+
+# QC outputs
+fastqc/
+fastqc_extracted/
+multiqc_out/
+
 
 # Common junk
 .DS_Store
 *~
+*.tmp
+__pycache__/
+*.pyc

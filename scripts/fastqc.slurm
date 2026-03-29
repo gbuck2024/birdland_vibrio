@@ -11,7 +11,14 @@
 
 set -euo pipefail
 
-PROJECT_DIR="${SLURM_SUBMIT_DIR}"
+if script_path="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null)"; then
+  SCRIPT_DIR="$(cd "$(dirname "${script_path}")" && pwd)"
+  PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+else
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+fi
+
 FQ_DIR="${PROJECT_DIR}/fq_raw"
 OUT_DIR="${PROJECT_DIR}/fastqc"
 

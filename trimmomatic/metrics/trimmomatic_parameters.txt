@@ -1,0 +1,36 @@
+Trimmomatic step parameter record
+Date prepared: 2026-03-28
+
+Input manifest
+trimmomatic/metrics/trimmomatic_input_manifest.tsv
+
+Software
+- Trimmomatic 0.39
+- Java runtime: OpenJDK 17
+- Adapter FASTA: /cm/shared/tamucc/apps/trimmomatic/0.39/adapters/TruSeq3-PE.fa
+
+Paired-end trimming command template
+java -jar /cm/shared/tamucc/apps/trimmomatic/0.39/dist/jar/trimmomatic-0.39.jar PE \
+  -threads 8 \
+  -phred33 \
+  <copied_R1.fq.gz> \
+  <copied_R2.fq.gz> \
+  <paired_R1_out.fq.gz> \
+  <unpaired_R1_out.fq.gz> \
+  <paired_R2_out.fq.gz> \
+  <unpaired_R2_out.fq.gz> \
+  ILLUMINACLIP:/cm/shared/tamucc/apps/trimmomatic/0.39/adapters/TruSeq3-PE.fa:2:30:10 \
+  LEADING:3 \
+  TRAILING:3 \
+  SLIDINGWINDOW:4:20 \
+  MINLEN:50
+
+Rationale
+- ILLUMINACLIP removes standard TruSeq paired-end adapter sequence.
+- LEADING and TRAILING remove low-quality terminal bases without aggressive front trimming.
+- SLIDINGWINDOW:4:20 is intended to reduce poor-quality tail sequence, including reverse-read tail artifacts seen in FastQC.
+- MINLEN:50 preserves bacterial short-read usability while discarding excessively short fragments.
+
+Planned submission form
+cd <project_root>
+sbatch --array=0-5 scripts/trimmomatic_array.slurm
