@@ -6,9 +6,10 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 project_dir="$(cd "${script_dir}/.." && pwd)"
 fastqc_dir="${project_dir}/fastqc"
 extract_dir="${project_dir}/fastqc_extracted"
-log_file="${extract_dir}/extract_fastqc_reports.log"
+log_dir="${extract_dir}/logs"
+log_file="${log_dir}/extract_fastqc_reports.log"
 
-mkdir -p "${extract_dir}"
+mkdir -p "${extract_dir}" "${log_dir}"
 
 timestamp() {
   date '+%Y-%m-%d %H:%M:%S %Z'

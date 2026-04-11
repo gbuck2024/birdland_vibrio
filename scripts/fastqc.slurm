@@ -6,8 +6,8 @@
 #SBATCH -n 1
 #SBATCH -c 8
 #SBATCH --mem=32G
-#SBATCH -o fastqc_%j.out
-#SBATCH -e fastqc_%j.err
+#SBATCH -o fastqc/logs/slurm/fastqc_%j.out
+#SBATCH -e fastqc/logs/slurm/fastqc_%j.err
 
 set -euo pipefail
 
@@ -21,13 +21,14 @@ fi
 
 FQ_DIR="${PROJECT_DIR}/fq_raw"
 OUT_DIR="${PROJECT_DIR}/fastqc"
+SLURM_LOG_DIR="${OUT_DIR}/logs/slurm"
 
 cd "$PROJECT_DIR"
 
 module purge
 module load fastqc/0.12.1
 
-mkdir -p "$OUT_DIR"
+mkdir -p "$OUT_DIR" "$SLURM_LOG_DIR"
 
 shopt -s nullglob
 FILES=("$FQ_DIR"/*.fq.gz)

@@ -13,7 +13,8 @@ EXTRACT_DIR = PROJECT_DIR / "fastqc_extracted"
 REVIEW_DIR = PROJECT_DIR / "fastqc_review"
 REPORT_PATH = REVIEW_DIR / "fastqc_interpreted_report.md"
 TSV_PATH = REVIEW_DIR / "fastqc_module_status.tsv"
-LOG_PATH = REVIEW_DIR / "analyze_fastqc_reports.log"
+LOG_DIR = REVIEW_DIR / "logs"
+LOG_PATH = LOG_DIR / "analyze_fastqc_reports.log"
 ROOT_DIR = PROJECT_DIR.parent
 DOC_PATHS = {
     "IN_PROGRESS": ROOT_DIR / "IN_PROGRESS.md",
@@ -27,7 +28,7 @@ def now_stamp() -> str:
 
 
 def append_log(message: str) -> None:
-    REVIEW_DIR.mkdir(parents=True, exist_ok=True)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
     with LOG_PATH.open("a", encoding="utf-8") as handle:
         handle.write(f"[{now_stamp()}] {message}\n")
 

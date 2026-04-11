@@ -1,35 +1,57 @@
-# Slurm logs
-*.out
-*.err
-slurm-*.out
-trimmomatic/logs/slurm/
+# Sequencing reads and bulky intermediates
+/fq_raw/
+/trimmomatic/copied_reads/
+/trimmomatic/trimmed_reads/
+/trimmomatic/unpaired_reads/
+/*.fastq
+/*.fastq.gz
+/*.fq
+/*.fq.gz
 
-# FastQC / QC outputs
-fastqc/
-multiqc_out/
+# Generated QC outputs and extracted archives
+/fastqc/
+/fastqc_extracted/
+/multiqc_out/
+/trimmomatic/fastqc_trimmed/
+/trimmomatic/fastqc_trimmed_extracted/
 
-# Large / raw sequence data
-fq_raw/
-*.fastq
-*.fastq.gz
-*.fq
-*.fq.gz
-fastqc_review/
+# Generated review metrics and runtime logs, but keep curated Markdown reports
+/fastqc_review/logs/
+/fastqc_review/*.tsv
+/fastqc_review/*.out
+/fastqc_review/*.err
+!/fastqc_review/*.md
+/trimmomatic/fastqc_trimmed_review/logs/
+/trimmomatic/fastqc_trimmed_review/*.tsv
+!/trimmomatic/fastqc_trimmed_review/*.md
 
-# Trimmomatic outputs
-trimmomatic/copied_reads/
-trimmomatic/trimmed_reads/
-trimmomatic/unpaired_reads/
+# Pipeline-generated manifests and step logs
+/trimmomatic/metrics/trimmomatic_input_manifest.tsv
+/trimmomatic/logs/
+/fastqc/logs/
+/slurm-*.out
+/slurm-*.err
 
-# QC outputs
-fastqc/
-fastqc_extracted/
-multiqc_out/
-
-
-# Common junk
-.DS_Store
-*~
-*.tmp
+# Python and notebook artifacts
 __pycache__/
-*.pyc
+*.py[cod]
+.ipynb_checkpoints/
+
+# Temporary files and caches
+*.tmp
+*.temp
+*.swp
+*~
+.cache/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+.emv
+*.pem
+*.key
+
+# OS junk
+.DS_Store
+Thumbs.db
