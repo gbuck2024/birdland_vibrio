@@ -1,56 +1,81 @@
 Codex operating rules for Vibrio WGS project
 
 Location
-- Project directory: /work/VibrioVulnificus/gbuck/20260105_Buck-wgs
+- Project directory: /work/VibrioVulnificus/gbuck/20260105_Buck-wgs/
 - Raw reads: fq_raw/
-- Outputs: create new directories for each step
+- Scripts: scripts/
+- Outputs: Create stage-specific directories. Do not mix outputs across steps.
 
 Project reference
-- See PROJECT_BRIEF.md for full project description and goals
+- See PROJECT_BRIEF.md for full project description and goals.
 
-Working rules
+Core working rules
 - Never modify files in fq_raw/
-- All outputs must go into new directories within /work/VibrioVulnificus/gbuck/
-- Scripts must be reusable and clearly named
-- Use SLURM for all compute-heavy tasks (no heavy work on login node)
-- Always log actions and outputs
-- Do not overwrite logs; append to them
+- All outputs must go into clearly named, stage-specific directories.
+- Scripts must be reusable, modular, and clearly named.
+- prefer relative paths when possible.
 
-SLURM rules
-- Check job status within 1–2 minutes of submission
-- Capture stdout and stderr logs for every job
-- Use multiple CPUs when appropriate
-- Use arrays when processing multiple samples
+Git repository
+- Track scripts, documentation, configs, and interpreted reports.
+- Must NOT contain:
+  - *.fq.gz, *.fastq.gz 
+  - FastQC HTML/ZIP
+  - Trimmed read files
+  - Logs (*.log, slurm-*.out, *.err)
+
+SLURM
+- Use SLURM for all compute-heavy tasks. Do not run heavy jobs on the login node
+- Do not run SLURM scripts, only write and ensure they are ready for submission.
 
 Data handling
-- Always treat forward and reverse reads as pairs
+- Treat forward (R1) and reverse (R2) reads as pairs
 - Validate input files before running jobs
 - Outputs must clearly map to input sample names
+- Preserve pairing integrity during all steps
 
 Data organization
-- Use the guidance in https://github.com/tamucc-comp-bio/how_to/blob/main/howto_organize_data.md as a guide for organizing biological data.
-- Minimize directory nesting per those guidelines.
+- Use and follow https://github.com/tamucc-comp-bio/how_to/blob/main/howto_organize_data.md
+- Minimize unnecessary directory nesting
+- Use consistent naming across all steps
+- Seperate:
+  - Raw data
+  - Intermediate outputs
+  - Interpreted reports
 
-Working agreement
-- Keep actions small and reversible; confirm before cancellations or resubmissions.
-- Check new jobs within 1-2 minutes for early failure and note status in IN_PROGRESS.md.
-- Favor array jobs for per-file work; avoid `find` when enumerating reads.
-- Use scratch/local staging only when it speeds I/O and fits space; leave original DB/library intact.
-- Log step boundaries with timestamped `echo` in SLURM outputs for fast troubleshooting.
-- Update NEXT_STEPS.md and WORK_COMPLETED.md after each milestone. Make these directories within /work/VibrioVulnificus/gbuck
-- Organize scripts with short comments explaining the code used to ensure reproducibility.
+Script rules
+- All scripts must be saved in /work/VibrioVulnificus/gbuck/20260105_Buck-wgs/scripts/
+- Each script must:
+  - Include short comments explaining purpose and logic
+  - Be reusable across samples
+  - Avoid hardcoding sample-specific values
+
+Workflow
+- Follow workflow defined in PROJECT_BRIEF.md
+- Pipeline stages include:
+  1. Raw FastQC
+  2. FastQC extraction
+  3. QC interpretation
+  4. Trimmomatic trimming
+  5. Post-trim FastQC
+  6. Post-trim QC interpretation
+  7. Alignment or assembly
+  8. Annotation
+  9. Gene mining
+  10. Phylogenetics 
+- Verify completion using expected files.
 
 Reproducibility
 - Record all parameters used
-- Save all scripts within /work/VibrioVulnificus/gbuck/20260105_Buck-wgs/scripts/ for each script used.
+- Saved all scripts used
 - Ensure all outputs can be regenerated from scripts
+- Do not rely on manual terminal history
+- Update documentation after each milestone:
+  - NEXT_STEPS.md
+  - WORK_COMPLETED.md
 
-Pipeline expectations
-- Follow workflow defined in PROJECT_BRIEF.md
-- Current completed step: FastQC on trimmed sequences
-- Next step: Develop scripts identical to the current scripts that analyzed FASTQC on raw reads. 
-
-Behavior expectations
-- Do not assume success—verify outputs
+Behavior
+- Do not assume success, verify outputs.
 - If an error occurs, stop and report it
-- Suggest improvements but do not make destructive changes without confirmation
+- Suggest improvements but do not make destructive changes without confirmation.
+- Flag uncertainty instead of guessing
+

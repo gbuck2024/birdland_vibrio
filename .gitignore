@@ -29,8 +29,18 @@
 /trimmomatic/metrics/trimmomatic_input_manifest.tsv
 /trimmomatic/logs/
 /fastqc/logs/
+/alignment/bam/
+/alignment/logs/
+/alignment/metrics/*.flagstat.txt
+/alignment/metrics/*.idxstats.txt
+*.log
+*.out
+*.err
 /slurm-*.out
 /slurm-*.err
+
+# Local reference files and indexes
+/reference/
 
 # Python and notebook artifacts
 __pycache__/

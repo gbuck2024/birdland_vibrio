@@ -21,6 +21,7 @@ The pipeline transforms raw paired-end Illumina reads into quality-controlled, t
 4. Trimmomatic trimming
 5. FastQC on trimmed reads
 6. Post-trim QC analysis
+7. BWA-MEM alignment review
 
 ---
 
@@ -29,6 +30,7 @@ The pipeline transforms raw paired-end Illumina reads into quality-controlled, t
 scripts/ # Pipeline scripts
 fastqc_review/ # Raw QC interpretation
 trimmomatic/ #Trimming + post-QC summaries.
+alignment/ # BAM files, per-sample metrics, and curated alignment summary
 
 ---
 
@@ -56,6 +58,7 @@ python3 scripts/analyze_fastqc_trimmed_reports.py
 - Documentation
 - QC interpretation reports
 - Parameter files
+- Curated alignment summary tables
 
 ---
 

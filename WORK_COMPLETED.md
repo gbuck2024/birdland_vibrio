@@ -18,3 +18,16 @@
 - Extracted 12 trimmed FastQC zip reports into `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/trimmomatic/fastqc_trimmed_extracted` and wrote the review outputs to `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/trimmomatic/fastqc_trimmed_review`.
 - Verified that trimming removed the raw reverse-read overrepresented-sequence failures and resolved the strongest GC-content anomaly, while forward-read tile-quality failures and duplication remained.
 
+## 2026-04-10 BWA-MEM alignment preparation milestone
+
+- Added `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/configs/alignment_manifest.tsv` listing all 6 trimmed read pairs with relative paths for array-based alignment.
+- Added `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/scripts/bwa_align_array.slurm` as a reusable SLURM array script that validates paired trimmed reads, loads `bwa` and `samtools`, aligns against `reference/v_vulnificus_ref.fasta`, writes sorted BAM outputs under `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/alignment/bam`, and writes `flagstat` plus `idxstats` reports under `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/alignment/metrics`.
+- Created the stage-specific alignment directories `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/alignment/bam`, `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/alignment/logs/slurm`, and `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/alignment/metrics`.
+- Updated `.gitignore` so generated alignment BAMs and SLURM logs remain out of Git while alignment manifests, scripts, and the curated TSV summary can be tracked.
+
+## 2026-04-12 Alignment metrics review and documentation update
+
+- Verified that `scripts/summarize_alignment_metrics.sh` passes `bash -n`, runs successfully, and reproduces `alignment/metrics/alignment_summary.tsv` from the per-sample `flagstat` and `idxstats` files.
+- Confirmed that `alignment/metrics/alignment_summary.tsv` is internally consistent: `idx_mapped_sum` matches the `flagstat` mapped count for all 6 samples, and each `idxstats` file reports the two expected reference contigs plus the `*` unmapped row.
+- Confirmed that the saved alignment SLURM script needed one reproducibility fix: the reference path now matches the checked-in FASTA at `reference/v_vulnificus_ref.fasta`.
+- Recorded the observed alignment-rate spread across samples: `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` at `1.05%`, `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` at `10.86%`, `Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7` at `30.57%`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7` at `81.57%`, `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7` at `87.51%`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7` at `88.12%`.

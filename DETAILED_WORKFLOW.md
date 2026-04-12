@@ -18,6 +18,8 @@
 - Post-trim FastQC reports for trimmed paired reads.
 - Extracted post-trim FastQC contents for scripted parsing.
 - A curated post-trim QC interpretation report and raw-versus-trimmed comparison tables.
+- Sorted BAM files plus per-sample `flagstat` and `idxstats` reports from reference-based alignment.
+- A curated alignment summary table that condenses the per-sample mapping metrics.
 
 ## Current Pipeline Status
 
@@ -30,8 +32,10 @@
   - Post-trim FastQC
   - Post-trim FastQC extraction
   - Post-trim QC interpretation
+  - Reference-based BWA-MEM alignment
+  - Alignment metric summarization
 - Next planned stage:
-  - Assembly workflow development on trimmed paired reads
+  - Assembly workflow development on trimmed paired reads, with optional follow-up review of low-alignment isolates
 
 ## Repository Structure
 
@@ -48,6 +52,7 @@
 | `fastqc_extracted/` | Extracted contents from raw-read FastQC ZIP archives for downstream parsing. |
 | `fastqc_review/` | Curated markdown interpretation of raw-read FastQC plus related generated review outputs. |
 | `trimmomatic/` | Trimming workspace containing copied inputs, manifests, trimmed reads, unpaired reads, logs, and post-trim QC outputs. |
+| `alignment/` | Reference-alignment workspace containing BAM files, per-sample metrics, and the curated alignment summary table. |
 | `scripts/` | Reusable shell, SLURM, and Python scripts for the pipeline. |
 
 ## Directory Details
@@ -92,6 +97,17 @@
 - Stores all reusable pipeline scripts.
 - Scripts are written so outputs can be regenerated from the repository rather than by manual terminal history.
 
+### `alignment/`
+
+- Stores outputs from the reference-based BWA-MEM stage.
+- Key subdirectories:
+
+| Subdirectory | Purpose |
+| --- | --- |
+| `alignment/bam/` | Sorted BAM files and `.bai` indexes for each aligned sample. |
+| `alignment/logs/` | Alignment-stage SLURM stdout/stderr and related logs. |
+| `alignment/metrics/` | Per-sample `flagstat` and `idxstats` outputs plus `alignment_summary.tsv`. |
+
 ## Pipeline Steps
 
 The workflow currently implemented in this repository follows this order:
@@ -116,6 +132,11 @@ The workflow currently implemented in this repository follows this order:
    - Output directories:
      - `trimmomatic/fastqc_trimmed_extracted/`
      - `trimmomatic/fastqc_trimmed_review/`
+7. **Reference-based alignment review**
+   - Align trimmed paired reads against `reference/v_vulnificus_ref.fasta`, then summarize `flagstat` and `idxstats` outputs.
+   - Output directories:
+     - `alignment/bam/`
+     - `alignment/metrics/`
 
 ## Script Descriptions
 
@@ -130,6 +151,8 @@ The workflow currently implemented in this repository follows this order:
 | `scripts/fastqc_trimmed.slurm` | SLURM batch script that validates trimmed paired reads, builds a post-trim manifest, and runs FastQC on trimmed paired samples. |
 | `scripts/extract_fastqc_trimmed_reports.sh` | Shell script that extracts post-trim FastQC ZIP archives into `trimmomatic/fastqc_trimmed_extracted/` and verifies required files. |
 | `scripts/analyze_fastqc_trimmed_reports.py` | Python script that parses extracted trimmed FastQC reports, compares trimmed versus raw module outcomes, and writes `trimmomatic/fastqc_trimmed_review/fastqc_trimmed_interpreted_report.md` plus TSV summaries. |
+| `scripts/bwa_align_array.slurm` | SLURM array script that validates paired trimmed reads, aligns them with BWA-MEM against `reference/v_vulnificus_ref.fasta`, writes sorted BAMs, and generates `flagstat` plus `idxstats` outputs. |
+| `scripts/summarize_alignment_metrics.sh` | Shell script that condenses per-sample `flagstat` and `idxstats` outputs into `alignment/metrics/alignment_summary.tsv`. |
 | `scripts/fastqc_vibecoded.txt` | Free-text notes related to FastQC scripting and workflow context. |
 
 ## Key Parameters Used
@@ -161,6 +184,18 @@ The workflow currently implemented in this repository follows this order:
   - `TRAILING:3`
   - `SLIDINGWINDOW:4:20`
   - `MINLEN:50`
+
+### Alignment
+
+- Software:
+  - `bwa`
+  - `samtools`
+- Reference FASTA:
+  - `reference/v_vulnificus_ref.fasta`
+- Job resources:
+  - `8` CPUs
+  - `64G` memory
+  - `24:00:00` walltime
 
 ## Reproducibility
 

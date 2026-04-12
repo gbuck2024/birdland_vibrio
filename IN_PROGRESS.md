@@ -18,3 +18,8 @@
 - Remaining technical caveat is the persistent forward-read per-tile FastQC failure, which appears to be a lane artifact rather than a trimming deficiency.
 - Next active pipeline step is assembly planning and submission on the trimmed paired reads.
 
+## 2026-04-12 Alignment review
+
+- Alignment against the current `Vibrio vulnificus` reference is complete for all 6 trimmed paired samples, and `alignment/metrics/alignment_summary.tsv` has been regenerated from the saved per-sample metrics.
+- Current technical caveat is that reference suitability appears uneven across isolates because mapped-read percentages range from `1.05%` to `88.12%`.
+- Next active step is assembly workflow submission, with optional follow-up review of sample identity or contamination for the lowest-alignment isolates before any reference-based downstream analysis.
