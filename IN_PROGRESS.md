@@ -23,3 +23,10 @@
 - Alignment against the current `Vibrio vulnificus` reference is complete for all 6 trimmed paired samples, and `alignment/metrics/alignment_summary.tsv` has been regenerated from the saved per-sample metrics.
 - Current technical caveat is that reference suitability appears uneven across isolates because mapped-read percentages range from `1.05%` to `88.12%`.
 - Next active step is assembly workflow submission, with optional follow-up review of sample identity or contamination for the lowest-alignment isolates before any reference-based downstream analysis.
+
+## 2026-04-13 Multi-reference alignment review
+
+- The multi-reference comparison is complete and the saved summaries now show sample-specific reference preferences instead of a single project-wide best fit.
+- Current technical caveat is that `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` aligns best to `Vibrio alginolyticus`, while `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` remains near-background against every tested reference.
+- The two `Vibrio ostreicida` references still need cautious interpretation because they are draft multi-contig assemblies, but they do not outperform the best closed-reference matches for any sample.
+- Next active pipeline step is assembly-stage preparation and documentation for all six trimmed paired samples, with later annotation and gene mining used to clarify species identity and virulence content.

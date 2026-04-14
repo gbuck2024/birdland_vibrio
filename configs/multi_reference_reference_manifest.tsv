@@ -1,0 +1,6 @@
+reference_id	reference_fasta	reference_format	notes
+v_alginolyticus	reference/v_alginolyticus_ref.fasta	complete_two_chromosome	Closed reference with two primary contigs.
+v_ostreicida_PP203	reference/v_ostreicida_PP203_ref.fasta	draft_multicontig_wgs	Draft assembly with multiple contigs; aggregate idxstats across all contigs.
+v_ostreicida_r172	reference/v_ostreicida_r172_ref.fasta	draft_multicontig_wgs	Draft assembly with multiple contigs; aggregate idxstats across all contigs.
+v_parahaemolyticus	reference/v_parahaemolyticus_ref.fasta	complete_two_chromosome	Closed reference with two primary contigs.
+v_vulnificus	reference/v_vulnificus_ref.fasta	complete_two_chromosome	Closed reference with two primary contigs.

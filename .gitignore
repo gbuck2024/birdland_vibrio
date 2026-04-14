@@ -33,6 +33,13 @@
 /alignment/logs/
 /alignment/metrics/*.flagstat.txt
 /alignment/metrics/*.idxstats.txt
+!/alignment/metrics/alignment_summary.tsv
+/multi_reference_alignment/bam/
+/multi_reference_alignment/logs/
+/multi_reference_alignment/metrics/*.flagstat.txt
+/multi_reference_alignment/metrics/*.idxstats.txt
+!/multi_reference_alignment/metrics/multi_reference_alignment_summary.tsv
+!/multi_reference_alignment/metrics/multi_reference_alignment_mapped_pct_matrix.tsv
 *.log
 *.out
 *.err

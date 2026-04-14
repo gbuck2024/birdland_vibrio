@@ -20,6 +20,7 @@
 - A curated post-trim QC interpretation report and raw-versus-trimmed comparison tables.
 - Sorted BAM files plus per-sample `flagstat` and `idxstats` reports from reference-based alignment.
 - A curated alignment summary table that condenses the per-sample mapping metrics.
+- A multi-reference alignment workspace plus checked-in summary tables comparing each of the 6 samples against 5 candidate Vibrio references.
 
 ## Current Pipeline Status
 
@@ -34,8 +35,10 @@
   - Post-trim QC interpretation
   - Reference-based BWA-MEM alignment
   - Alignment metric summarization
+  - Multi-reference BWA-MEM comparison
+  - Multi-reference metric summarization
 - Next planned stage:
-  - Assembly workflow development on trimmed paired reads, with optional follow-up review of low-alignment isolates
+  - Assembly workflow development on trimmed paired reads, with sample-identity follow-up focused on the `Buck_NB0507_14` and `Buck_BI0607_2` outliers
 
 ## Repository Structure
 
@@ -53,6 +56,7 @@
 | `fastqc_review/` | Curated markdown interpretation of raw-read FastQC plus related generated review outputs. |
 | `trimmomatic/` | Trimming workspace containing copied inputs, manifests, trimmed reads, unpaired reads, logs, and post-trim QC outputs. |
 | `alignment/` | Reference-alignment workspace containing BAM files, per-sample metrics, and the curated alignment summary table. |
+| `multi_reference_alignment/` | Alternative-reference alignment workspace for the 6-by-5 sample/reference comparison stage. |
 | `scripts/` | Reusable shell, SLURM, and Python scripts for the pipeline. |
 
 ## Directory Details
@@ -108,6 +112,17 @@
 | `alignment/logs/` | Alignment-stage SLURM stdout/stderr and related logs. |
 | `alignment/metrics/` | Per-sample `flagstat` and `idxstats` outputs plus `alignment_summary.tsv`. |
 
+### `multi_reference_alignment/`
+
+- Stores outputs from the alternative-reference BWA-MEM comparison stage.
+- Key subdirectories:
+
+| Subdirectory | Purpose |
+| --- | --- |
+| `multi_reference_alignment/bam/` | Sorted BAM files and `.bai` indexes named with both sample and reference identifiers. |
+| `multi_reference_alignment/logs/` | Multi-reference alignment SLURM stdout/stderr and related logs. |
+| `multi_reference_alignment/metrics/` | Per-sample/per-reference `flagstat` and `idxstats` outputs plus the curated comparison TSV summaries retained for Git tracking. |
+
 ## Pipeline Steps
 
 The workflow currently implemented in this repository follows this order:
@@ -137,6 +152,13 @@ The workflow currently implemented in this repository follows this order:
    - Output directories:
      - `alignment/bam/`
      - `alignment/metrics/`
+8. **Alternative-reference alignment comparison**
+   - Align the same trimmed paired reads against 5 candidate Vibrio references, including draft `Vibrio ostreicida` assemblies, and summarize mapping across all 30 sample/reference combinations.
+   - Output directories:
+     - `multi_reference_alignment/bam/`
+     - `multi_reference_alignment/metrics/`
+   - Current interpretation:
+     - Four samples still match `Vibrio vulnificus` best, `Buck_NB0507_14` matches `Vibrio alginolyticus` best, and `Buck_BI0607_2` remains unresolved because all tested references map at about `1%`.
 
 ## Script Descriptions
 
@@ -153,6 +175,8 @@ The workflow currently implemented in this repository follows this order:
 | `scripts/analyze_fastqc_trimmed_reports.py` | Python script that parses extracted trimmed FastQC reports, compares trimmed versus raw module outcomes, and writes `trimmomatic/fastqc_trimmed_review/fastqc_trimmed_interpreted_report.md` plus TSV summaries. |
 | `scripts/bwa_align_array.slurm` | SLURM array script that validates paired trimmed reads, aligns them with BWA-MEM against `reference/v_vulnificus_ref.fasta`, writes sorted BAMs, and generates `flagstat` plus `idxstats` outputs. |
 | `scripts/summarize_alignment_metrics.sh` | Shell script that condenses per-sample `flagstat` and `idxstats` outputs into `alignment/metrics/alignment_summary.tsv`. |
+| `scripts/bwa_align_multiref_array.slurm` | SLURM array script that expands the 6 saved trimmed pairs across 5 references and writes sample-plus-reference BAMs and metrics under `multi_reference_alignment/`. |
+| `scripts/summarize_multiref_alignment_metrics.py` | Python script that condenses the 30 multi-reference `flagstat` and `idxstats` pairs into a long summary TSV and a mapped-percentage matrix. |
 | `scripts/fastqc_vibecoded.txt` | Free-text notes related to FastQC scripting and workflow context. |
 
 ## Key Parameters Used
@@ -196,6 +220,26 @@ The workflow currently implemented in this repository follows this order:
   - `8` CPUs
   - `64G` memory
   - `24:00:00` walltime
+
+### Multi-Reference Alignment Comparison
+
+- Software:
+  - `bwa`
+  - `samtools`
+- Reference manifests:
+  - `configs/multi_reference_reference_manifest.tsv`
+- Reference set:
+  - `reference/v_alginolyticus_ref.fasta`
+  - `reference/v_ostreicida_PP203_ref.fasta`
+  - `reference/v_ostreicida_r172_ref.fasta`
+  - `reference/v_parahaemolyticus_ref.fasta`
+  - `reference/v_vulnificus_ref.fasta`
+- Job resources:
+  - `8` CPUs
+  - `64G` memory
+  - `24:00:00` walltime
+- Important caveat:
+  - `v_ostreicida_PP203` and `v_ostreicida_r172` are draft multi-contig assemblies rather than closed two-chromosome references, so the summary script aggregates `idxstats` across all contigs and records contig counts for interpretation.
 
 ## Reproducibility
 
@@ -298,6 +342,28 @@ cd /work/VibrioVulnificus/gbuck/20260105_Buck-wgs
 python3 scripts/analyze_fastqc_trimmed_reports.py
 ```
 
+#### 12. Submit the multi-reference alignment array
+
+```bash
+cd /work/VibrioVulnificus/gbuck/20260105_Buck-wgs
+sbatch --array=0-29 scripts/bwa_align_multiref_array.slurm
+```
+
+#### 13. Check the multi-reference array within 1 to 2 minutes
+
+```bash
+cd /work/VibrioVulnificus/gbuck/20260105_Buck-wgs
+squeue -u "$USER"
+ls -1 multi_reference_alignment/logs/slurm
+```
+
+#### 14. Summarize the multi-reference metrics
+
+```bash
+cd /work/VibrioVulnificus/gbuck/20260105_Buck-wgs
+python3 scripts/summarize_multiref_alignment_metrics.py
+```
+
 ### Expected Primary Outputs
 
 | Step | Primary outputs |
@@ -310,6 +376,8 @@ python3 scripts/analyze_fastqc_trimmed_reports.py
 | Post-trim FastQC | `trimmomatic/fastqc_trimmed/reports/*/*.html`, `trimmomatic/fastqc_trimmed/reports/*/*.zip` |
 | Post-trim extraction | `trimmomatic/fastqc_trimmed_extracted/*/summary.txt`, `trimmomatic/fastqc_trimmed_extracted/*/fastqc_data.txt` |
 | Post-trim QC analysis | `trimmomatic/fastqc_trimmed_review/fastqc_trimmed_interpreted_report.md` |
+| Multi-reference alignment | `multi_reference_alignment/bam/*.sorted.bam`, `multi_reference_alignment/metrics/*.flagstat.txt`, `multi_reference_alignment/metrics/*.idxstats.txt` |
+| Multi-reference summary | `multi_reference_alignment/metrics/multi_reference_alignment_summary.tsv`, `multi_reference_alignment/metrics/multi_reference_alignment_mapped_pct_matrix.tsv` |
 
 ## What Was Tracked
 
@@ -361,6 +429,11 @@ Large inputs, bulky generated outputs, runtime logs, and transient artifacts are
   - `slurm-*.err`
 - Generated manifests:
   - `trimmomatic/metrics/trimmomatic_input_manifest.tsv`
+- Generated multi-reference alignment metrics:
+  - `multi_reference_alignment/bam/`
+  - `multi_reference_alignment/logs/`
+  - `multi_reference_alignment/metrics/*.flagstat.txt`
+  - `multi_reference_alignment/metrics/*.idxstats.txt`
 - Local cache and interpreter artifacts:
   - `__pycache__/`
   - `*.py[cod]`
@@ -373,3 +446,4 @@ Large inputs, bulky generated outputs, runtime logs, and transient artifacts are
 - Compute-heavy steps are designed for SLURM submission rather than execution on the login node.
 - All paired-end operations preserve forward and reverse read pairing.
 - The current QC checkpoint indicates that trimming improved the major reverse-read PolyG and GC-content issues, while forward-read per-tile failures remain as a likely lane artifact to monitor during assembly.
+- The alternative-reference stage explicitly handles both closed two-chromosome references and draft multi-contig `Vibrio ostreicida` assemblies by validating `.fai` index content and aggregating `idxstats` across all contigs.
