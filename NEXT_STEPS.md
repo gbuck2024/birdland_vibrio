@@ -35,3 +35,28 @@
 - Treat `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` as a likely non-`Vibrio vulnificus` isolate or mixed-signal sample because it maps best to `Vibrio alginolyticus` rather than the current `Vibrio vulnificus` reference.
 - Flag `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` for extra scrutiny during assembly and annotation because its mapped-read percentage stays near `1%` across all tested references, consistent with severe reference mismatch, contamination, or low-complexity data.
 - Prepare the SPAdes stage next in a new assembly-specific directory with a reusable SLURM script, saved parameters, and an explicit manifest so the step is ready for cluster submission without running heavy work on the login node.
+
+## 2026-04-14 Kraken2 bacteria database prepared for submission
+
+- Stage a Singularity image with `kraken2-build` available and submit `scripts/kraken2_build_bacterial_db.slurm` from the project root when cluster resources and storage quota are confirmed.
+- Review `kraken2_db/README.md` before submission and adjust `KRAKEN2_SIF`, `MIN_PROJECT_FREE_GB`, `MIN_TMP_FREE_GB`, or `KRAKEN2_CLEAN_AFTER_BUILD` only if local HPC policy or quota requires different guardrails.
+- After the build finishes, confirm that `kraken2_db/db/hash.k2d`, `kraken2_db/db/opts.k2d`, and `kraken2_db/db/taxo.k2d` exist and inspect the small text records in `kraken2_db/metadata/` for recorded parameters and disk-usage snapshots.
+- Use the completed Kraken2 database as a broader taxonomic check for the ambiguous isolates, especially `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` and `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7`, while continuing to prepare the SPAdes stage in parallel.
+
+## 2026-04-17 Kraken2 database build verified
+
+- Treat the Kraken2 bacteria database as ready for downstream classification because `kraken2_db/db/hash.k2d`, `kraken2_db/db/opts.k2d`, and `kraken2_db/db/taxo.k2d` now exist and the successful job `1319269` completed end-to-end.
+- Use the database first on the ambiguous isolates, especially `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` and `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7`, to test whether a broader bacterial taxonomic screen clarifies the weak or conflicting alignment results.
+- Keep `kraken2_db/metadata/kraken2_build_verification_2026-04-17.md` with the run records, because the successful build still logged one transient FTP fetch failure and two gzip-corrupt downloaded genome files during library processing.
+- Rebuild the database only if downstream Kraken2 results suggest the missing or corrupt source genomes are likely to affect interpretation; otherwise keep momentum and proceed to sample classification plus assembly preparation.
+- Continue preparing the SPAdes assembly stage in parallel so assembly, annotation, and gene-mining work do not wait on further database rebuilding unless the classification results justify it.
+
+## 2026-04-17 Post-Kraken2 summary decision point
+
+- Use `kraken2_classification/metrics/kraken2_classification_summary.tsv` together with `multi_reference_alignment/metrics/multi_reference_alignment_summary.tsv` as the current project-level split point before assembly.
+- Prioritize SPAdes preparation for all 6 trimmed paired samples so taxonomic interpretation does not rely only on read-level classifiers or a small reference panel.
+- Treat `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7` as the strongest current `Vibrio vulnificus` candidates for downstream annotation and virulence-gene review.
+- Carry `Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7` forward as a likely non-`vulnificus Vibrio` isolate because Kraken2 now favors `Vibrio cidicii` over `Vibrio vulnificus`.
+- Carry `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` forward as a `Vibrio` sample with unresolved species identity because both reference alignment and Kraken2 remain mixed at the species level.
+- Carry `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` forward as the highest-priority contamination or mislabeling check because it remains a severe outlier in alignment and now classifies mainly to `Bacillus` rather than `Vibrio`.
+- Before assembly submission, add a reusable SPAdes manifest plus SLURM script, define assembly output directories, and record expected metrics to verify completion without running heavy work on the login node.

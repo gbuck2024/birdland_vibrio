@@ -40,11 +40,22 @@
 /multi_reference_alignment/metrics/*.idxstats.txt
 !/multi_reference_alignment/metrics/multi_reference_alignment_summary.tsv
 !/multi_reference_alignment/metrics/multi_reference_alignment_mapped_pct_matrix.tsv
+/kraken2_db/db/
+/kraken2_db/logs/
+/kraken2_classification/outputs/
+/kraken2_classification/reports/
+/kraken2_classification/logs/
+!/kraken2_classification/metrics/kraken2_classification_summary.tsv
+/kraken2_db/metadata/
+/kraken2.sif
+/containers/*.sif
 *.log
 *.out
 *.err
 /slurm-*.out
 /slurm-*.err
+*.k2d
+
 
 # Local reference files and indexes
 /reference/

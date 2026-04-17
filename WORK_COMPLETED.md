@@ -47,3 +47,43 @@
 - Verified that `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` aligns best to the `Vibrio alginolyticus` reference at `43.84%`, exceeding its `Vibrio parahaemolyticus` (`31.18%`) and `Vibrio vulnificus` (`10.86%`) mapping rates.
 - Confirmed that `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` remains a low-alignment outlier against all five references, with mapped percentages clustered near `1%`.
 - Preserved the per-combination BAMs, `flagstat`, and `idxstats` files under the dedicated `multi_reference_alignment/` stage while keeping only the curated TSV summaries intended for Git tracking.
+
+## 2026-04-14 Kraken2 database preparation milestone
+
+- Added `scripts/kraken2_build_bacterial_db.slurm` as a reusable SLURM script that uses Singularity rather than environment modules to build a bacteria-focused Kraken2 database in the new `kraken2_db/` stage.
+- Added `kraken2_db/README.md` to document the intended container input, expected runtime outputs, conservative storage guardrails, and the assumption that a bacteria-only database is the most appropriate next taxonomic screen after the ambiguous multi-reference alignment results.
+- Configured the new SLURM workflow to record build parameters plus before/after disk-usage snapshots under `kraken2_db/metadata/` and to abort early if project or temporary free space is below conservative thresholds.
+- Updated `.gitignore` so the large Kraken2 database files and SLURM logs remain outside Git while the stage documentation and future small metadata records can remain trackable.
+- Did not submit or run the Kraken2 build job.
+
+## 2026-04-16 Kraken2 build troubleshooting and retry hardening
+
+- Reviewed the two saved Kraken2 SLURM runs under `kraken2_db/logs/slurm` and confirmed that job `1319090` failed during taxonomy download because the containerized `rsync` path hit `Unknown module 'pub'`.
+- Confirmed that job `1319091` successfully launched Singularity, downloaded taxonomy into `kraken2_db/db/taxonomy`, and then failed during the RefSeq bacteria library transfer because repeated FTP attempts for `GCF_022220625.1_ASM2222062v1_genomic.fna.gz` ended with `Connection closed`.
+- Verified that the Kraken2 stage remains incomplete because `kraken2_db/db/hash.k2d`, `kraken2_db/db/opts.k2d`, and `kraken2_db/db/taxo.k2d` are still absent.
+- Updated `scripts/kraken2_build_bacterial_db.slurm` so the bacteria-library download step now retries transient failures with configurable `KRAKEN2_DOWNLOAD_MAX_ATTEMPTS` and `KRAKEN2_DOWNLOAD_RETRY_SLEEP_SEC` settings, clearer retry logging, and explicit checks for `library/bacteria/assembly_summary.txt` plus `manifest.txt` before the build step.
+- Updated `kraken2_db/README.md` and `NEXT_STEPS.md` so the failed job history, FTP recommendation, and resubmission guidance are documented for the next cluster submission.
+
+## 2026-04-17 Kraken2 database build verification completed
+
+- Reviewed all three Kraken2 build jobs under `kraken2_db/logs/slurm` and confirmed that job `1319269` is the first successful end-to-end run, finishing on `2026-04-17 09:50:55 CDT`.
+- Verified that the expected final database files now exist at `kraken2_db/db/hash.k2d`, `kraken2_db/db/opts.k2d`, and `kraken2_db/db/taxo.k2d`, with `hash.k2d` occupying about `93G`.
+- Confirmed from `kraken2_db/metadata/disk_usage_after_job_1319269.tsv` that the cleaned database footprint is about `100G`, consistent with the completed build log.
+- Recorded a stage-specific interpretation in `kraken2_db/metadata/kraken2_build_verification_2026-04-17.md` documenting that the database build succeeded and is usable, but the successful run still logged one transient FTP fetch failure and two gzip-corrupt downloaded genomes during library processing.
+- Concluded that the Kraken2 stage is complete enough for downstream classification, while noting that the RefSeq bacteria snapshot used for this build may be missing a very small number of source genomes because the successful run was not perfectly clean at the individual-download level.
+
+## 2026-04-17 Kraken2 sample-classification stage prepared
+
+- Added `configs/kraken2_classification_manifest.tsv` so the Kraken2 stage has its own saved manifest of the 6 paired trimmed read sets, using relative paths under `trimmomatic/trimmed_reads/`.
+- Added `scripts/kraken2_classify_array.slurm` as a reusable SLURM workflow that classifies one saved sample pair per array task against `kraken2_db/db/`, writes one Kraken2 output file plus one Kraken2 report per sample under `kraken2_classification/`, and supports a `summary` mode for post-run aggregation.
+- Added `scripts/summarize_kraken2_classification.py` to parse the saved Kraken2 reports, rank species-level hits before genus-level hits, and write the curated summary table `kraken2_classification/metrics/kraken2_classification_summary.tsv`.
+- Added `kraken2_classification/README.md` to document that Kraken2 uses paired trimmed FASTQ inputs rather than FastQC artifacts, to describe expected stage outputs, and to record the interpretation labels `strong species fit`, `genus-level only fit`, `mixed/ambiguous`, and `mostly unclassified`.
+- Updated `.gitignore` so per-sample Kraken2 outputs, reports, and SLURM logs stay outside Git while the curated TSV summary can remain trackable.
+
+## 2026-04-17 Kraken2 sample-classification summary completed
+
+- Verified from `kraken2_classification/logs/slurm/kraken2_classify_1319693_*.out` and matching `.err` files that the 6-sample Kraken2 array job completed and wrote one output plus one report for each trimmed paired sample.
+- Identified why the original summary submission `1319701` failed: the parser compared the Kraken2 output line count to the report `root` row, but the `root` row records only classified reads, not total reads including the `unclassified` row.
+- Corrected `scripts/summarize_kraken2_classification.py` so the summary step now derives total reads from the saved report counts and only uses the Kraken2 output files as non-empty existence checks.
+- Regenerated `kraken2_classification/metrics/kraken2_classification_summary.tsv` successfully from the saved reports.
+- Confirmed the current taxonomic split across the 6 samples: 3 strong `Vibrio vulnificus` fits (`Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`), 1 strong non-`vulnificus Vibrio` fit (`Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7` as `Vibrio cidicii`), 1 genus-level `Vibrio` but species-ambiguous sample (`Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7`), and 1 likely non-`Vibrio` outlier (`Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` with a dominant `Bacillus` genus signal).
