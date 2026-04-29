@@ -1,0 +1,39 @@
+Kraken2-guided Vibrio read-filtering parameter record
+Date prepared: 2026-04-28
+
+Input manifest
+configs/kraken2_vibrio_filter_manifest.tsv
+
+Stage directory
+kraken2_vibrio_read_filtering
+
+Software
+- Python 3
+- scripts/filter_kraken2_vibrio_reads.py
+- scripts/summarize_kraken2_vibrio_filtering.py
+- scripts/kraken2_vibrio_filter_array.slurm
+
+Filtering rule
+- Keep paired fragments whose Kraken2 assigned taxid is Vibrio genus (taxid 662) or a descendant taxid under that genus in the saved sample Kraken2 report.
+- Exclude unclassified pairs and assignments above genus level.
+
+Inputs consumed per sample
+- Trimmed paired FASTQ files from trimmomatic/trimmed_reads/
+- Kraken2 paired-fragment output from kraken2_classification/outputs/
+- Kraken2 report from kraken2_classification/reports/
+
+Per-sample metrics recorded
+- original_paired_reads
+- retained_read_pairs
+- retained_pct
+- filtering_rule
+
+Target samples
+- Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7
+- Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7
+- Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7
+
+Planned submission form
+cd <project_root>
+sbatch --array=0-2 scripts/kraken2_vibrio_filter_array.slurm
+sbatch --export=ALL,KRAKEN2_VIBRIO_FILTER_MODE=summary scripts/kraken2_vibrio_filter_array.slurm

@@ -1,0 +1,36 @@
+SPAdes assembly stage parameter record
+Date prepared: 2026-04-18
+
+Input manifest
+configs/assembly_manifest.tsv
+
+Software
+- SPAdes
+- Default executable lookup in script: SPADES_BIN or spades.py
+
+Planned paired-end assembly command template
+spades.py \
+  --pe1-1 <trimmed_R1_paired.fq.gz> \
+  --pe1-2 <trimmed_R2_paired.fq.gz> \
+  -o assembly/assemblies/<sample_id> \
+  -t 16 \
+  -m 120 \
+  --tmp-dir <tmp_root>/spades_<sample_id>
+
+Default SLURM resources
+- 16 CPUs
+- 128G memory
+- 48:00:00 walltime
+
+Expected completion checks
+- assembly/assemblies/<sample_id>/contigs.fasta
+- assembly/assemblies/<sample_id>/scaffolds.fasta
+- assembly/assemblies/<sample_id>/assembly_graph.fastg
+- assembly/assemblies/<sample_id>/params.txt
+- assembly/assemblies/<sample_id>/spades.log
+- assembly/metrics/assembly_summary.tsv after running the summary mode
+
+Planned submission form
+cd <project_root>
+sbatch --array=0-5 scripts/spades_assembly_array.slurm
+sbatch --export=ALL,SPADES_MODE=summary scripts/spades_assembly_array.slurm

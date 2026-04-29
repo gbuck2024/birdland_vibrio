@@ -1,0 +1,37 @@
+SPAdes filtered-read isolate rerun parameter record
+Date prepared: 2026-04-28
+
+Input manifest
+configs/assembly_manifest_vulnificus_candidates_filtered.tsv
+
+Stage directory
+assembly_filtered_isolate_rerun
+
+Software
+- SPAdes
+- Existing reusable script: scripts/spades_assembly_array.slurm
+- Default executable lookup in script: SPADES_BIN or spades.py
+
+Planned paired-end assembly command template
+spades.py \
+  --pe1-1 <filtered_R1_paired.fq.gz> \
+  --pe1-2 <filtered_R2_paired.fq.gz> \
+  -o assembly_filtered_isolate_rerun/assemblies/<sample_id> \
+  -t 16 \
+  -m 120 \
+  --tmp-dir <tmp_root>/spades_<sample_id> \
+  --isolate
+
+Priority samples
+- Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7
+- Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7
+- Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7
+
+Reason for rerun
+- These three samples remain the strongest current Vibrio vulnificus candidates across Kraken2 and reference alignment.
+- The original assembly and the first isolate-mode rerun remain inflated and fragmented, so this comparison stage narrows input reads to Kraken2-supported Vibrio pairs before rerunning SPAdes.
+
+Planned submission form
+cd <project_root>
+sbatch --export=ALL,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered.tsv,STAGE_DIR=assembly_filtered_isolate_rerun --array=0-2 scripts/spades_assembly_array.slurm
+sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered.tsv,STAGE_DIR=assembly_filtered_isolate_rerun scripts/spades_assembly_array.slurm

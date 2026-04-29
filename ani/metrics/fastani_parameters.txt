@@ -1,0 +1,44 @@
+ANI stage parameter record
+Date prepared: 2026-04-18
+
+Input manifests
+configs/ani_query_manifest.tsv
+configs/ani_reference_manifest.tsv
+
+Software
+- Preferred ANI tool: fastANI
+- Default executable lookup in script: FASTANI_BIN or fastANI
+
+Planned ANI command template
+fastANI \
+  --query assembly/assemblies/<sample_id>/contigs.fasta \
+  --rl ani/metrics/fastani_reference_list.txt \
+  --output ani/outputs/<sample_id>.fastani.tsv \
+  --threads 8 \
+  --fragLen 3000 \
+  --kmer 16 \
+  --minFraction 0.2
+
+Default SLURM resources
+- 8 CPUs
+- 32G memory
+- 08:00:00 walltime
+
+Expected completion checks
+- ani/outputs/<sample_id>.fastani.tsv
+- ani/metrics/ani_summary.tsv
+- ani/metrics/ani_matrix.tsv after running the summary mode
+
+No-hit behavior
+- A sample with no reportable ANI hits may still produce an empty raw fastANI output file.
+- The summary step treats empty raw output as a valid no-hit/outlier case and records `NA` ANI values.
+
+Interpretation target
+- ANI at or above about 95-96 percent against `v_vulnificus` supports likely `Vibrio vulnificus`.
+- ANI at or above about 95-96 percent against another reference supports likely another species.
+- Sub-species-threshold or no-hit samples should be treated as outliers or unresolved.
+
+Planned submission form
+cd <project_root>
+sbatch --array=0-5 scripts/fastani_array.slurm
+sbatch --export=ALL,ANI_MODE=summary scripts/fastani_array.slurm
