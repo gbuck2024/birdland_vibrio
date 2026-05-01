@@ -1,5 +1,26 @@
 # Next Steps
 
+## 2026-05-01 Filtered-read assembly decision point
+
+- Treat the filtered-read `--isolate` rerun as complete and use `assembly_filtered_isolate_rerun/metrics/assembly_summary.tsv` as the current assembly decision point for the 3 strongest `Vibrio vulnificus` candidates.
+- Do not move these filtered assemblies directly into ANI, annotation, or virulence-gene mining yet, because scaffold totals remain inflated at about `13.5 Mb`, `11.0 Mb`, and `10.1 Mb`, still well above an isolate-scale `5.2 Mb` genome.
+- Prioritize a controlled subsampling test on the filtered paired FASTQ files for `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`.
+- Build a new stage-specific workflow that subsamples each filtered read pair set to approximate `25x`, `50x`, and `100x` coverage assuming a `5.2 Mb` genome, while preserving read pairing and writing all outputs into a new dedicated stage directory.
+- Use approximate retained-pair targets of about `436,242` pairs for `25x`, `872,483` pairs for `50x`, and `1,744,966` pairs for `100x` if trimmed read lengths stay near `149 bp`.
+- After subsampling, run `SPAdes --isolate` separately on each depth level for each of the 3 samples and save all manifests, parameters, and completion checks in the new stage directory rather than reusing `assembly_filtered_isolate_rerun/`.
+- Compare the subsampled assembly summaries against `assembly_filtered_isolate_rerun/metrics/assembly_summary.tsv`, `assembly_isolate_rerun/metrics/assembly_summary.tsv`, and `assembly/metrics/assembly_summary.tsv`, focusing on total bases, contig and scaffold counts, N50, longest scaffold, and whether the assemblies move closer to the expected isolate genome size.
+- Treat `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7` as the highest-risk sample in the subsampling test, because its filtered SPAdes log still reports unreliable k-mer model warnings even after Kraken2-guided filtering.
+- Keep `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` and `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` out of this focused `Vibrio vulnificus` subsampling path, because the saved Kraken2 and alignment evidence still does not support them as comparably clean `Vibrio vulnificus` isolates.
+
+## 2026-04-28 Kraken2-guided Vibrio filtering prepared
+
+- Submit `sbatch --array=0-2 scripts/kraken2_vibrio_filter_array.slurm` to retain only Kraken2-classified `Vibrio` genus-or-below read pairs for `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`.
+- After the filtering array completes, submit `sbatch --export=ALL,KRAKEN2_VIBRIO_FILTER_MODE=summary scripts/kraken2_vibrio_filter_array.slurm` to generate `kraken2_vibrio_read_filtering/metrics/kraken2_vibrio_filtering_summary.tsv`.
+- Review retained-pair counts and retained percentages before rerunning SPAdes, because a very low retained fraction would indicate that the Kraken2-guided narrowing step may be too aggressive for one or more samples.
+- If the retained-read summary looks reasonable, submit `sbatch --export=ALL,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered.tsv,STAGE_DIR=assembly_filtered_isolate_rerun --array=0-2 scripts/spades_assembly_array.slurm`.
+- After the filtered-read assembly array completes, submit `sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered.tsv,STAGE_DIR=assembly_filtered_isolate_rerun scripts/spades_assembly_array.slurm`.
+- Compare `assembly_filtered_isolate_rerun/metrics/assembly_summary.tsv` against both `assembly/metrics/assembly_summary.tsv` and `assembly_isolate_rerun/metrics/assembly_summary.tsv`, focusing on total assembly size, contig count, scaffold count, and N50 before deciding which assemblies should feed ANI and downstream annotation.
+
 ## 2026-03-27 FastQC extraction and interpretation
 
 - Build a reusable SLURM array script for paired-end trimming with adapter clipping and quality-tail trimming.
@@ -60,3 +81,29 @@
 - Carry `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` forward as a `Vibrio` sample with unresolved species identity because both reference alignment and Kraken2 remain mixed at the species level.
 - Carry `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` forward as the highest-priority contamination or mislabeling check because it remains a severe outlier in alignment and now classifies mainly to `Bacillus` rather than `Vibrio`.
 - Before assembly submission, add a reusable SPAdes manifest plus SLURM script, define assembly output directories, and record expected metrics to verify completion without running heavy work on the login node.
+
+## 2026-04-18 SPAdes stage prepared for submission
+
+- Submit `scripts/spades_assembly_array.slurm` with `sbatch --array=0-5` so each trimmed paired sample assembles once into `assembly/assemblies/<sample_id>/`.
+- Confirm within 1-2 minutes that the array has started cleanly by checking `assembly/logs/slurm/` for the first stdout/stderr files and verifying that each task resolved the SPAdes executable correctly on the cluster.
+- After the array completes, submit `sbatch --export=ALL,SPADES_MODE=summary scripts/spades_assembly_array.slurm` to generate `assembly/metrics/assembly_summary.tsv`.
+- Review assembly size, contig count, scaffold count, N50, longest contig, and GC percentage before moving into annotation and gene-target analysis.
+- Keep `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` flagged as the highest-scrutiny assembly for contamination or non-target biology during post-assembly interpretation.
+
+## 2026-04-18 ANI stage prepared for submission
+
+- After `assembly/assemblies/<sample_id>/contigs.fasta` exists for all 6 samples, submit `scripts/fastani_array.slurm` with `sbatch --array=0-5` so each assembled genome is compared once against the saved reference set.
+- Confirm within 1-2 minutes that the ANI array has started cleanly by checking `ani/logs/slurm/` and verifying that each task resolved the `fastANI` executable correctly on the cluster.
+- After the array completes, submit `sbatch --export=ALL,ANI_MODE=summary scripts/fastani_array.slurm` to generate `ani/metrics/ani_summary.tsv` and `ani/metrics/ani_matrix.tsv`.
+- Use ANI values near or above `95-96%` against `v_vulnificus` as the strongest assembly-level support for likely `Vibrio vulnificus`.
+- Treat samples with species-level ANI to a different reference as likely other `Vibrio` species, and treat sub-threshold or no-hit samples as outliers or unresolved pending broader post-assembly review.
+
+## 2026-04-20 Assembly rerun decision point
+
+- Prioritize an isolate-oriented SPAdes rerun for only `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`, because they remain the strongest current `Vibrio vulnificus` candidates across Kraken2 and reference alignment.
+- Keep `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` out of the main `Vibrio vulnificus` rerun path because the combined Kraken2 and alignment evidence still supports contamination, mislabeling, or non-target biology.
+- Keep `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` out of the focused rerun because it remains a mixed or unresolved `Vibrio` sample with stronger support for non-`vulnificus` identity than for `Vibrio vulnificus`.
+- Submit the rerun with `sbatch --export=ALL,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates.tsv,STAGE_DIR=assembly_isolate_rerun --array=0-2 scripts/spades_assembly_array.slurm`.
+- Confirm within 1-2 minutes that `assembly_isolate_rerun/logs/slurm/` contains clean startup logs showing the intended manifest, stage directory, and `--isolate` extra argument.
+- After the rerun completes, submit `sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates.tsv,STAGE_DIR=assembly_isolate_rerun scripts/spades_assembly_array.slurm`.
+- Compare `assembly_isolate_rerun/metrics/assembly_summary.tsv` against the original `assembly/metrics/assembly_summary.tsv`, focusing on total assembly size, contig count, scaffold count, N50, and the number of sequences at least `1000 bp` before deciding whether ANI and annotation should use the rerun outputs.

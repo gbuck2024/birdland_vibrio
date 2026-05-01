@@ -62,6 +62,7 @@
 /kraken2_vibrio_read_filtering/filtered_reads/
 /kraken2_vibrio_read_filtering/logs/
 !/kraken2_vibrio_read_filtering/metrics/
+/kraken2_vibrio_read_filtering/metrics/*.filtering_metrics.tsv
 !/kraken2_vibrio_read_filtering/metrics/filtering_parameters.txt
 !/kraken2_vibrio_read_filtering/metrics/kraken2_vibrio_filtering_summary.tsv
 /kraken2_db/metadata/

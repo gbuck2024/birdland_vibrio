@@ -1,5 +1,34 @@
 # Work Completed
 
+## 2026-05-01 Filtered-read assembly comparison and next-step decision
+
+- Audited the completed `assembly_filtered_isolate_rerun/` stage and confirmed that all 3 target samples now have finished SPAdes outputs plus a saved comparison table at `assembly_filtered_isolate_rerun/metrics/assembly_summary.tsv`.
+- Confirmed that Kraken2-guided `Vibrio` filtering materially improved the focused `--isolate` rerun relative to the prior isolate-mode rerun, reducing scaffold totals from about `66.5 Mb`, `32.6 Mb`, and `19.0 Mb` to about `13.5 Mb`, `11.0 Mb`, and `10.1 Mb` for `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`, respectively.
+- Confirmed that the filtered rerun is still too inflated for clean isolate-scale downstream use, because all 3 assemblies remain roughly `2x` or more above an expected `5.2 Mb` `Vibrio vulnificus` genome even after the Kraken2-guided narrowing step.
+- Rechecked that these 3 samples remain the strongest current `Vibrio vulnificus` set in the saved project evidence: Kraken2 top-species calls still favor `Vibrio vulnificus`, and the retained filtered-pair percentages remain high at `91.86%`, `98.40%`, and `98.76%`.
+- Confirmed from the saved SPAdes logs that the filtered read sets are still extremely deep and likely coverage-skewed for assembly, with SPAdes estimating genome-scale coverages in the thousands for `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7` and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`, while `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7` still shows unreliable k-mer model warnings.
+- Calculated that the retained filtered read sets still represent roughly `9,300x` to `12,600x` depth assuming a `5.2 Mb` genome and approximately `149 bp` trimmed read length, which makes a controlled downsampling test biologically justified rather than a blind extra rerun.
+- Chose the next recommended corrective step as a new stage-specific subsampling experiment on the filtered paired FASTQ inputs, targeting approximate depths of `25x`, `50x`, and `100x`, followed by `SPAdes --isolate` assemblies for each subsampled dataset before ANI, annotation, or gene-mining on these 3 samples.
+
+## 2026-04-30 Assembly rerun audit while filtered-read SPAdes job is running
+
+- Audited the saved project state against `PROJECT_BRIEF.md` and confirmed that the completed stages on disk are raw FastQC, FastQC extraction and interpretation, Trimmomatic trimming, post-trim FastQC interpretation, single-reference alignment review, multi-reference alignment review, Kraken2 broad classification, first-pass SPAdes assembly, the 3-sample isolate-mode rerun, and the new Kraken2-guided Vibrio read-filtering stage.
+- Verified that the Kraken2 Vibrio filtering array had already completed successfully for the 3 strongest current `Vibrio vulnificus` candidates and that the summary job `1321574` completed cleanly on `2026-04-30`, writing `kraken2_vibrio_read_filtering/metrics/kraken2_vibrio_filtering_summary.tsv` with no stderr output.
+- Confirmed that the filtered-read retention is high enough to justify the current SPAdes rerun: `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7` retained `219,765,787` of `239,251,931` read pairs (`91.86%`), `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7` retained `177,537,029` of `180,420,959` (`98.40%`), and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7` retained `163,105,516` of `165,150,467` (`98.76%`).
+- Rechecked that these same 3 samples remain the best-supported `Vibrio vulnificus` set across the saved evidence: Kraken2 top-species calls are `Vibrio vulnificus` for all three, and the best multi-reference alignment fits are also to `v_vulnificus` at `87.51%`, `81.57%`, and `88.12%` mapped, respectively.
+- Reconfirmed that the prior isolate-mode rerun did not sufficiently solve assembly inflation, with scaffold totals still at about `66.5 Mb` for `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `32.6 Mb` for `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `19.0 Mb` for `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`, so a filtered-read rerun remains a justified corrective step.
+- Verified that the current SLURM submission was the correct next move: job array `1321575_[0-2]` is actively running under `scripts/spades_assembly_array.slurm` with `MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered.tsv`, `STAGE_DIR=assembly_filtered_isolate_rerun`, and default `--isolate` mode.
+- Confirmed from the live SPAdes logs under `assembly_filtered_isolate_rerun/logs/` and the sample assembly directories that all 3 tasks started cleanly, are reading the intended filtered FASTQ pairs, are writing to the intended stage-specific directory, and have progressed into SPAdes `K21` assembly without an immediate startup or input-validation failure.
+
+## 2026-04-28 Kraken2-guided Vibrio read-filtering and filtered-read assembly stage prepared
+
+- Confirmed that QC, trimming, single-reference alignment review, Kraken2 broad classification, first-pass SPAdes assembly, and the 3-sample isolate-mode SPAdes rerun are already completed in the saved project tree.
+- Confirmed again that the strongest current `Vibrio vulnificus` candidates remain `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`, based on the saved Kraken2 classification summary.
+- Confirmed that the isolate-mode rerun still looks inflated, with scaffold totals of about `66.5 Mb`, `32.6 Mb`, and `19.0 Mb` respectively in `assembly_isolate_rerun/metrics/assembly_summary.tsv`, which remains far above an expected isolate-scale `Vibrio vulnificus` genome size.
+- Added `configs/kraken2_vibrio_filter_manifest.tsv` for a focused 3-sample Kraken2-guided filtering stage and `configs/assembly_manifest_vulnificus_candidates_filtered.tsv` for the downstream filtered-read rerun.
+- Added `scripts/filter_kraken2_vibrio_reads.py`, `scripts/summarize_kraken2_vibrio_filtering.py`, and `scripts/kraken2_vibrio_filter_array.slurm` to reproducibly retain only paired fragments classified by Kraken2 as `Vibrio` genus (`taxid 662`) or below while preserving read-pair synchronization and recording per-sample filtering metrics.
+- Added the new stage directories `kraken2_vibrio_read_filtering/` and `assembly_filtered_isolate_rerun/` with README and parameter files so the filtered FASTQ generation and the filtered-read `--isolate` SPAdes rerun can be submitted without overwriting the original trimmed reads or either prior assembly stage.
+
 ## 2026-03-27 FastQC extraction and interpretation
 
 - Extracted 12 FastQC zip reports into `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/fastqc_extracted`.
@@ -87,3 +116,32 @@
 - Corrected `scripts/summarize_kraken2_classification.py` so the summary step now derives total reads from the saved report counts and only uses the Kraken2 output files as non-empty existence checks.
 - Regenerated `kraken2_classification/metrics/kraken2_classification_summary.tsv` successfully from the saved reports.
 - Confirmed the current taxonomic split across the 6 samples: 3 strong `Vibrio vulnificus` fits (`Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`), 1 strong non-`vulnificus Vibrio` fit (`Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7` as `Vibrio cidicii`), 1 genus-level `Vibrio` but species-ambiguous sample (`Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7`), and 1 likely non-`Vibrio` outlier (`Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` with a dominant `Bacillus` genus signal).
+
+## 2026-04-18 SPAdes assembly preparation milestone
+
+- Added `configs/assembly_manifest.tsv` listing all 6 trimmed read pairs with relative paths for the assembly stage.
+- Added `scripts/spades_assembly_array.slurm` as a reusable SLURM array script that validates paired trimmed reads, writes one sample-specific assembly directory under `assembly/assemblies/`, records per-task logs under `assembly/logs/`, and supports a `summary` mode for post-run metric collation.
+- Added `scripts/summarize_spades_assemblies.py` to compute contig and scaffold counts, total assembled bases, N50, longest sequence, GC percentage, and the number of sequences at least `1000 bp`, then write the curated table `assembly/metrics/assembly_summary.tsv`.
+- Added `assembly/README.md` plus `assembly/metrics/spades_parameters.txt` so the assembly stage has documented inputs, outputs, resource defaults, and completion checks before submission.
+- Updated `.gitignore` so bulky assembly outputs and runtime logs remain outside Git while the parameter record and curated summary TSV can stay trackable.
+
+## 2026-04-18 ANI preparation milestone
+
+- Added `configs/ani_query_manifest.tsv` so ANI queries come from `assembly/assemblies/<sample_id>/contigs.fasta` in a saved manifest-driven format.
+- Added `configs/ani_reference_manifest.tsv` so ANI comparisons use the same tracked reference genomes already used by the alignment stages.
+- Added `scripts/fastani_array.slurm` as a reusable SLURM array script that validates assembled query FASTA files, resolves the reference manifest automatically, writes one raw fastANI output file per sample under `ani/outputs/`, and supports a `summary` mode for post-run collation.
+- Added `scripts/summarize_fastani.py` to combine the raw fastANI outputs into a long-form summary table plus a sample-by-reference ANI matrix, with threshold-based interpretation labels for likely `Vibrio vulnificus`, likely other species, or outlier status.
+- Added `ani/README.md` plus `ani/metrics/fastani_parameters.txt` so the ANI stage has documented dependencies, inputs, outputs, interpretation thresholds, and completion checks before submission.
+- Updated `.gitignore` so bulky ANI outputs and runtime logs remain outside Git while the parameter record and curated ANI TSV summaries can stay trackable.
+
+## 2026-04-20 Assembly interpretation review and isolate-rerun preparation
+
+- Reviewed the completed SPAdes outputs under `assembly/assemblies/` together with `kraken2_classification/metrics/kraken2_classification_summary.tsv`, `alignment/metrics/alignment_summary.tsv`, and `multi_reference_alignment/metrics/multi_reference_alignment_summary.tsv`.
+- Confirmed that the original 6-sample assembly run completed only after three failed SPAdes-resolution attempts and one successful container-backed submission (`1319742`), then regenerated the missing curated file `assembly/metrics/assembly_summary.tsv` from the saved assembly outputs.
+- Interpreted the first-pass assembly metrics as poor for isolate-scale downstream use: all 6 assemblies are highly fragmented and inflated in total size, with scaffold totals from about `18.7 Mb` to `65.2 Mb`, indicating that the current outputs should not be treated as strong finished genomes.
+- Confirmed that `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` is the strongest non-target or contamination candidate because Kraken2 is dominated by `Bacillus` and all tested Vibrio references map at only about `1%`.
+- Confirmed that `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` remains a mixed or unresolved `Vibrio` sample because Kraken2 species calls are split and the best tested reference fit is `Vibrio alginolyticus` rather than `Vibrio vulnificus`.
+- Confirmed that the best current `Vibrio vulnificus` candidates remain `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7`, because they have strong Kraken2 `Vibrio vulnificus` calls and strong `Vibrio vulnificus` alignment rates even though their first-pass assemblies still look poor.
+- Updated `scripts/spades_assembly_array.slurm` so the workflow now supports `MANIFEST_FILE` and `STAGE_DIR` overrides, logs the chosen stage and extra arguments, defaults to `--isolate` for bacterial isolate reruns unless explicitly overridden, and uses `bash -c` rather than `bash -lc` inside the containerized execution path to reduce shell-init noise in SLURM logs.
+- Added `configs/assembly_manifest_vulnificus_candidates.tsv` to define a focused 3-sample rerun set for the strongest current `Vibrio vulnificus` candidates.
+- Added the new comparison stage `assembly_isolate_rerun/` with `README.md` and `metrics/spades_parameters.txt` so the isolate-oriented rerun can be submitted reproducibly without overwriting the original `assembly/` outputs.
