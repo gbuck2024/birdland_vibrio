@@ -1,5 +1,23 @@
 # Next Steps
 
+## 2026-05-01 ANI substage prepared for the 3 best subsampled assemblies
+
+- Review `assembly_filtered_subsampled_isolate/metrics/assembly_summary.tsv` one last time if you want to challenge the chosen representatives, but the current planned ANI set is `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x`.
+- Submit `scripts/fastani_array.slurm` with `STAGE_DIR=ani/subsampled_best_assemblies` and `QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv` so the 3 selected scaffold assemblies are compared against the intended saved `Vibrio` reference set without touching any prior ANI outputs.
+- After the ANI array completes, submit the same script in `ANI_MODE=summary` to write `ani/subsampled_best_assemblies/metrics/ani_summary.tsv` and `ani/subsampled_best_assemblies/metrics/ani_matrix.tsv`.
+- Confirm that 3 raw outputs appear under `ani/subsampled_best_assemblies/outputs/` and that the summary and matrix files appear under `ani/subsampled_best_assemblies/metrics/`.
+- Interpret `>=95-96% ANI` to `v_vulnificus` as the strongest planned assembly-level confirmation that the selected subsampled representatives are consistent with `Vibrio vulnificus`.
+
+## 2026-05-01 Subsampling stage prepared for submission
+
+- Submit the new fixed-depth subsampling array with `sbatch --array=0-8 scripts/subsample_vibrio_reads_array.slurm` so each of the 3 target samples is downsampled once at `25x`, `50x`, and `100x` from the completed Kraken2-filtered paired FASTQ inputs.
+- After the subsampling array completes, submit `sbatch --export=ALL,SUBSAMPLE_MODE=summary scripts/subsample_vibrio_reads_array.slurm` to generate `kraken2_vibrio_subsampled_reads/metrics/subsampling_summary.tsv`.
+- Verify that all 9 expected subsampled paired FASTQ outputs exist under `kraken2_vibrio_subsampled_reads/subsampled_reads/` and confirm from the summary TSV that each `actual_read_pairs` value matches its saved `target_read_pairs`.
+- If the summary looks clean, submit `sbatch --export=ALL,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered_subsampled.tsv,STAGE_DIR=assembly_filtered_subsampled_isolate --array=0-8 scripts/spades_assembly_array.slurm`.
+- After the subsampled SPAdes array completes, submit `sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered_subsampled.tsv,STAGE_DIR=assembly_filtered_subsampled_isolate scripts/spades_assembly_array.slurm`.
+- Compare `assembly_filtered_subsampled_isolate/metrics/assembly_summary.tsv` against `assembly_filtered_isolate_rerun/metrics/assembly_summary.tsv`, `assembly_isolate_rerun/metrics/assembly_summary.tsv`, and `assembly/metrics/assembly_summary.tsv`, focusing on whether the fixed-depth subsets move scaffold totals and fragmentation closer to an expected isolate-scale `5.2 Mb` genome.
+- Keep `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` and `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` out of this depth-test path unless later results justify an expanded sample set.
+
 ## 2026-05-01 Filtered-read assembly decision point
 
 - Treat the filtered-read `--isolate` rerun as complete and use `assembly_filtered_isolate_rerun/metrics/assembly_summary.tsv` as the current assembly decision point for the 3 strongest `Vibrio vulnificus` candidates.

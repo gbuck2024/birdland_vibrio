@@ -1,5 +1,30 @@
 # Work Completed
 
+## 2026-05-01 ANI substage prepared for the 3 best completed subsampled assemblies
+
+- Reviewed the top-level project markdown files again before editing so the ANI updates follow the saved workflow, documentation, stage-isolation, and Git-tracking rules already in force on `2026-05-01`.
+- Audited the existing ANI assets under `ani/`, `configs/`, `scripts/`, and `reference/` before patching so the new work reuses the saved reference manifest and does not collide with the older six-sample ANI preparation.
+- Reviewed `assembly_filtered_subsampled_isolate/metrics/assembly_summary.tsv` and selected one best subsampled assembly per strong `Vibrio vulnificus` candidate for the next ANI run: `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x`.
+- Added `configs/ani_query_manifest_subsampled_best_assemblies.tsv` so the 3 chosen ANI queries are saved explicitly as scaffold-level FASTA paths under `assembly_filtered_subsampled_isolate/assemblies/`.
+- Added the new substage directory `ani/subsampled_best_assemblies/` with `README.md` and `metrics/fastani_parameters.txt` documenting why those 3 assemblies were selected, the exact scaffold source paths, the intended tracked reference set, the planned `fastANI` thresholds, and the expected outputs.
+- Updated `scripts/fastani_array.slurm` so ANI runs can now be redirected into a new stage with `STAGE_DIR`, can swap query manifests with `QUERY_MANIFEST`, can pin the reference manifest with `REFERENCE_MANIFEST`, and can accept either `contigs.fasta` or `scaffolds.fasta` as the query assembly FASTA.
+- Updated `scripts/summarize_fastani.py` so the summary and matrix generation now respect `STAGE_DIR`, `QUERY_MANIFEST`, and `REFERENCE_MANIFEST`, which allows the same summarizer to be reused for the new substage without overwriting any older ANI summary targets.
+- Updated `ani/README.md`, `.gitignore`, `README.md`, `NEXT_STEPS.md`, and `IN_PROGRESS.md` so the new ANI substage is documented and its future raw outputs and logs stay out of Git while curated metrics remain trackable.
+- Ran only non-compute validation in this turn: manifest path checks, Bash syntax checks, and Python syntax checks for the updated ANI workflow. No SLURM jobs were submitted and no new ANI outputs were generated yet.
+
+## 2026-05-01 Kraken2-filtered subsampling and subsampled-SPAdes stages prepared
+
+- Read the top-level project markdown files again before editing so the new stage follows the saved workflow, documentation, and repo-tracking rules already in force on `2026-05-01`.
+- Calculated the fixed target read-pair counts for the new downsampling test assuming a `5.2 Mb` genome and `149 bp` paired-end reads: `436,242` pairs for `25x`, `872,483` pairs for `50x`, and `1,744,966` pairs for `100x`.
+- Added `configs/kraken2_vibrio_subsample_manifest.tsv` to define all 9 planned sample-depth subsets from the completed `kraken2_vibrio_read_filtering/filtered_reads/` inputs, including saved seeds, output FASTQ paths, and per-run metrics paths.
+- Added `scripts/subsample_paired_fastq.py` as a reusable Python subsampling workflow that validates paired gzipped FASTQ inputs, preserves R1/R2 synchronization by reading both files in lockstep, draws a seeded random subset of pair indexes, and records `sample_id`, `subsample_id`, target depth assumptions, target pair counts, actual pair counts, seeds, and input/output FASTQ paths.
+- Added `scripts/summarize_subsampled_reads.py` plus `scripts/subsample_vibrio_reads_array.slurm` so the new subsampling stage can be submitted as a 9-task SLURM array and then summarized into `kraken2_vibrio_subsampled_reads/metrics/subsampling_summary.tsv` without mixing outputs into earlier stages.
+- Added the new stage directory `kraken2_vibrio_subsampled_reads/` with `README.md` and `metrics/subsampling_parameters.txt` so the planned fixed-depth FASTQ outputs, recorded fields, and submission form are documented before job submission.
+- Added `configs/assembly_manifest_vulnificus_candidates_filtered_subsampled.tsv` for the downstream `SPAdes --isolate` rerun across the 9 planned subsampled paired-read sets.
+- Added the new stage directory `assembly_filtered_subsampled_isolate/` with `README.md` and `metrics/spades_parameters.txt` so the fixed-depth assembly rerun can be submitted reproducibly without overwriting `assembly/`, `assembly_isolate_rerun/`, or `assembly_filtered_isolate_rerun/`.
+- Updated `README.md`, `.gitignore`, and the milestone notes so the new subsampling-preparation state is documented and the future subsampled FASTQ outputs, runtime logs, and assembly directories stay out of Git while curated metrics remain trackable.
+- Ran only non-compute validation in this turn: Python syntax checks, Bash syntax checks, and dry-run/path validation against all 9 planned subsampling rows. No SLURM jobs were submitted and no new FASTQ outputs were generated yet.
+
 ## 2026-05-01 Filtered-read assembly comparison and next-step decision
 
 - Audited the completed `assembly_filtered_isolate_rerun/` stage and confirmed that all 3 target samples now have finished SPAdes outputs plus a saved comparison table at `assembly_filtered_isolate_rerun/metrics/assembly_summary.tsv`.

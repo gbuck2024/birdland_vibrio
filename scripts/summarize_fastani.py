@@ -4,15 +4,17 @@
 from __future__ import annotations
 
 import csv
+import os
 import sys
 from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-QUERY_MANIFEST = PROJECT_DIR / "configs" / "ani_query_manifest.tsv"
-REFERENCE_MANIFEST_DEFAULT = PROJECT_DIR / "configs" / "ani_reference_manifest.tsv"
+QUERY_MANIFEST = PROJECT_DIR / Path(os.environ.get("QUERY_MANIFEST", "configs/ani_query_manifest.tsv"))
+REFERENCE_MANIFEST_DEFAULT = PROJECT_DIR / Path(os.environ.get("REFERENCE_MANIFEST", "configs/ani_reference_manifest.tsv"))
 REFERENCE_MANIFEST_FALLBACK = PROJECT_DIR / "configs" / "multi_reference_reference_manifest.tsv"
-OUTPUT_DIR = PROJECT_DIR / "ani" / "outputs"
-METRICS_DIR = PROJECT_DIR / "ani" / "metrics"
+STAGE_DIR = PROJECT_DIR / Path(os.environ.get("STAGE_DIR", "ani"))
+OUTPUT_DIR = STAGE_DIR / "outputs"
+METRICS_DIR = STAGE_DIR / "metrics"
 SUMMARY_TSV = METRICS_DIR / "ani_summary.tsv"
 ANI_MATRIX_TSV = METRICS_DIR / "ani_matrix.tsv"
 

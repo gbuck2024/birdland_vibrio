@@ -4,7 +4,7 @@
 #
 # How to run:
 # 1. Submit one ANI task per assembled sample:
-#    sbatch --array=0-5 scripts/fastani_array.slurm
+#    sbatch --array=0-N scripts/fastani_array.slurm
 # 2. After the array job completes, generate the curated ANI summaries:
 #    sbatch --export=ALL,ANI_MODE=summary scripts/fastani_array.slurm
 
@@ -30,15 +30,15 @@ fi
 cd "${PROJECT_DIR}"
 
 MODE="${ANI_MODE:-compare}"
-QUERY_MANIFEST="configs/ani_query_manifest.tsv"
-REFERENCE_MANIFEST_DEFAULT="configs/ani_reference_manifest.tsv"
+QUERY_MANIFEST="${QUERY_MANIFEST:-configs/ani_query_manifest.tsv}"
+REFERENCE_MANIFEST_DEFAULT="${REFERENCE_MANIFEST:-configs/ani_reference_manifest.tsv}"
 REFERENCE_MANIFEST_FALLBACK="configs/multi_reference_reference_manifest.tsv"
-STAGE_DIR="ani"
+STAGE_DIR="${STAGE_DIR:-ani}"
 OUTPUT_DIR="${STAGE_DIR}/outputs"
 METRICS_DIR="${STAGE_DIR}/metrics"
 LOG_DIR="${STAGE_DIR}/logs"
 SLURM_LOG_DIR="${LOG_DIR}/slurm"
-SUMMARY_SCRIPT="scripts/summarize_fastani.py"
+SUMMARY_SCRIPT="${SUMMARY_SCRIPT:-scripts/summarize_fastani.py}"
 
 FASTANI_BIN="${FASTANI_BIN:-fastANI}"
 FASTANI_THREADS="${SLURM_CPUS_PER_TASK:-8}"
@@ -121,6 +121,7 @@ REFERENCE_MANIFEST="$(resolve_reference_manifest)"
 log "START fastani_array.slurm"
 log "Project directory: ${PROJECT_DIR}"
 log "Mode: ${MODE}"
+log "Stage directory: ${STAGE_DIR}"
 log "Query manifest: ${QUERY_MANIFEST}"
 log "Reference manifest: ${REFERENCE_MANIFEST}"
 
@@ -183,8 +184,8 @@ fi
 require_file "${query_fasta}" "ANI query FASTA"
 
 query_base="$(basename "${query_fasta}")"
-if [ "${query_base}" != "contigs.fasta" ]; then
-  log "ERROR: ANI query FASTA does not match the expected assembly contigs path: ${query_fasta}" >&2
+if [ "${query_base}" != "contigs.fasta" ] && [ "${query_base}" != "scaffolds.fasta" ]; then
+  log "ERROR: ANI query FASTA must be an assembly contig or scaffold FASTA: ${query_fasta}" >&2
   exit 1
 fi
 
