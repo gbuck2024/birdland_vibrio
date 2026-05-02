@@ -39,7 +39,7 @@ The current tracked workflow takes raw paired-end Illumina reads through:
 
 ## Current Status
 
-As of 2026-05-01, the project has completed the QC, trimming, alignment-review, multi-reference comparison, Kraken2 database, Kraken2 classification-summary, first SPAdes preparation, ANI stage-preparation, Kraken2-guided Vibrio read filtering, the filtered-read `--isolate` rerun review, the fixed-depth subsampled assembly review, and the new ANI substage preparation for the three strongest current `Vibrio vulnificus` candidates.
+As of 2026-05-01, the project has completed the QC, trimming, alignment-review, multi-reference comparison, Kraken2 database, Kraken2 classification-summary, first SPAdes preparation, ANI stage-preparation, Kraken2-guided Vibrio read filtering, the filtered-read `--isolate` rerun review, the fixed-depth subsampled assembly review, and the new ANI substage preparation for the three strongest current `Vibrio vulnificus` candidates. The ANI execution path now expects the saved fastANI container image under `containers/` by default.
 
 The current decision point is no longer subsampling or assembly preparation. The current decision point is when to submit the new ANI substage for the 3 selected best completed subsampled assemblies:
 
@@ -90,6 +90,7 @@ The new subsampled-assembly rerun stage is prepared with:
 
 - `scripts/`: reusable shell, SLURM, and Python workflow scripts
 - `configs/`: tracked manifests and reference lists used by batch jobs
+- `containers/`: local Singularity images used by reproducible compute stages
 - `fastqc_review/`: curated raw-read QC interpretation
 - `trimmomatic/`: trimming workspace and post-trim QC outputs
 - `alignment/`: single-reference alignment workspace and curated summary table
@@ -141,6 +142,6 @@ The heavy compute stages are written for SLURM submission and should not be run 
 - FastQC .html/.zip outputs
 - Trimmed reads
 - Logs
-- Local Singularity container images such as `kraken2.sif`
+- Local Singularity container images such as `containers/kraken2.sif`, `containers/spades.sif`, and `containers/fastani_latest.sif`
 
 By Gilbert N. Lametrie

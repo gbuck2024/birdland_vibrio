@@ -47,10 +47,10 @@ KRAKEN2_EXTRA_ARGS="${KRAKEN2_EXTRA_ARGS:-}"
 
 if [ -n "${KRAKEN2_SIF:-}" ]; then
   CONTAINER_IMAGE="${KRAKEN2_SIF}"
-elif [ -s "${PROJECT_DIR}/kraken2.sif" ]; then
-  CONTAINER_IMAGE="${PROJECT_DIR}/kraken2.sif"
-else
+elif [ -s "${PROJECT_DIR}/containers/kraken2.sif" ]; then
   CONTAINER_IMAGE="${PROJECT_DIR}/containers/kraken2.sif"
+else
+  CONTAINER_IMAGE="${PROJECT_DIR}/kraken2.sif"
 fi
 
 timestamp() {

@@ -15,8 +15,8 @@ This stage prepares a bacteria-focused Kraken2 database in a dedicated project s
 
 Default container path search order:
 
-- `kraken2.sif`
 - `containers/kraken2.sif`
+- `kraken2.sif`
 
 Override at submission time if needed:
 

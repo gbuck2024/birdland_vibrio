@@ -20,8 +20,9 @@ Reusable overrides now supported by `scripts/fastani_array.slurm`:
 ## Dependency
 
 - Preferred tool: `fastANI`
-- The workflow is written around `fastANI`. If it is not already available on the cluster, set `FASTANI_BIN` to the correct executable path or install/load `fastANI` before submission.
-- The SLURM script will first try `FASTANI_BIN`, then `fastANI` on `PATH`, then environment modules named `fastani` or `FastANI`.
+- The workflow is now written to prefer a saved Singularity image. By default the script checks `containers/fastani_latest.sif`, then `containers/fastani.sif`, then older project-root fallbacks.
+- Override the container path with `FASTANI_SIF=/path/to/fastani.sif` if needed.
+- If no container image is available, the script still falls back to `FASTANI_BIN`, then `fastANI` on `PATH`, then environment modules named `fastani` or `FastANI`.
 
 ## Intended outputs
 
@@ -44,6 +45,7 @@ An outlier sample may still produce an empty raw `fastANI` output file if no rep
 - The ANI stage is separate from assembly and does not modify assembly outputs.
 - The script prefers `configs/ani_reference_manifest.tsv`, falls back to `configs/multi_reference_reference_manifest.tsv`, and only autodetects `reference/*.fasta` if no saved ANI reference manifest is present.
 - For the best completed subsampled assemblies, use `configs/ani_query_manifest_subsampled_best_assemblies.tsv` together with `STAGE_DIR=ani/subsampled_best_assemblies` so the new outputs stay isolated from the earlier ANI preparation.
+- The default reproducible container location is `containers/fastani_latest.sif`.
 
 ## Interpretation goal
 

@@ -1,0 +1,5 @@
+reference/v_alginolyticus_ref.fasta
+reference/v_ostreicida_PP203_ref.fasta
+reference/v_ostreicida_r172_ref.fasta
+reference/v_parahaemolyticus_ref.fasta
+reference/v_vulnificus_ref.fasta

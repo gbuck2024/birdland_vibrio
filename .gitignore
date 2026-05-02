@@ -96,6 +96,7 @@
 !/assembly_isolate_rerun/metrics/assembly_summary.tsv
 /kraken2.sif
 /spades.sif
+/fastani_latest.sif
 /containers/*.sif
 *.log
 *.out

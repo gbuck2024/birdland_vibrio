@@ -7,10 +7,14 @@ configs/ani_reference_manifest.tsv
 
 Software
 - Preferred ANI tool: fastANI
-- Default executable lookup in script: FASTANI_BIN or fastANI
+- Default container lookup in script: FASTANI_SIF, then containers/fastani_latest.sif, then containers/fastani.sif
+- Native fallback if no container is present: FASTANI_BIN, then fastANI on PATH, then fastani/FastANI modules
 
 Planned ANI command template
-fastANI \
+singularity exec --cleanenv \
+  --bind <project_root>:<project_root> \
+  containers/fastani_latest.sif \
+  fastANI \
   --query assembly/assemblies/<sample_id>/contigs.fasta \
   --rl ani/metrics/fastani_reference_list.txt \
   --output ani/outputs/<sample_id>.fastani.tsv \
@@ -40,5 +44,5 @@ Interpretation target
 
 Planned submission form
 cd <project_root>
-sbatch --array=0-5 scripts/fastani_array.slurm
-sbatch --export=ALL,ANI_MODE=summary scripts/fastani_array.slurm
+sbatch --export=ALL,FASTANI_SIF=containers/fastani_latest.sif --array=0-5 scripts/fastani_array.slurm
+sbatch --export=ALL,ANI_MODE=summary,FASTANI_SIF=containers/fastani_latest.sif scripts/fastani_array.slurm

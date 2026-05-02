@@ -27,10 +27,14 @@ Reference set
 
 Software
 - Preferred ANI tool: fastANI
-- Default executable lookup in script: FASTANI_BIN or fastANI
+- Default container lookup in script: FASTANI_SIF, then containers/fastani_latest.sif, then containers/fastani.sif
+- Native fallback if no container is present: FASTANI_BIN, then fastANI on PATH, then fastani/FastANI modules
 
 Planned ANI command template
-fastANI \
+singularity exec --cleanenv \
+  --bind <project_root>:<project_root> \
+  containers/fastani_latest.sif \
+  fastANI \
   --query assembly_filtered_subsampled_isolate/assemblies/<sample_id>/scaffolds.fasta \
   --rl ani/subsampled_best_assemblies/metrics/fastani_reference_list.txt \
   --output ani/subsampled_best_assemblies/outputs/<sample_id>.fastani.tsv \
@@ -56,5 +60,5 @@ Expected completion checks
 
 Planned submission form
 cd /work/VibrioVulnificus/gbuck/20260105_Buck-wgs
-sbatch --export=ALL,STAGE_DIR=ani/subsampled_best_assemblies,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest.tsv --array=0-2 scripts/fastani_array.slurm
-sbatch --export=ALL,ANI_MODE=summary,STAGE_DIR=ani/subsampled_best_assemblies,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest.tsv scripts/fastani_array.slurm
+sbatch --export=ALL,FASTANI_SIF=containers/fastani_latest.sif,STAGE_DIR=ani/subsampled_best_assemblies,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest.tsv --array=0-2 scripts/fastani_array.slurm
+sbatch --export=ALL,ANI_MODE=summary,FASTANI_SIF=containers/fastani_latest.sif,STAGE_DIR=ani/subsampled_best_assemblies,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest.tsv scripts/fastani_array.slurm

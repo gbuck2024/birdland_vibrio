@@ -5,7 +5,7 @@
 - The next active downstream step is now ANI for the 3 selected best completed subsampled assemblies rather than another assembly-preparation task.
 - The planned representative set is `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x`, based on the saved scaffold totals, scaffold counts, and scaffold `N50` values in `assembly_filtered_subsampled_isolate/metrics/assembly_summary.tsv`.
 - The ANI workflow is now prepared to run as a separate substage at `ani/subsampled_best_assemblies/` using `configs/ani_query_manifest_subsampled_best_assemblies.tsv` and the tracked reference manifest at `configs/ani_reference_manifest.tsv`.
-- Current technical caveat is dependency-specific rather than workflow-specific: the cluster submission will still require `fastANI` to be available through `FASTANI_BIN`, `PATH`, or an environment module.
+- Current technical caveat is now container-specific rather than workflow-specific: the cluster submission should use the saved fastANI image at `containers/fastani_latest.sif` unless `FASTANI_SIF` is overridden.
 
 ## 2026-05-01 Filtered-read assembly follow-up
 

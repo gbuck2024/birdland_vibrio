@@ -3,7 +3,7 @@
 ## 2026-05-01 ANI substage prepared for the 3 best subsampled assemblies
 
 - Review `assembly_filtered_subsampled_isolate/metrics/assembly_summary.tsv` one last time if you want to challenge the chosen representatives, but the current planned ANI set is `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x`.
-- Submit `scripts/fastani_array.slurm` with `STAGE_DIR=ani/subsampled_best_assemblies` and `QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv` so the 3 selected scaffold assemblies are compared against the intended saved `Vibrio` reference set without touching any prior ANI outputs.
+- Confirm that `containers/fastani_latest.sif` exists, then submit `scripts/fastani_array.slurm` with `STAGE_DIR=ani/subsampled_best_assemblies` and `QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv` so the 3 selected scaffold assemblies are compared against the intended saved `Vibrio` reference set without touching any prior ANI outputs.
 - After the ANI array completes, submit the same script in `ANI_MODE=summary` to write `ani/subsampled_best_assemblies/metrics/ani_summary.tsv` and `ani/subsampled_best_assemblies/metrics/ani_matrix.tsv`.
 - Confirm that 3 raw outputs appear under `ani/subsampled_best_assemblies/outputs/` and that the summary and matrix files appear under `ani/subsampled_best_assemblies/metrics/`.
 - Interpret `>=95-96% ANI` to `v_vulnificus` as the strongest planned assembly-level confirmation that the selected subsampled representatives are consistent with `Vibrio vulnificus`.
@@ -111,7 +111,7 @@
 ## 2026-04-18 ANI stage prepared for submission
 
 - After `assembly/assemblies/<sample_id>/contigs.fasta` exists for all 6 samples, submit `scripts/fastani_array.slurm` with `sbatch --array=0-5` so each assembled genome is compared once against the saved reference set.
-- Confirm within 1-2 minutes that the ANI array has started cleanly by checking `ani/logs/slurm/` and verifying that each task resolved the `fastANI` executable correctly on the cluster.
+- Confirm within 1-2 minutes that the ANI array has started cleanly by checking `ani/logs/slurm/` and verifying that each task resolved `containers/fastani_latest.sif` or the intended override container cleanly on the cluster.
 - After the array completes, submit `sbatch --export=ALL,ANI_MODE=summary scripts/fastani_array.slurm` to generate `ani/metrics/ani_summary.tsv` and `ani/metrics/ani_matrix.tsv`.
 - Use ANI values near or above `95-96%` against `v_vulnificus` as the strongest assembly-level support for likely `Vibrio vulnificus`.
 - Treat samples with species-level ANI to a different reference as likely other `Vibrio` species, and treat sub-threshold or no-hit samples as outliers or unresolved pending broader post-assembly review.

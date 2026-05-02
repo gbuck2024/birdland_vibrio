@@ -40,12 +40,25 @@ LOG_DIR="${STAGE_DIR}/logs"
 SLURM_LOG_DIR="${LOG_DIR}/slurm"
 SUMMARY_SCRIPT="${SUMMARY_SCRIPT:-scripts/summarize_fastani.py}"
 
+CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-singularity}"
 FASTANI_BIN="${FASTANI_BIN:-fastANI}"
 FASTANI_THREADS="${SLURM_CPUS_PER_TASK:-8}"
 FASTANI_FRAGLEN="${FASTANI_FRAGLEN:-3000}"
 FASTANI_KMER="${FASTANI_KMER:-16}"
 FASTANI_MIN_FRACTION="${FASTANI_MIN_FRACTION:-0.2}"
 FASTANI_EXTRA_ARGS="${FASTANI_EXTRA_ARGS:-}"
+
+if [ -n "${FASTANI_SIF:-}" ]; then
+  CONTAINER_IMAGE="${FASTANI_SIF}"
+elif [ -s "${PROJECT_DIR}/containers/fastani_latest.sif" ]; then
+  CONTAINER_IMAGE="${PROJECT_DIR}/containers/fastani_latest.sif"
+elif [ -s "${PROJECT_DIR}/containers/fastani.sif" ]; then
+  CONTAINER_IMAGE="${PROJECT_DIR}/containers/fastani.sif"
+elif [ -s "${PROJECT_DIR}/fastani_latest.sif" ]; then
+  CONTAINER_IMAGE="${PROJECT_DIR}/fastani_latest.sif"
+else
+  CONTAINER_IMAGE="${PROJECT_DIR}/fastani.sif"
+fi
 
 timestamp() {
   date '+%Y-%m-%d %H:%M:%S %Z'
@@ -73,6 +86,91 @@ require_path_exists() {
     log "ERROR: ${label} not found: ${path}" >&2
     exit 1
   fi
+}
+
+require_command() {
+  local command_name="$1"
+
+  if ! command -v "${command_name}" >/dev/null 2>&1; then
+    log "ERROR: Required command not found in PATH: ${command_name}" >&2
+    exit 1
+  fi
+}
+
+resolve_fastani_bin() {
+  local candidate=""
+
+  for candidate in "${FASTANI_BIN}" fastANI fastani; do
+    if command -v "${candidate}" >/dev/null 2>&1; then
+      FASTANI_BIN="${candidate}"
+      log "Using fastANI executable: ${FASTANI_BIN}"
+      return 0
+    fi
+  done
+
+  if command -v module >/dev/null 2>&1; then
+    module purge
+    if module load fastani >/dev/null 2>&1; then
+      for candidate in "${FASTANI_BIN}" fastANI fastani; do
+        if command -v "${candidate}" >/dev/null 2>&1; then
+          FASTANI_BIN="${candidate}"
+          log "Loaded fastANI via environment module 'fastani'."
+          log "Using fastANI executable: ${FASTANI_BIN}"
+          return 0
+        fi
+      done
+    fi
+    module purge
+    if module load FastANI >/dev/null 2>&1; then
+      for candidate in "${FASTANI_BIN}" fastANI fastani; do
+        if command -v "${candidate}" >/dev/null 2>&1; then
+          FASTANI_BIN="${candidate}"
+          log "Loaded fastANI via environment module 'FastANI'."
+          log "Using fastANI executable: ${FASTANI_BIN}"
+          return 0
+        fi
+      done
+    fi
+    module purge
+  fi
+
+  log "ERROR: fastANI executable not found. Set FASTANI_BIN or provide a container image with FASTANI_SIF." >&2
+  return 1
+}
+
+run_fastani_in_container() {
+  require_command "${CONTAINER_RUNTIME}"
+  require_file "${CONTAINER_IMAGE}" "fastANI container image"
+
+  log "Using container runtime: ${CONTAINER_RUNTIME}"
+  log "Using container image: ${CONTAINER_IMAGE}"
+
+  "${CONTAINER_RUNTIME}" exec \
+    --cleanenv \
+    --bind "${PROJECT_DIR}:${PROJECT_DIR}" \
+    "${CONTAINER_IMAGE}" \
+    bash -c "
+      set -euo pipefail
+      if command -v '${FASTANI_BIN}' >/dev/null 2>&1; then
+        resolved_fastani='${FASTANI_BIN}'
+      elif command -v fastANI >/dev/null 2>&1; then
+        resolved_fastani='fastANI'
+      elif command -v fastani >/dev/null 2>&1; then
+        resolved_fastani='fastani'
+      else
+        echo 'fastANI executable not found inside container.' >&2
+        exit 1
+      fi
+      \"\${resolved_fastani}\" \
+        --query '${query_fasta}' \
+        --rl '${reference_list_file}' \
+        --output '${sample_output}' \
+        --threads '${FASTANI_THREADS}' \
+        --fragLen '${FASTANI_FRAGLEN}' \
+        --kmer '${FASTANI_KMER}' \
+        --minFraction '${FASTANI_MIN_FRACTION}' \
+        ${FASTANI_EXTRA_ARGS}
+    "
 }
 
 resolve_reference_manifest() {
@@ -124,6 +222,7 @@ log "Mode: ${MODE}"
 log "Stage directory: ${STAGE_DIR}"
 log "Query manifest: ${QUERY_MANIFEST}"
 log "Reference manifest: ${REFERENCE_MANIFEST}"
+log "Container image candidate: ${CONTAINER_IMAGE}"
 
 require_file "${QUERY_MANIFEST}" "ANI query manifest"
 require_file "${REFERENCE_MANIFEST}" "ANI reference manifest"
@@ -143,23 +242,6 @@ fi
 if [ -z "${SLURM_ARRAY_TASK_ID:-}" ]; then
   log "ERROR: Submit ANI compare mode with sbatch --array=0-N." >&2
   exit 1
-fi
-
-if ! command -v "${FASTANI_BIN}" >/dev/null 2>&1; then
-  if command -v module >/dev/null 2>&1; then
-    module purge
-    if module load fastani >/dev/null 2>&1 && command -v "${FASTANI_BIN}" >/dev/null 2>&1; then
-      log "Loaded fastANI via environment module 'fastani'."
-    elif module load FastANI >/dev/null 2>&1 && command -v "${FASTANI_BIN}" >/dev/null 2>&1; then
-      log "Loaded fastANI via environment module 'FastANI'."
-    else
-      log "ERROR: fastANI executable not found. Set FASTANI_BIN or load/install fastANI before submission." >&2
-      exit 1
-    fi
-  else
-    log "ERROR: fastANI executable not found. Set FASTANI_BIN or install fastANI before submission." >&2
-    exit 1
-  fi
 fi
 
 mapfile -t QUERY_ROWS < <(tail -n +2 "${QUERY_MANIFEST}")
@@ -204,15 +286,20 @@ log "Sample: ${sample_id}"
 log "Query FASTA: ${query_fasta}"
 log "Raw output: ${sample_output}"
 
-"${FASTANI_BIN}" \
-  --query "${query_fasta}" \
-  --rl "${reference_list_file}" \
-  --output "${sample_output}" \
-  --threads "${FASTANI_THREADS}" \
-  --fragLen "${FASTANI_FRAGLEN}" \
-  --kmer "${FASTANI_KMER}" \
-  --minFraction "${FASTANI_MIN_FRACTION}" \
-  ${FASTANI_EXTRA_ARGS}
+if [ -s "${CONTAINER_IMAGE}" ]; then
+  run_fastani_in_container
+else
+  resolve_fastani_bin
+  "${FASTANI_BIN}" \
+    --query "${query_fasta}" \
+    --rl "${reference_list_file}" \
+    --output "${sample_output}" \
+    --threads "${FASTANI_THREADS}" \
+    --fragLen "${FASTANI_FRAGLEN}" \
+    --kmer "${FASTANI_KMER}" \
+    --minFraction "${FASTANI_MIN_FRACTION}" \
+    ${FASTANI_EXTRA_ARGS}
+fi
 
 require_path_exists "${sample_output}" "Raw fastANI output"
 

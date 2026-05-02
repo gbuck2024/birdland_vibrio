@@ -27,7 +27,7 @@ This stage holds de novo SPAdes assemblies generated from the paired trimmed rea
 - The script now tries `SPADES_BIN` first, then common executable names (`spades.py`, `spades`), and then common module names (`spades`, `SPAdes`) after initializing environment modules in a non-interactive SLURM shell.
 - If your HPC uses a different wrapper command, submit with an explicit override such as `sbatch --export=ALL,SPADES_BIN=/path/to/spades.py --array=0-5 scripts/spades_assembly_array.slurm`.
 - The script can use a SPAdes Singularity or Apptainer image if one is available. Set `SPADES_SIF=/path/to/spades.sif` and optionally `CONTAINER_RUNTIME=apptainer` at submission time.
-- If `SPADES_SIF` is unset, the script checks `spades.sif` in the project root and then `containers/spades.sif`.
+- If `SPADES_SIF` is unset, the script checks `containers/spades.sif` first and then falls back to `spades.sif` in the project root for older runs.
 
 ## Interpretation notes
 

@@ -35,6 +35,7 @@ Primary manifest: `configs/ani_reference_manifest.tsv`
 ## Planned ANI tool and thresholds
 
 - Tool: `fastANI`
+- Default container image: `containers/fastani_latest.sif`
 - Query FASTA type: assembled `scaffolds.fasta`
 - Default parameters: `--fragLen 3000 --kmer 16 --minFraction 0.2 --threads 8`
 - Species-level interpretation target: about `95-96% ANI`

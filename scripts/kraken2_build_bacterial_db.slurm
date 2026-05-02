@@ -47,10 +47,10 @@ JOB_TMPDIR="${JOB_TMP_ROOT}/kraken2_build_${SLURM_JOB_ID:-manual}"
 
 if [ -n "${KRAKEN2_SIF:-}" ]; then
   CONTAINER_IMAGE="${KRAKEN2_SIF}"
-elif [ -s "${PROJECT_DIR}/kraken2.sif" ]; then
-  CONTAINER_IMAGE="${PROJECT_DIR}/kraken2.sif"
-else
+elif [ -s "${PROJECT_DIR}/containers/kraken2.sif" ]; then
   CONTAINER_IMAGE="${PROJECT_DIR}/containers/kraken2.sif"
+else
+  CONTAINER_IMAGE="${PROJECT_DIR}/kraken2.sif"
 fi
 
 timestamp() {

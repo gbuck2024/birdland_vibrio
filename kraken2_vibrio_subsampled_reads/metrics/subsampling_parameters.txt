@@ -1,0 +1,48 @@
+Kraken2-filtered Vibrio read subsampling parameter record
+Date prepared: 2026-05-01
+
+Input manifest
+configs/kraken2_vibrio_subsample_manifest.tsv
+
+Stage directory
+kraken2_vibrio_subsampled_reads
+
+Software
+- Python 3
+- scripts/subsample_paired_fastq.py
+- scripts/summarize_subsampled_reads.py
+- scripts/subsample_vibrio_reads_array.slurm
+
+Coverage assumptions
+- Genome size assumption: 5200000 bp
+- Read length assumption: 149 bp per mate
+- Paired-end bases per read pair: 298 bp
+
+Target read-pair counts
+- 25x coverage: 436242 read pairs
+- 50x coverage: 872483 read pairs
+- 100x coverage: 1744966 read pairs
+
+Target samples
+- Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7
+- Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7
+- Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7
+
+Per-run recorded fields
+- sample_id
+- subsample_id
+- target_coverage
+- genome_size_assumption
+- read_length_assumption
+- target_read_pairs
+- actual_read_pairs
+- seed
+- input_read1
+- input_read2
+- output_read1
+- output_read2
+
+Planned submission form
+cd <project_root>
+sbatch --array=0-8 scripts/subsample_vibrio_reads_array.slurm
+sbatch --export=ALL,SUBSAMPLE_MODE=summary scripts/subsample_vibrio_reads_array.slurm

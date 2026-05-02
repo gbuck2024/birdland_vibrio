@@ -51,10 +51,10 @@ SPADES_TMP_ROOT="${SPADES_TMP_ROOT:-${TMPDIR:-${PROJECT_DIR}/tmp}}"
 
 if [ -n "${SPADES_SIF:-}" ]; then
   CONTAINER_IMAGE="${SPADES_SIF}"
-elif [ -s "${PROJECT_DIR}/spades.sif" ]; then
-  CONTAINER_IMAGE="${PROJECT_DIR}/spades.sif"
-else
+elif [ -s "${PROJECT_DIR}/containers/spades.sif" ]; then
   CONTAINER_IMAGE="${PROJECT_DIR}/containers/spades.sif"
+else
+  CONTAINER_IMAGE="${PROJECT_DIR}/spades.sif"
 fi
 
 timestamp() {

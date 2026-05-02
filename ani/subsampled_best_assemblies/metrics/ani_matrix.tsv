@@ -1,0 +1,4 @@
+sample_id	v_alginolyticus	v_ostreicida_PP203	v_ostreicida_r172	v_parahaemolyticus	v_vulnificus	best_reference_id	best_ani_pct	species_interpretation
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x	80.19	NA	NA	80.40	98.65	v_vulnificus	98.65	likely Vibrio vulnificus
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x	80.17	NA	NA	80.30	95.63	v_vulnificus	95.63	likely Vibrio vulnificus
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x	80.22	NA	NA	80.36	98.25	v_vulnificus	98.25	likely Vibrio vulnificus

@@ -1,5 +1,14 @@
 # Work Completed
 
+## 2026-05-01 ANI containerization and container-directory cleanup
+
+- Audited the saved container-handling patterns in `scripts/spades_assembly_array.slurm`, `scripts/kraken2_build_bacterial_db.slurm`, `scripts/kraken2_classify_array.slurm`, `scripts/fastani_array.slurm`, and the related stage notes before editing so the new ANI fix follows the same reproducibility model already used elsewhere in the project.
+- Updated `scripts/fastani_array.slurm` so ANI now prefers a Singularity image through `FASTANI_SIF` or the canonical default location `containers/fastani_latest.sif`, while still retaining fallback support for a native `FASTANI_BIN` or older module-based environments if the container is absent.
+- Updated the SPAdes and Kraken2 SLURM scripts so they now prefer the canonical `containers/` image location first and only fall back to the older project-root `.sif` paths for backward compatibility with earlier saved runs.
+- Updated the ANI, assembly, Kraken2, and top-level project documentation so the container search order, reproducible default paths, and the new ANI submission expectation are recorded explicitly.
+- Created `containers/README.md` and moved `fastani_latest.sif`, `kraken2.sif`, and `spades.sif` into `containers/` so the repository root no longer accumulates workflow images.
+- Extended `.gitignore` so the relocated top-level `fastani_latest.sif` remains untracked if it reappears outside `containers/`.
+
 ## 2026-05-01 ANI substage prepared for the 3 best completed subsampled assemblies
 
 - Reviewed the top-level project markdown files again before editing so the ANI updates follow the saved workflow, documentation, stage-isolation, and Git-tracking rules already in force on `2026-05-01`.

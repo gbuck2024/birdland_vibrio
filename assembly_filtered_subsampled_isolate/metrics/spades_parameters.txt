@@ -1,0 +1,37 @@
+SPAdes filtered-read subsampled isolate rerun parameter record
+Date prepared: 2026-05-01
+
+Input manifest
+configs/assembly_manifest_vulnificus_candidates_filtered_subsampled.tsv
+
+Stage directory
+assembly_filtered_subsampled_isolate
+
+Software
+- SPAdes
+- Existing reusable script: scripts/spades_assembly_array.slurm
+- Default executable lookup in script: SPADES_BIN or spades.py
+
+Planned paired-end assembly command template
+spades.py \
+  --pe1-1 <subsampled_R1_paired.fq.gz> \
+  --pe1-2 <subsampled_R2_paired.fq.gz> \
+  -o assembly_filtered_subsampled_isolate/assemblies/<sample_id> \
+  -t 16 \
+  -m 120 \
+  --tmp-dir <tmp_root>/spades_<sample_id> \
+  --isolate
+
+Planned depth-specific subsets
+- 3 samples at 25x
+- 3 samples at 50x
+- 3 samples at 100x
+
+Reason for rerun
+- The completed filtered-read isolate rerun still looks inflated relative to an expected 5.2 Mb isolate genome.
+- Fixed-depth subsets should test whether excessive read depth is a main driver of residual assembly inflation.
+
+Planned submission form
+cd <project_root>
+sbatch --export=ALL,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered_subsampled.tsv,STAGE_DIR=assembly_filtered_subsampled_isolate --array=0-8 scripts/spades_assembly_array.slurm
+sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates_filtered_subsampled.tsv,STAGE_DIR=assembly_filtered_subsampled_isolate scripts/spades_assembly_array.slurm
