@@ -1,5 +1,15 @@
 # Work Completed
 
+## 2026-05-01 vcg mining stage prepared for selected confirmed assemblies
+
+- Reviewed the existing manifest-driven SLURM stages, the saved project brief, and the current assembly-selection notes before editing so the new vcg workflow follows the repository’s stage isolation, reproducibility, and documentation rules.
+- Added `configs/vcg_mining_manifest.tsv` to define the first 3 confirmed subsampled assemblies for vcg screening: `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x`, each pointing to its saved `scaffolds.fasta`.
+- Added the new stage directory `vcg_mining/` with `README.md` plus the requested `references/`, `results/`, `logs/`, and `scripts/` subdirectories so the vcg work is isolated from the earlier assembly and ANI stages.
+- Added `scripts/vcg_mining_array.slurm` as a reusable SLURM array workflow that validates the manifest, validates each assembly FASTA, fails clearly if `vcg_mining/references/vcg_reference_alleles.fasta` is missing or empty, tries to resolve `blastn` and `makeblastdb` from `PATH` or a BLAST environment module, builds a local nucleotide BLAST database for each assembly reproducibly under `vcg_mining/results/blast_db/`, and writes the requested tabular BLAST output columns for each sample.
+- Added `scripts/summarize_vcg_hits.py` to parse the per-sample BLAST tables and write `vcg_mining/results/vcg_best_hits_summary.tsv` with one best hit per sample chosen by bitscore, then e-value, then percent identity and query coverage.
+- Updated `.gitignore`, `NEXT_STEPS.md`, and the stage notes so raw vcg BLAST outputs and logs stay out of Git while the curated summary TSV remains trackable.
+- Ran only non-compute preparation in this turn. No BLAST jobs were submitted and no vcg mining outputs were generated yet.
+
 ## 2026-05-01 ANI containerization and container-directory cleanup
 
 - Audited the saved container-handling patterns in `scripts/spades_assembly_array.slurm`, `scripts/kraken2_build_bacterial_db.slurm`, `scripts/kraken2_classify_array.slurm`, `scripts/fastani_array.slurm`, and the related stage notes before editing so the new ANI fix follows the same reproducibility model already used elsewhere in the project.

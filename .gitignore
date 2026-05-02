@@ -54,6 +54,10 @@
 !/ani/subsampled_best_assemblies/metrics/fastani_parameters.txt
 !/ani/subsampled_best_assemblies/metrics/ani_summary.tsv
 !/ani/subsampled_best_assemblies/metrics/ani_matrix.tsv
+/vcg_mining/results/*.blast.tsv
+/vcg_mining/results/blast_db/
+/vcg_mining/logs/
+!/vcg_mining/results/vcg_best_hits_summary.tsv
 /multi_reference_alignment/bam/
 /multi_reference_alignment/logs/
 /multi_reference_alignment/metrics/*.flagstat.txt

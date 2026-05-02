@@ -1,5 +1,13 @@
 # Next Steps
 
+## 2026-05-01 vcg mining stage prepared for 3 confirmed subsampled assemblies
+
+- Add the required nucleotide reference FASTA at `vcg_mining/references/vcg_reference_alleles.fasta` before any submission. Include the intended `vcgC` and `vcgE` allele sequences with stable FASTA headers, because the workflow will fail immediately if that file is missing or empty.
+- Review `configs/vcg_mining_manifest.tsv` if you want to expand beyond the current initial set, but the prepared manifest currently targets `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x`.
+- When the vcg reference FASTA is ready, submit `sbatch --array=0-2 scripts/vcg_mining_array.slurm` so each selected scaffold assembly is searched once with `blastn` against the saved vcg allele set.
+- After the array completes, submit `sbatch --export=ALL,VCG_MODE=summary scripts/vcg_mining_array.slurm` to write `vcg_mining/results/vcg_best_hits_summary.tsv`.
+- Verify that one raw BLAST table appears for each sample under `vcg_mining/results/` and that the summary file reports exactly one best hit row per sample using the requested BLAST columns.
+
 ## 2026-05-01 ANI substage prepared for the 3 best subsampled assemblies
 
 - Review `assembly_filtered_subsampled_isolate/metrics/assembly_summary.tsv` one last time if you want to challenge the chosen representatives, but the current planned ANI set is `Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7_50x`, `Buck_CB0707_82_WKDL250009588-1A_233TFCLT4_L7_25x`, and `Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7_100x`.
