@@ -57,7 +57,14 @@
 /vcg_mining/results/*.blast.tsv
 /vcg_mining/results/blast_db/
 /vcg_mining/logs/
+/vcg_mining/extracted_sequences/
+/vcg_mining/alignment/
+/vcg_mining/references/.gitkeep
+/vcg_mining/results/.gitkeep
 !/vcg_mining/results/vcg_best_hits_summary.tsv
+/vcg_mining/tree/*.log
+!/vcg_mining/tree/*.nwk
+!/vcg_mining/tree/*.pdf
 /multi_reference_alignment/bam/
 /multi_reference_alignment/logs/
 /multi_reference_alignment/metrics/*.flagstat.txt

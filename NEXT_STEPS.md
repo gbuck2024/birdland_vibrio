@@ -1,5 +1,41 @@
 # Next Steps
 
+## 2026-05-04 vcg single-gene tree follow-up
+
+- Treat `scripts/build_vcg_fasttree.sh` as the saved reproducible entry point for regenerating the vcg single-gene FastTree output from `vcg_mining/alignment/all_vcg_sequences.aligned.fasta`.
+- Rerun the tree and PDF visualization from the project root with:
+
+```bash
+cd /work/VibrioVulnificus/gbuck/20260105_Buck-wgs
+module load fasttree/2.1.11
+bash scripts/build_vcg_fasttree.sh
+module load R/gcc11/4.4.0
+Rscript scripts/plot_vcg_tree.R
+```
+
+- Use `vcg_mining/tree/all_vcg_sequences.fasttree.nwk` as the Newick tree for later R visualization and `vcg_mining/tree/all_vcg_sequences.fasttree.pdf` as the current quick-look tree figure.
+- Keep the interpretation limited to vcg single-gene relationships. This tree supports the expected close relationship between `Buck_BS0607_9_vcgE` and `Buck_NB0507_8_vcgE` relative to `Buck_CB0707_82_vcgC`, but it is not a whole-genome phylogeny.
+- If this tree is included in a report, label it as a preliminary vcg single-gene tree and cite the alignment source `vcg_mining/alignment/all_vcg_sequences.aligned.fasta`.
+
+## 2026-05-04 vcg alignment inspection follow-up
+
+- Treat `scripts/review_vcg_alignment.py` as the saved reproducible inspection step for the current MAFFT output, and rerun it with `PYTHONDONTWRITEBYTECODE=1 python3 scripts/review_vcg_alignment.py` if the aligned FASTA changes.
+- Use `vcg_mining/alignment_review/vcg_pairwise_differences.tsv` and `vcg_mining/alignment_review/vcg_alignment_review.md` as the current quick-look summary of vcg sequence similarity and variable sites before any downstream tree-building or broader comparative analysis.
+- Keep this stage focused on alignment inspection only; defer phylogenetic tree construction until you decide on the next vcg comparison or reporting step.
+
+## 2026-05-04 vcg alignment follow-up after MAFFT run
+
+- Treat `scripts/align_vcg_mafft.sh` as the saved reproducible entry point for rerunning the nucleotide alignment from the project root with `bash scripts/align_vcg_mafft.sh`.
+- Confirm that `vcg_mining/alignment/all_vcg_sequences.aligned.fasta` remains the current alignment built from `vcg_mining/extracted_sequences/all_vcg_sequences.fasta` and that `vcg_mining/logs/mafft_vcg.err` stays available as the runtime log for troubleshooting.
+- Use the aligned FASTA as the starting point for the next downstream vcg comparison step, such as alignment inspection, simple polymorphism review, or preparation for any phylogenetic analysis you plan to add later in the workflow.
+
+## 2026-05-04 vcg extraction follow-up after script repair
+
+- Use `bash scripts/extract_vcg.sh` from the project root after `vcg_mining/results/vcg_best_hits_summary.tsv` is present; the script now reads that summary by default, resolves `samtools` reproducibly, and no longer requires `seqkit`.
+- Treat any existing sample-level FASTA already present in `vcg_mining/extracted_sequences/` as completed work during reruns, because the repaired script now skips those rows instead of regenerating them.
+- Verify that the expected extracted FASTA files exist under `vcg_mining/extracted_sequences/` and that `vcg_mining/extracted_sequences/all_vcg_sequences.fasta` is rebuilt from the available per-sample FASTA files after each rerun.
+- If you want a completely clean, from-scratch extraction set with uniform headers and filenames, archive or move any older legacy FASTA files out of `vcg_mining/extracted_sequences/` before rerunning the script so only current-format outputs are combined.
+
 ## 2026-05-01 vcg mining stage prepared for 3 confirmed subsampled assemblies
 
 - Add the required nucleotide reference FASTA at `vcg_mining/references/vcg_reference_alleles.fasta` before any submission. Include the intended `vcgC` and `vcgE` allele sequences with stable FASTA headers, because the workflow will fail immediately if that file is missing or empty.

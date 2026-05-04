@@ -1,5 +1,37 @@
 # Work Completed
 
+## 2026-05-04 vcg single-gene FastTree workflow added and run
+
+- Checked FastTree availability from the project root. `command -v FastTree` and `command -v fasttree` were not available before module loading; `module avail fasttree` reported `fasttree/2.1.11`; `module spider fasttree` is not supported by this module system and returned `ERROR: Invalid command 'spider'`.
+- Added `scripts/build_vcg_fasttree.sh` as the reusable vcg single-gene tree builder. The script uses strict Bash mode, resolves the project root from the script location, validates `vcg_mining/alignment/all_vcg_sequences.aligned.fasta`, creates `vcg_mining/tree`, resolves FastTree from `PATH` or the `fasttree/2.1.11` module, writes `vcg_mining/tree/all_vcg_sequences.fasttree.nwk`, saves stderr/runtime details to `vcg_mining/tree/all_vcg_sequences.fasttree.log`, and verifies that the Newick tree is non-empty.
+- Added `scripts/plot_vcg_tree.R` to read the FastTree Newick file with `ape` and save `vcg_mining/tree/all_vcg_sequences.fasttree.pdf`.
+- Ran `bash scripts/build_vcg_fasttree.sh` successfully. The tree file is non-empty and the log records FastTree `2.1.11`.
+- Loaded `R/gcc11/4.4.0`, confirmed that the R package `ape` is available, and ran `Rscript scripts/plot_vcg_tree.R` successfully to create the PDF visualization.
+- Audited `.gitignore` for the new tree stage so `vcg_mining/tree/*.log` remains ignored while `.nwk` and `.pdf` tree outputs are explicitly allowed.
+- Biological interpretation for this small single-gene tree: the branch lengths are consistent with `Buck_BS0607_9_vcgE` and `Buck_NB0507_8_vcgE` being much closer to each other than either is to `Buck_CB0707_82_vcgC`. The saved Newick is `Buck_CB0707_82_vcgC` on a much longer branch, consistent with separate vcgC branching, but this is a 3-sequence single-gene tree and should not be interpreted as a whole-genome phylogeny.
+
+## 2026-05-04 vcg alignment inspection script added and reviewed
+
+- Added `scripts/review_vcg_alignment.py` as a reusable post-alignment inspection step for `vcg_mining/alignment/all_vcg_sequences.aligned.fasta`.
+- The script validates that all aligned FASTA records have equal length, counts per-sequence gap positions, computes pairwise nucleotide differences across the full alignment, identifies all variable alignment columns, and writes both `vcg_mining/alignment_review/vcg_pairwise_differences.tsv` and `vcg_mining/alignment_review/vcg_alignment_review.md`.
+- Ran `python3 scripts/review_vcg_alignment.py` with bytecode writing disabled for this environment, which successfully generated the requested review outputs under `vcg_mining/alignment_review/`.
+- Verified from the generated outputs that all 3 aligned sequences share a length of `581 bp`, the alignment contains `106` variable columns, `Buck_CB0707_82_vcgC` has `30` gap positions, and the pairwise differences are `103` for `Buck_BS0607_9_vcgE` versus `Buck_CB0707_82_vcgC`, `6` for `Buck_BS0607_9_vcgE` versus `Buck_NB0507_8_vcgE`, and `105` for `Buck_CB0707_82_vcgC` versus `Buck_NB0507_8_vcgE`.
+
+## 2026-05-04 vcg MAFFT alignment script added and verified
+
+- Added `scripts/align_vcg_mafft.sh` as a reusable non-SLURM Bash wrapper for the vcg alignment step, with strict mode enabled, automatic project-root resolution from the script location, stage-directory creation, and validation of the extracted input FASTA, `singularity`, and the saved MAFFT container image at `containers/mafft_7.525.sif`.
+- Implemented a container self-test before alignment, routed MAFFT stderr into `vcg_mining/logs/mafft_vcg.err`, wrote the alignment through a temporary file before moving it into place, and made the script fail clearly if MAFFT exits non-zero or produces an empty output FASTA.
+- Ran `bash -n scripts/align_vcg_mafft.sh` and then executed `bash scripts/align_vcg_mafft.sh`, which successfully created `vcg_mining/alignment/all_vcg_sequences.aligned.fasta` with 3 aligned records and reported aligned sequence lengths of `581 bp` for `Buck_BS0607_9_vcgE`, `Buck_CB0707_82_vcgC`, and `Buck_NB0507_8_vcgE`.
+
+## 2026-05-04 vcg extraction script repaired for resumable sequence extraction
+
+- Reviewed the saved vcg mining outputs, the reference allele FASTA, and the current `vcg_mining/results/vcg_best_hits_summary.tsv` layout before editing so the extraction script matches the stage that has already been run.
+- Rewrote `scripts/extract_vcg.sh` so it now uses the saved summary file `vcg_mining/results/vcg_best_hits_summary.tsv` by default instead of the missing older path `vcg_mining/results/combined_vcg_results.tsv`.
+- Removed the hard dependency on `seqkit` and replaced reverse-strand handling with an in-script Python reverse-complement step, which fixes the reported `module load seqkit` failure while keeping the extraction logic reproducible.
+- Added explicit project-root resolution, input validation, `samtools` discovery from either `PATH` or a common module name, numeric coordinate checks, conditional FASTA indexing, and atomic temporary-file writes so reruns fail clearly and do not leave partial outputs behind.
+- Updated the extraction naming and resume behavior so reruns recognize the legacy sample-level FASTA already present under `vcg_mining/extracted_sequences/` and skip that sample instead of recomputing it unnecessarily.
+- Verified the repaired script with `bash -n scripts/extract_vcg.sh` and a light execution check using `bash scripts/extract_vcg.sh`, confirming that the script now runs without `seqkit` and writes the expected extracted FASTA outputs under `vcg_mining/extracted_sequences/`.
+
 ## 2026-05-01 vcg mining stage prepared for selected confirmed assemblies
 
 - Reviewed the existing manifest-driven SLURM stages, the saved project brief, and the current assembly-selection notes before editing so the new vcg workflow follows the repository’s stage isolation, reproducibility, and documentation rules.

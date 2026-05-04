@@ -1,0 +1,4 @@
+sequence_1	sequence_2	aligned_length	pairwise_differences	gap_positions_sequence_1	gap_positions_sequence_2
+Buck_BS0607_9_vcgE	Buck_CB0707_82_vcgC	581	103	0	30
+Buck_BS0607_9_vcgE	Buck_NB0507_8_vcgE	581	6	0	0
+Buck_CB0707_82_vcgC	Buck_NB0507_8_vcgE	581	105	30	0
