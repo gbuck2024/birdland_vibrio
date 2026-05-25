@@ -65,6 +65,18 @@
 /vcg_mining/tree/*.log
 !/vcg_mining/tree/*.nwk
 !/vcg_mining/tree/*.pdf
+/snp_phylogeny/bam/
+/snp_phylogeny/vcf/
+/snp_phylogeny/logs/
+!/snp_phylogeny/core_alignment/
+/snp_phylogeny/core_alignment/*
+!/snp_phylogeny/core_alignment/.gitkeep
+!/snp_phylogeny/core_alignment/core_snps.fasta
+!/snp_phylogeny/core_alignment/core_snp_summary.tsv
+!/snp_phylogeny/tree/
+/snp_phylogeny/tree/*
+!/snp_phylogeny/tree/.gitkeep
+!/snp_phylogeny/tree/core_snps.fasttree.nwk
 /multi_reference_alignment/bam/
 /multi_reference_alignment/logs/
 /multi_reference_alignment/metrics/*.flagstat.txt
@@ -89,6 +101,13 @@
 /kraken2_vibrio_subsampled_reads/metrics/*.subsampling_metrics.tsv
 !/kraken2_vibrio_subsampled_reads/metrics/subsampling_parameters.txt
 !/kraken2_vibrio_subsampled_reads/metrics/subsampling_summary.tsv
+/ambiguous_isolate_resolution/taxonomic_filtering/logs/
+/ambiguous_isolate_resolution/taxonomic_filtering/read_ids/
+/ambiguous_isolate_resolution/taxonomic_filtering/filtered_reads/
+/ambiguous_isolate_resolution/taxonomic_filtering/downsampled_reads/
+/ambiguous_isolate_resolution/taxonomic_filtering/assemblies/
+!/ambiguous_isolate_resolution/taxonomic_filtering/metrics/
+!/ambiguous_isolate_resolution/taxonomic_filtering/metrics/taxon_filtered_assembly_summary.tsv
 /kraken2_db/metadata/
 /assembly_filtered_isolate_rerun/assemblies/
 /assembly_filtered_isolate_rerun/logs/
@@ -118,7 +137,15 @@
 
 
 # Local reference files and indexes
-/reference/
+/reference/*
+!/reference/expanded_vv/
+!/reference/expanded_vv/README.md
+!/reference/expanded_vv/metadata/
+!/reference/expanded_vv/metadata/mullis2019_wgs_accessions.txt
+!/reference/expanded_vv/metadata/mullis2019_genome_downloads.tsv
+/reference/expanded_vv/downloads/
+/reference/expanded_vv/genomes/
+/reference/expanded_vv/README.md.bak_*
 
 # Python and notebook artifacts
 __pycache__/

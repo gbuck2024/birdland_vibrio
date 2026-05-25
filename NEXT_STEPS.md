@@ -169,3 +169,27 @@ Rscript scripts/plot_vcg_tree.R
 - Confirm within 1-2 minutes that `assembly_isolate_rerun/logs/slurm/` contains clean startup logs showing the intended manifest, stage directory, and `--isolate` extra argument.
 - After the rerun completes, submit `sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_vulnificus_candidates.tsv,STAGE_DIR=assembly_isolate_rerun scripts/spades_assembly_array.slurm`.
 - Compare `assembly_isolate_rerun/metrics/assembly_summary.tsv` against the original `assembly/metrics/assembly_summary.tsv`, focusing on total assembly size, contig count, scaffold count, N50, and the number of sequences at least `1000 bp` before deciding whether ANI and annotation should use the rerun outputs.
+## 2026-05-05 SNP phylogeny branch ready for manual submission
+
+- Review `snp_phylogeny/README.md` and `configs/snp_manifest.tsv` before submitting any cluster jobs.
+- Run `bash scripts/prepare_snp_reference.sh` from the project root to validate the existing ATCC 27562 reference indexes; this should mostly report that indexes already exist.
+- Submit BWA alignment only when ready with `sbatch --array=0-2 scripts/bwa_snp_align_array.slurm`.
+- After all three alignment tasks finish, validate `snp_phylogeny/bam/*.sorted.bam`, `.bai`, and `.flagstat.txt` before submitting FreeBayes.
+- Submit FreeBayes only after BAM validation with `sbatch --array=0-2 scripts/freebayes_snp_call_array.slurm`.
+- After all three VCFs exist, build the first-pass core SNP alignment with `python3 scripts/filter_snps_and_build_alignment.py`, then build the approximate ML tree with `bash scripts/build_snp_fasttree.sh`.
+- Interpret the first-pass tree only as a within-project comparison of the three confirmed *Vibrio vulnificus* isolates; do not add Mullis et al. data until the external-data comparison branch is explicitly designed.
+
+## 2026-05-05 Ambiguous isolate taxonomic-filtering branch ready for manual submission
+
+- Review `ambiguous_isolate_resolution/taxonomic_filtering/README.md` and `configs/taxon_filter_manifest.tsv` before submitting any cluster jobs.
+- Submit the filtering array only when ready with `sbatch --array=0-2 scripts/filter_taxon_reads_array.slurm`; this uses existing Kraken2 per-read outputs and does not rerun Kraken2.
+- After filtering finishes, inspect `ambiguous_isolate_resolution/taxonomic_filtering/metrics/*.filter_summary.tsv` and confirm retained read-pair counts before downsampling.
+- Submit downsampling with `sbatch --array=0-2 scripts/downsample_taxon_filtered_reads_array.slurm`, then submit reassembly with `sbatch --array=0-2 scripts/spades_taxon_filtered_array.slurm`.
+- After SPAdes finishes, run `python3 scripts/summarize_taxon_filtered_assemblies.py` and interpret whether each assembly collapses toward a plausible 4-6 Mb bacterial genome size.
+
+## 2026-05-05 Mullis 2019 expanded reference scaffold ready for manual download
+
+- Review `reference/expanded_vv/README.md` and `reference/expanded_vv/metadata/mullis2019_genome_downloads.tsv` before downloading external genomes.
+- Download the resolved Mullis et al. 2019 genomes only when ready with `bash scripts/download_mullis2019_genomes.sh`.
+- Validate the expanded reference scaffold and downloaded gzip files with `bash scripts/validate_mullis2019_genomes.sh`.
+- Keep the expanded set under `reference/expanded_vv/`; do not mix these genomes into the current main `reference/` root or the active 3-isolate SNP pipeline.

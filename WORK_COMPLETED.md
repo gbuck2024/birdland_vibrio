@@ -221,3 +221,29 @@
 - Updated `scripts/spades_assembly_array.slurm` so the workflow now supports `MANIFEST_FILE` and `STAGE_DIR` overrides, logs the chosen stage and extra arguments, defaults to `--isolate` for bacterial isolate reruns unless explicitly overridden, and uses `bash -c` rather than `bash -lc` inside the containerized execution path to reduce shell-init noise in SLURM logs.
 - Added `configs/assembly_manifest_vulnificus_candidates.tsv` to define a focused 3-sample rerun set for the strongest current `Vibrio vulnificus` candidates.
 - Added the new comparison stage `assembly_isolate_rerun/` with `README.md` and `metrics/spades_parameters.txt` so the isolate-oriented rerun can be submitted reproducibly without overwriting the original `assembly/` outputs.
+## 2026-05-05 SNP phylogeny branch scaffolded
+
+- Audited the confirmed *Vibrio vulnificus* isolate inputs and located paired trimmed reads for `Buck_BS0607_9`, `Buck_CB0707_82`, and `Buck_NB0507_8` under `trimmomatic/trimmed_reads/`.
+- Confirmed the existing ATCC 27562 reference FASTA at `reference/v_vulnificus_ref.fasta`; the FASTA header identifies *Vibrio vulnificus* NBRC 15645 = ATCC 27562 chromosome 1.
+- Confirmed the reference already has BWA index sidecars and a samtools FASTA index: `.amb`, `.ann`, `.bwt`, `.pac`, `.sa`, and `.fai`.
+- Added the manifest-driven SNP phylogeny scaffold: `configs/snp_manifest.tsv`, `snp_phylogeny/README.md`, and stage-specific output directories for logs, BAM, VCF, core alignment, and tree outputs.
+- Added reusable scripts for reference preparation, BWA alignment, FreeBayes calling with monomorphic-site reporting, core SNP alignment construction, and FastTree tree building.
+- Added scoped `.gitignore` rules so future SNP BAM, VCF, and runtime logs remain out of Git while interpreted core alignment and tree outputs can be tracked if desired.
+
+## 2026-05-05 Ambiguous isolate taxonomic-filtering branch scaffolded
+
+- Added `configs/taxon_filter_manifest.tsv` for `Buck_BI0607_1`, `Buck_NB0507_14`, and `Buck_BI0607_2`, using the existing trimmed read paths plus existing Kraken2 output/report paths.
+- Created the separate `ambiguous_isolate_resolution/taxonomic_filtering/` stage with directories for logs, read IDs, filtered reads, downsampled reads, assemblies, and metrics.
+- Added `scripts/filter_fastq_by_kraken_taxon.py` and `scripts/filter_taxon_reads_array.slurm` to retain read pairs with target genus evidence from existing Kraken2 per-read classifications.
+- Added `scripts/downsample_paired_fastq.py` and `scripts/downsample_taxon_filtered_reads_array.slurm` for reproducible paired downsampling to 1,000,000 pairs when needed.
+- Added `scripts/spades_taxon_filtered_array.slurm` to reassemble downsampled target-taxon reads using the existing SPAdes Singularity image at `containers/spades.sif` when available.
+- Added `scripts/summarize_taxon_filtered_assemblies.py` and `ambiguous_isolate_resolution/taxonomic_filtering/README.md` to document the workflow and summarize whether assemblies move toward expected bacterial genome size.
+
+## 2026-05-05 Mullis 2019 expanded reference scaffolded
+
+- Resolved all 42 Mullis et al. 2019 Table 1 WGS accessions to corresponding NCBI Assembly accessions and genome FASTA FTP URLs using NCBI Assembly E-utilities for BioProject `PRJNA475262`.
+- Added `reference/expanded_vv/metadata/mullis2019_genome_downloads.tsv` with isolate, WGS accession, Assembly accession, download URL, local filename, provenance, and notes fields.
+- Added `scripts/download_mullis2019_genomes.sh` to perform resumable downloads into `reference/expanded_vv/downloads/`, validate gzip files, and link valid genomes into `reference/expanded_vv/genomes/`.
+- Added `scripts/validate_mullis2019_genomes.sh` to report metadata counts, resolved URLs, downloaded genome files, gzip status, and missing resolved genomes.
+- Updated `reference/expanded_vv/README.md` with purpose, citation, WGS-to-Assembly handling, directory structure, exact commands, and the warning not to use this expanded set in the current 3-isolate SNP pipeline.
+- Confirmed the metadata table has 42 data rows, 42 resolved FTP URLs, 0 unresolved rows, and valid 7-column formatting; did not submit jobs or run the full download script.
