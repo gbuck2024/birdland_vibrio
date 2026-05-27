@@ -1,5 +1,20 @@
 # Next Steps
 
+## 2026-05-27 Expanded V. vulnificus RAxML tree plotting follow-up
+
+- Regenerate the annotated RAxML support tree figures from the project root with `module load R/gcc11/4.4.0 && Rscript scripts/plot_expanded_vv_raxml_tree.R`.
+- Review `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` for publication/report layout and use the PNG for quick sharing or notebook inclusion.
+- Treat the duplicated ATCC tips in the current support tree as a point to review before final interpretation, because both `atcc_27562.fna` and `atcc_27562.fna.ref` map to the same manifest row.
+
+## 2026-05-26 Expanded V. vulnificus Parsnp phylogeny follow-up
+
+- Review `phylogeny/expanded_vv_46/README.md` and `configs/expanded_vv_46_genome_manifest.tsv` before submitting the expanded-panel Parsnp job.
+- The input staging step has already been run successfully, but it can be regenerated from the project root with `bash scripts/prepare_expanded_vv_parsnp_inputs.sh`.
+- SLURM job `1325452` failed only because Parsnp 2.1.5 rejected an empty pre-existing `phylogeny/expanded_vv_46/alignment/parsnp/` output directory. `scripts/parsnp_expanded_vv_46.slurm` has been repaired to remove that empty directory before invoking Parsnp while still refusing to overwrite non-empty output.
+- Submit Parsnp only when ready with `sbatch scripts/parsnp_expanded_vv_46.slurm`; this is the compute-heavy step and should run through SLURM.
+- After Parsnp completes, verify the expected outputs under `phylogeny/expanded_vv_46/alignment/parsnp/`: `parsnp.xmfa`, `parsnp.tree`, `parsnp.snps.mblocks`, and `parsnp.ggr`.
+- Do not run IQ-TREE or RAxML-NG yet. Placeholder commands are saved in `phylogeny/expanded_vv_46/metadata/downstream_tree_commands.sh` for later use after the Parsnp alignment is reviewed and converted/prepared for tree building.
+
 ## 2026-05-04 vcg single-gene tree follow-up
 
 - Treat `scripts/build_vcg_fasttree.sh` as the saved reproducible entry point for regenerating the vcg single-gene FastTree output from `vcg_mining/alignment/all_vcg_sequences.aligned.fasta`.
@@ -193,3 +208,10 @@ Rscript scripts/plot_vcg_tree.R
 - Download the resolved Mullis et al. 2019 genomes only when ready with `bash scripts/download_mullis2019_genomes.sh`.
 - Validate the expanded reference scaffold and downloaded gzip files with `bash scripts/validate_mullis2019_genomes.sh`.
 - Keep the expanded set under `reference/expanded_vv/`; do not mix these genomes into the current main `reference/` root or the active 3-isolate SNP pipeline.
+
+## 2026-05-26 Mullis 2019 FastANI validation manifest ready
+
+- Use `configs/ani_reference_manifest_mullis2019_plus_buck_atcc.tsv` as the FastANI reference manifest when comparing the selected Buck assemblies against the downloaded Mullis et al. 2019 genomes, the 3 Buck validation assemblies, and ATCC 27562.
+- For the current best 3 Buck assemblies, submit the comparison as a separate stage so older ANI outputs stay untouched: `sbatch --export=ALL,STAGE_DIR=ani/mullis2019_plus_buck_atcc_validation,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest_mullis2019_plus_buck_atcc.tsv --array=0-2 scripts/fastani_array.slurm`.
+- After the array completes, summarize the same stage with `sbatch --export=ALL,ANI_MODE=summary,STAGE_DIR=ani/mullis2019_plus_buck_atcc_validation,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest_mullis2019_plus_buck_atcc.tsv scripts/fastani_array.slurm`.
+- Interpret the summary cautiously: the current generic FastANI summarizer labels only reference ID `v_vulnificus` as likely *Vibrio vulnificus*, so Mullis-specific best hits should be read from `best_reference_id`, `best_ani_pct`, and the raw ANI values rather than the generic `species_interpretation` label.

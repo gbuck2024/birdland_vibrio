@@ -1,0 +1,9 @@
+parameter	value
+project_dir	/work/VibrioVulnificus/gbuck/20260105_Buck-wgs
+manifest	configs/expanded_vv_46_genome_manifest.tsv
+container	containers/parsnp_2.1.5.sif
+parsnp_reference	phylogeny/expanded_vv_46/genomes/atcc_27562.fna
+genome_dir	phylogeny/expanded_vv_46/genomes
+output_dir	phylogeny/expanded_vv_46/alignment/parsnp
+threads	16
+parsnp_args	-r ${PARSNP_REFERENCE} -d ${GENOME_DIR} -o ${PARSNP_OUT} -p ${PARSNP_THREADS} -c

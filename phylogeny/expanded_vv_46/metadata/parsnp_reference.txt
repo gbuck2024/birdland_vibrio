@@ -1,0 +1,2 @@
+reference_id	staged_fasta
+atcc_27562	phylogeny/expanded_vv_46/genomes/atcc_27562.fna

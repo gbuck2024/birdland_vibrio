@@ -1,5 +1,23 @@
 # Work Completed
 
+## 2026-05-27 Expanded V. vulnificus RAxML tree plotting added
+
+- Added `scripts/plot_expanded_vv_raxml_tree.R` as the reusable R plotting entry point for `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46.raxml.support`.
+- The script reads the expanded 46-genome manifest, matches normalized tree tip labels to `genome_id` values using `reference_id` as the fallback because the current manifest does not contain a `genome_id` column, enriches the three Buck isolates with saved vcg summary calls, and reports unmatched tree tips plus unmatched metadata rows.
+- Handled the current RAxML support tree's duplicated ATCC-derived labels, `atcc_27562.fna` and `atcc_27562.fna.ref`, by preserving unique plot labels while mapping both tips back to ATCC metadata.
+- Verified the script with `module load R/gcc11/4.4.0 && Rscript scripts/plot_expanded_vv_raxml_tree.R`; it wrote `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` and `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.png`.
+
+## 2026-05-26 Expanded V. vulnificus Parsnp phylogeny scaffold prepared
+
+- Added `configs/expanded_vv_46_genome_manifest.tsv` as the requested 46-genome phylogeny manifest, based on the existing Mullis 2019 plus Buck plus ATCC panel manifest.
+- Added `scripts/prepare_expanded_vv_parsnp_inputs.sh` to validate that the manifest has 46 genomes plus a header, create `phylogeny/expanded_vv_46/{genomes,alignment,logs,metadata,tree}`, stage Parsnp FASTA inputs, and select ATCC 27562 as the Parsnp reference.
+- Added `scripts/parsnp_expanded_vv_46.slurm` to run Parsnp with `singularity exec containers/parsnp_2.1.5.sif parsnp ...`, write outputs under `phylogeny/expanded_vv_46/alignment/parsnp/`, and verify `parsnp.xmfa`, `parsnp.tree`, `parsnp.snps.mblocks`, and `parsnp.ggr`.
+- Repaired `scripts/parsnp_expanded_vv_46.slurm` after SLURM job `1325452` failed because Parsnp 2.1.5 rejects a pre-existing output directory. The script now still stops if `phylogeny/expanded_vv_46/alignment/parsnp/` contains files, but removes that directory when it is empty so Parsnp can create it itself.
+- Added `scripts/test_phylogeny_containers.sh` to check the Parsnp, IQ-TREE, and RAxML-NG containers without running tree-building analyses.
+- Added `phylogeny/expanded_vv_46/README.md` documenting the workflow, expected outputs, and downstream IQ-TREE/RAxML-NG placeholder command location.
+- Ran the prep script successfully. It staged 46 FASTA inputs and recorded ATCC 27562 as `phylogeny/expanded_vv_46/genomes/atcc_27562.fna`.
+- Ran the container smoke test successfully outside the sandbox after the sandboxed Singularity run failed due local mount restrictions.
+
 ## 2026-05-04 vcg single-gene FastTree workflow added and run
 
 - Checked FastTree availability from the project root. `command -v FastTree` and `command -v fasttree` were not available before module loading; `module avail fasttree` reported `fasttree/2.1.11`; `module spider fasttree` is not supported by this module system and returned `ERROR: Invalid command 'spider'`.
@@ -247,3 +265,12 @@
 - Added `scripts/validate_mullis2019_genomes.sh` to report metadata counts, resolved URLs, downloaded genome files, gzip status, and missing resolved genomes.
 - Updated `reference/expanded_vv/README.md` with purpose, citation, WGS-to-Assembly handling, directory structure, exact commands, and the warning not to use this expanded set in the current 3-isolate SNP pipeline.
 - Confirmed the metadata table has 42 data rows, 42 resolved FTP URLs, 0 unresolved rows, and valid 7-column formatting; did not submit jobs or run the full download script.
+
+## 2026-05-26 Mullis 2019 FastANI reference manifest prepared
+
+- Added `configs/ani_reference_manifest_mullis2019.tsv` for the existing `scripts/fastani_array.slurm` workflow, with 42 `mullis2019_<isolate>` reference rows pointing to the downloaded genomes under `reference/expanded_vv/genomes/`.
+- Added `configs/ani_reference_manifest_mullis2019_plus_buck_atcc.tsv` with the 42 Mullis genomes plus the 3 selected Buck *Vibrio vulnificus* subsampled scaffold assemblies and the ATCC 27562 project reference, for 46 reference rows plus the header.
+- Preserved the expanded-reference separation by keeping the Mullis genomes in `reference/expanded_vv/` and not mixing them into the default `configs/ani_reference_manifest.tsv` or the active SNP phylogeny reference set.
+- Validated the new manifest structure: 42 data rows, 4 non-empty tab-delimited fields per row, and all listed genome paths present.
+- Validated the expanded plus manifest structure: 46 data rows, 4 non-empty tab-delimited fields per row, all listed reference paths present, gzip-valid compressed genomes, and FASTA-like uncompressed Buck/ATCC references.
+- Re-ran `bash scripts/validate_mullis2019_genomes.sh`; validation passed with 42 metadata rows, 0 unresolved rows, 42 expected downloadable genomes, 42 valid downloads, and 42 valid genome entries.
