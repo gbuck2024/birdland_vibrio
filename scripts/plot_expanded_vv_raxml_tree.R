@@ -19,6 +19,7 @@ vcg_file <- file.path(project_dir, "vcg_mining", "results", "vcg_best_hits_summa
 out_dir <- file.path(project_dir, "phylogeny", "expanded_vv_46", "tree", "raxmlng")
 pdf_file <- file.path(out_dir, "expanded_vv_46_raxml_tree.pdf")
 png_file <- file.path(out_dir, "expanded_vv_46_raxml_tree.png")
+x_axis_label <- "Evolutionary distance (substitutions per site)"
 
 missing_required <- character()
 for (pkg in c("ape")) {
@@ -224,21 +225,24 @@ if (has_ggtree) {
     ggplot2::xlim(0, x_limit) +
     ggplot2::labs(
       title = "Expanded V. vulnificus 46-genome RAxML-NG support tree",
-      # Branch lengths are measured as expected substitutions per nucleotide site.
-      x = "Evolutionary distance (substitutions per site)",
       color = "Source",
       shape = "Group",
       fill = "VCG status"
     ) +
     ggtree::theme_tree2() +
+    # Branch lengths are measured as expected substitutions per nucleotide site.
+    ggplot2::xlab(x_axis_label) +
     ggplot2::theme(
       legend.position = "right",
       legend.box.margin = ggplot2::margin(0, 0, 0, 24),
       plot.title = ggplot2::element_text(size = 12),
       legend.text = ggplot2::element_text(size = 8),
-      axis.title.x = ggplot2::element_text(size = 10, margin = ggplot2::margin(t = 8)),
+      axis.title.x = ggplot2::element_text(size = 10, margin = ggplot2::margin(t = 10)),
+      axis.text.x = ggplot2::element_text(size = 8),
+      axis.ticks.x = ggplot2::element_line(linewidth = 0.25),
+      axis.line.x = ggplot2::element_line(linewidth = 0.25),
       # Wider outer margins preserve label and legend whitespace in exported files.
-      plot.margin = ggplot2::margin(t = 12, r = 48, b = 14, l = 12)
+      plot.margin = ggplot2::margin(t = 12, r = 48, b = 34, l = 12)
     )
 
   ggplot2::ggsave(pdf_file, p, width = 15, height = 10, units = "in")
@@ -275,7 +279,7 @@ if (has_ggtree) {
     )
     # Branch length units represent expected nucleotide substitutions per site.
     ape::axisPhylo(cex = 0.7)
-    mtext("Evolutionary distance (substitutions per site)", side = 1, line = 2.5, cex = 0.8)
+    mtext(x_axis_label, side = 1, line = 2.5, cex = 0.8)
     ape::tiplabels(
       pch = group_pch[tip_meta$group],
       col = "black",
