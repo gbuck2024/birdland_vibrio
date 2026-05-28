@@ -281,3 +281,12 @@
 - Added explicit evolutionary-distance x-axis labeling and comments documenting that branch lengths represent expected substitutions per site.
 - Expanded the plotting x-range, right margin, legend spacing, and export dimensions so right-side tip labels and legends remain readable in the final static figure.
 - Regenerated `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` and `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.png`; the PNG export is now `4500 x 3000` pixels.
+
+## 2026-05-27 Expanded 46-genome vcg-marker workflow scaffolded
+
+- Added a separate vcg-only phylogeny stage under `phylogeny/expanded_vv_46/vcg_tree/` with `blast/`, `extracted_sequences/`, `alignment/`, `tree/`, `metadata/`, `figures/`, and `logs/` subdirectories.
+- Added reusable scripts for expanded-set vcg mining, best-hit sequence extraction, MAFFT alignment, FastTree tree building, R plotting, and an optional ordered driver script.
+- Added `scripts/run_expanded_vv_vcg_tree_workflow.slurm` so the full workflow can be submitted safely as a compute job instead of run on the login node.
+- Kept this workflow separate from the whole-genome Parsnp/RAxML-NG tree; no Parsnp, RAxML-NG, raw reads, original assemblies, or existing RAxML outputs were modified.
+- Added `phylogeny/expanded_vv_46/vcg_tree/README.md` documenting step-by-step execution, expected outputs, and how to compare the vcg-marker tree with the whole-genome RAxML-NG tree.
+- Validated the new shell scripts with `bash -n`; R plotting syntax was not executed because `Rscript` is not currently available in the active shell.

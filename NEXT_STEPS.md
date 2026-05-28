@@ -220,3 +220,12 @@ Rscript scripts/plot_vcg_tree.R
 
 - Review `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` or `.png` for final visual approval before using it in reports or manuscripts.
 - Keep using `scripts/plot_expanded_vv_raxml_tree.R` to regenerate the figure if tree rooting, metadata, VCG calls, or isolate inclusion changes.
+
+## 2026-05-27 Expanded 46-genome vcg-marker workflow ready for compute execution
+
+- Review `phylogeny/expanded_vv_46/vcg_tree/README.md` before running the vcg-marker workflow.
+- Run BLAST mining, MAFFT, and FastTree only in a SLURM batch job or interactive compute allocation, not on the login node.
+- Execute the workflow stepwise with `bash scripts/mine_expanded_vv_vcg.sh`, `bash scripts/extract_expanded_vv_vcg_sequences.sh`, `bash scripts/align_expanded_vv_vcg_mafft.sh`, `bash scripts/build_expanded_vv_vcg_fasttree.sh`, then `module load R/gcc11/4.4.0` and `Rscript scripts/plot_expanded_vv_vcg_tree.R`.
+- Submit the full workflow directly with `sbatch scripts/run_expanded_vv_vcg_tree_workflow.slurm`, or run `bash scripts/run_expanded_vv_vcg_tree_workflow.sh` inside an appropriate compute allocation.
+- After mining, inspect `phylogeny/expanded_vv_46/vcg_tree/metadata/expanded_vv_46_vcg_calls.tsv` to confirm the known Buck calls are preserved: `BS0607_9 = vcgE`, `CB0707_82 = vcgC`, and `NB0507_8 = vcgE`.
+- Compare `phylogeny/expanded_vv_46/vcg_tree/figures/expanded_vv_46_vcg_tree.pdf` against `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` to distinguish vcg-marker grouping from whole-genome relatedness.
