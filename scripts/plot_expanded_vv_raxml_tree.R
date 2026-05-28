@@ -206,9 +206,9 @@ if (has_ggtree) {
   group_values <- sort(unique(plot_data$group))
   group_shapes <- setNames(rep(c(21, 22, 24, 23, 25), length.out = length(group_values)), group_values)
   tree_depth <- max(ape::node.depth.edgelength(tree))
-  # Extra x-axis room prevents right-side tip labels from being clipped and
-  # creates separation between aligned labels and the legend block.
-  x_limit <- tree_depth * 2.35
+  # Reserve enough x-axis room for aligned labels without letting the rooted
+  # tree collapse into the left side of the figure.
+  x_limit <- tree_depth * 1.65
   ggtree_attach_data <- get("%<+%", envir = asNamespace("ggtree"))
   p <- ggtree_attach_data(ggtree::ggtree(tree, layout = "rectangular"), plot_data) +
     ggtree::geom_tiplab(
@@ -217,7 +217,7 @@ if (has_ggtree) {
       align = TRUE,
       linetype = "dotted",
       linesize = 0.2,
-      offset = tree_depth * 0.015
+      offset = tree_depth * 0.012
     ) +
     ggtree::geom_tippoint(ggplot2::aes(color = source, shape = group, fill = vcg_status), size = 2.4, stroke = 0.7) +
     ggplot2::scale_shape_manual(values = group_shapes) +
@@ -257,7 +257,7 @@ if (has_ggtree) {
     tree_to_plot <- tree
     tree_to_plot$tip.label <- tip_meta$display_label
     tree_depth <- max(ape::node.depth.edgelength(tree_to_plot))
-    x_limit <- tree_depth * 2.35
+    x_limit <- tree_depth * 1.65
     # The right margin is deliberately broad so long tip labels and legends
     # remain visible in static PDF/PNG exports.
     op <- par(mar = c(4, 1, 3, 14), xpd = NA)
