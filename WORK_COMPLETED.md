@@ -274,3 +274,10 @@
 - Validated the new manifest structure: 42 data rows, 4 non-empty tab-delimited fields per row, and all listed genome paths present.
 - Validated the expanded plus manifest structure: 46 data rows, 4 non-empty tab-delimited fields per row, all listed reference paths present, gzip-valid compressed genomes, and FASTA-like uncompressed Buck/ATCC references.
 - Re-ran `bash scripts/validate_mullis2019_genomes.sh`; validation passed with 42 metadata rows, 0 unresolved rows, 42 expected downloadable genomes, 42 valid downloads, and 42 valid genome entries.
+
+## 2026-05-27 Expanded RAxML-NG tree figure refreshed
+
+- Updated `scripts/plot_expanded_vv_raxml_tree.R` to simplify the three selected Buck isolate labels in the figure while preserving the full tree and metadata IDs for matching.
+- Added explicit evolutionary-distance x-axis labeling and comments documenting that branch lengths represent expected substitutions per site.
+- Expanded the plotting x-range, right margin, legend spacing, and export dimensions so right-side tip labels and legends remain readable in the final static figure.
+- Regenerated `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` and `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.png`; the PNG export is now `4500 x 3000` pixels.

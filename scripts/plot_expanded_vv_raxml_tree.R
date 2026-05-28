@@ -67,6 +67,17 @@ canonical_buck_id <- function(x) {
   }, character(1))
 }
 
+simplify_buck_label <- function(x) {
+  # Buck assembly filenames include project and coverage tokens that are useful
+  # for file tracking but too verbose for a publication figure.
+  replacements <- c(
+    buck_BS0607_9_50x = "BS0607_9",
+    buck_CB0707_82_25x = "CB0707_82",
+    buck_NB0507_8_100x = "NB0507_8"
+  )
+  ifelse(x %in% names(replacements), replacements[x], x)
+}
+
 parse_source <- function(reference_id, reference_format, notes) {
   source <- rep("not_reported", length(reference_id))
   source[grepl("^buck_", reference_id, ignore.case = TRUE)] <- "Buck"
@@ -168,6 +179,7 @@ if (length(unmatched_tree_tips) > 0) {
 tip_meta$is_highlight <- grepl("^buck_", tip_meta$tree_id, ignore.case = TRUE) | tip_meta$tree_id == "atcc_27562"
 tip_meta$plot_label <- tree$tip.label
 tip_meta$display_id <- tree_match_id
+tip_meta$display_id <- simplify_buck_label(tip_meta$display_id)
 duplicate_match_id <- duplicated(tree_match_id) | duplicated(tree_match_id, fromLast = TRUE)
 tip_meta$display_id[duplicate_match_id] <- paste0(tip_meta$display_id[duplicate_match_id], " [", tip_meta$plot_label[duplicate_match_id], "]")
 tip_meta$display_label <- ifelse(tip_meta$is_highlight, paste0("*", tip_meta$display_id), tip_meta$display_id)
@@ -193,6 +205,10 @@ if (has_ggtree) {
   rownames(plot_data) <- plot_data$plot_label
   group_values <- sort(unique(plot_data$group))
   group_shapes <- setNames(rep(c(21, 22, 24, 23, 25), length.out = length(group_values)), group_values)
+  tree_depth <- max(ape::node.depth.edgelength(tree))
+  # Extra x-axis room prevents right-side tip labels from being clipped and
+  # creates separation between aligned labels and the legend block.
+  x_limit <- tree_depth * 2.35
   ggtree_attach_data <- get("%<+%", envir = asNamespace("ggtree"))
   p <- ggtree_attach_data(ggtree::ggtree(tree, layout = "rectangular"), plot_data) +
     ggtree::geom_tiplab(
@@ -200,12 +216,16 @@ if (has_ggtree) {
       size = 2.5,
       align = TRUE,
       linetype = "dotted",
-      linesize = 0.2
+      linesize = 0.2,
+      offset = tree_depth * 0.015
     ) +
     ggtree::geom_tippoint(ggplot2::aes(color = source, shape = group, fill = vcg_status), size = 2.4, stroke = 0.7) +
     ggplot2::scale_shape_manual(values = group_shapes) +
+    ggplot2::xlim(0, x_limit) +
     ggplot2::labs(
       title = "Expanded V. vulnificus 46-genome RAxML-NG support tree",
+      # Branch lengths are measured as expected substitutions per nucleotide site.
+      x = "Evolutionary distance (substitutions per site)",
       color = "Source",
       shape = "Group",
       fill = "VCG status"
@@ -213,12 +233,16 @@ if (has_ggtree) {
     ggtree::theme_tree2() +
     ggplot2::theme(
       legend.position = "right",
+      legend.box.margin = ggplot2::margin(0, 0, 0, 24),
       plot.title = ggplot2::element_text(size = 12),
-      legend.text = ggplot2::element_text(size = 8)
+      legend.text = ggplot2::element_text(size = 8),
+      axis.title.x = ggplot2::element_text(size = 10, margin = ggplot2::margin(t = 8)),
+      # Wider outer margins preserve label and legend whitespace in exported files.
+      plot.margin = ggplot2::margin(t = 12, r = 48, b = 14, l = 12)
     )
 
-  ggplot2::ggsave(pdf_file, p, width = 11, height = 8.5, units = "in")
-  ggplot2::ggsave(png_file, p, width = 11, height = 8.5, units = "in", dpi = 300)
+  ggplot2::ggsave(pdf_file, p, width = 15, height = 10, units = "in")
+  ggplot2::ggsave(png_file, p, width = 15, height = 10, units = "in", dpi = 300)
 } else {
   message("ggtree/ggplot2 unavailable; using ape fallback plot.")
   sources <- sort(unique(tip_meta$source))
@@ -232,7 +256,11 @@ if (has_ggtree) {
   draw_ape_plot <- function() {
     tree_to_plot <- tree
     tree_to_plot$tip.label <- tip_meta$display_label
-    op <- par(mar = c(2, 1, 3, 10), xpd = NA)
+    tree_depth <- max(ape::node.depth.edgelength(tree_to_plot))
+    x_limit <- tree_depth * 2.35
+    # The right margin is deliberately broad so long tip labels and legends
+    # remain visible in static PDF/PNG exports.
+    op <- par(mar = c(4, 1, 3, 14), xpd = NA)
     on.exit(par(op), add = TRUE)
     ape::plot.phylo(
       tree_to_plot,
@@ -242,8 +270,12 @@ if (has_ggtree) {
       tip.color = label_cols,
       font = label_font,
       no.margin = FALSE,
+      x.lim = c(0, x_limit),
       main = "Expanded V. vulnificus 46-genome RAxML-NG support tree"
     )
+    # Branch length units represent expected nucleotide substitutions per site.
+    ape::axisPhylo(cex = 0.7)
+    mtext("Evolutionary distance (substitutions per site)", side = 1, line = 2.5, cex = 0.8)
     ape::tiplabels(
       pch = group_pch[tip_meta$group],
       col = "black",
@@ -252,16 +284,16 @@ if (has_ggtree) {
       adj = c(0.5, 0.5)
     )
     ape::add.scale.bar(cex = 0.7)
-    legend("topright", inset = c(-0.28, 0), legend = sources, col = source_cols, pch = 19, cex = 0.65, title = "Source", bty = "n")
-    legend("right", inset = c(-0.28, 0), legend = groups, pt.bg = "white", pch = group_pch, cex = 0.65, title = "Group", bty = "n")
-    legend("bottomright", inset = c(-0.28, 0), legend = vcg_statuses, cex = 0.65, title = "VCG status", bty = "n")
+    legend("topright", inset = c(-0.36, 0), legend = sources, col = source_cols, pch = 19, cex = 0.65, title = "Source", bty = "n")
+    legend("right", inset = c(-0.36, 0), legend = groups, pt.bg = "white", pch = group_pch, cex = 0.65, title = "Group", bty = "n")
+    legend("bottomright", inset = c(-0.36, 0), legend = vcg_statuses, cex = 0.65, title = "VCG status", bty = "n")
   }
 
-  grDevices::pdf(pdf_file, width = 11, height = 8.5)
+  grDevices::pdf(pdf_file, width = 15, height = 10)
   draw_ape_plot()
   grDevices::dev.off()
 
-  grDevices::png(png_file, width = 3300, height = 2550, res = 300)
+  grDevices::png(png_file, width = 4500, height = 3000, res = 300)
   draw_ape_plot()
   grDevices::dev.off()
 }

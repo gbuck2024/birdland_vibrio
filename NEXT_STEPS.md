@@ -215,3 +215,8 @@ Rscript scripts/plot_vcg_tree.R
 - For the current best 3 Buck assemblies, submit the comparison as a separate stage so older ANI outputs stay untouched: `sbatch --export=ALL,STAGE_DIR=ani/mullis2019_plus_buck_atcc_validation,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest_mullis2019_plus_buck_atcc.tsv --array=0-2 scripts/fastani_array.slurm`.
 - After the array completes, summarize the same stage with `sbatch --export=ALL,ANI_MODE=summary,STAGE_DIR=ani/mullis2019_plus_buck_atcc_validation,QUERY_MANIFEST=configs/ani_query_manifest_subsampled_best_assemblies.tsv,REFERENCE_MANIFEST=configs/ani_reference_manifest_mullis2019_plus_buck_atcc.tsv scripts/fastani_array.slurm`.
 - Interpret the summary cautiously: the current generic FastANI summarizer labels only reference ID `v_vulnificus` as likely *Vibrio vulnificus*, so Mullis-specific best hits should be read from `best_reference_id`, `best_ani_pct`, and the raw ANI values rather than the generic `species_interpretation` label.
+
+## 2026-05-27 Expanded RAxML-NG figure ready for review
+
+- Review `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` or `.png` for final visual approval before using it in reports or manuscripts.
+- Keep using `scripts/plot_expanded_vv_raxml_tree.R` to regenerate the figure if tree rooting, metadata, VCG calls, or isolate inclusion changes.
