@@ -1,5 +1,38 @@
 # Work Completed
 
+## 2026-08-14 reference-panel-plus-unknown ANI heatmaps generated
+
+- Investigated SLURM job `1465438` and confirmed it completed successfully with exit code `0:0`; this was the `ANI_MODE=matrix` summary pass for `ani/reference_panel_plus_unknown_matrix`, not a new fastANI comparison array.
+- Verified that the stage contains `82` query rows, `82` reference rows, `82` non-empty raw fastANI output files, and a complete long-form matrix with `6,725` lines (`82 x 82` comparisons plus header).
+- Confirmed the summary step wrote `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv`, `fastani_genome_matrix.tsv`, `fastani_species_max_matrix.tsv`, and `fastani_species_mean_matrix.tsv`.
+- Located and ran `scripts/plot_fastani_matrix_heatmap.R` with `module load R/gcc11/4.4.0 && Rscript scripts/plot_fastani_matrix_heatmap.R`.
+- Generated the current heatmap figures under `ani/reference_panel_plus_unknown_matrix/figures/`: `reference_panel_plus_unknown_matrix_genome_heatmap.pdf`, `.png`, `reference_panel_plus_unknown_matrix_species_max_heatmap.pdf`, and `.png`.
+
+## 2026-07-02 unresolved-isolate vcg screen summarized
+
+- Reviewed the completed ambiguous-isolate `vcg_mining` BLAST outputs for `Buck_BI0607_1`, `Buck_BI0607_2`, and `Buck_NB0507_14`; each per-sample BLAST table exists under `ambiguous_isolate_resolution/vcg_mining/results/` and contains zero hit rows.
+- Confirmed that job array `1395878_[0-2]` completed successfully with exit code `0:0`, while the later summary job `1395886` failed because it was submitted with an incorrect manifest path.
+- Regenerated the lightweight summary directly with `scripts/summarize_vcg_hits.py`, writing `ambiguous_isolate_resolution/vcg_mining/results/vcg_best_hits_summary.tsv`.
+- The summary reports `best_hit_found=no` for all three ambiguous isolates, so no `vcgC` or `vcgE` hit was detected under the saved `blastn` settings.
+- Updated `ambiguous_isolate_resolution/vcg_mining/README.md` with the interpreted result and retained the conservative interpretation that this single-gene screen supports excluding these unresolved isolates from the confirmed `Vibrio vulnificus` branch but does not replace broader taxonomy or ANI evidence.
+
+## 2026-07-02 unresolved-isolate vcg submission repair
+
+- Checked SLURM accounting for job array `1395856` and confirmed all three `vcg_mining` array tasks failed with exit code `1:0` after 1-2 seconds.
+- Reviewed `vcg_mining/logs/slurm/vcg_mining_1395856_*.err` and found the shared failure reason: the redirected ambiguous-isolate run looked for a missing stage-local reference FASTA at `ambiguous_isolate_resolution/vcg_mining/references/vcg_reference_alleles.fasta`.
+- Verified that the intended reusable reference FASTA exists and is non-empty at `vcg_mining/references/vcg_reference_alleles.fasta`.
+- Updated `scripts/vcg_mining_array.slurm` so redirected stages still prefer a stage-local reference if present, but otherwise fall back to the shared saved `vcg_mining/references/vcg_reference_alleles.fasta` rather than failing before BLAST starts.
+- Updated `ambiguous_isolate_resolution/vcg_mining/README.md` and `NEXT_STEPS.md` with corrected `sbatch` commands that pass `-o/-e` paths for ambiguous-stage SLURM logs, since `#SBATCH` output directives are otherwise fixed before the script can apply `STAGE_DIR`.
+- Did not resubmit the BLAST job. The workflow is repaired and ready for manual SLURM submission.
+
+## 2026-07-01 unresolved-isolate vcg screening stage prepared
+
+- Reviewed the repo-level project markdown, the existing `vcg_mining` workflow, and the ambiguous-isolate taxonomic-filtering stage before editing so the new work stays isolated from the confirmed `Vibrio vulnificus` branch.
+- Added `configs/ambiguous_vcg_mining_manifest.tsv` to define the three unresolved reassemblies for `vcg` screening: `Buck_BI0607_1`, `Buck_BI0607_2`, and `Buck_NB0507_14`, each pointing to its taxon-filtered `scaffolds.fasta` and a stage-local BLAST output path under `ambiguous_isolate_resolution/vcg_mining/results/`.
+- Added `ambiguous_isolate_resolution/vcg_mining/README.md` documenting the rationale for screening `vcgC`/`vcgE` in the unresolved reassemblies, the saved assembly-size context (`4.3 Mb`, `4.1 Mb`, and `6.1 Mb`), the intended inputs and outputs, and the exact `sbatch` commands needed to run the BLAST and summary steps through SLURM.
+- Relaxed one overly strict check in `scripts/vcg_mining_array.slurm` so the reusable workflow no longer fails when a manifest uses simplified `sample_id` labels that do not exactly match the assembly directory name, which is required for reuse on the ambiguous-isolate reassembly directories.
+- Verified only the workflow preparation and syntax in this milestone. No new BLAST searches were run and no new `vcg` results were generated for the unresolved isolates in this turn.
+
 ## 2026-05-27 Expanded V. vulnificus RAxML tree plotting added
 
 - Added `scripts/plot_expanded_vv_raxml_tree.R` as the reusable R plotting entry point for `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46.raxml.support`.
@@ -290,3 +323,77 @@
 - Kept this workflow separate from the whole-genome Parsnp/RAxML-NG tree; no Parsnp, RAxML-NG, raw reads, original assemblies, or existing RAxML outputs were modified.
 - Added `phylogeny/expanded_vv_46/vcg_tree/README.md` documenting step-by-step execution, expected outputs, and how to compare the vcg-marker tree with the whole-genome RAxML-NG tree.
 - Validated the new shell scripts with `bash -n`; R plotting syntax was not executed because `Rscript` is not currently available in the active shell.
+
+## 2026-08-14 Project-wide reference manifest initialized
+
+- Added `configs/reference_sequence_manifest.tsv` as the current project-wide dictionary of available reference sequences, using the same four-column schema consumed by existing alignment and ANI scripts: `reference_id`, `reference_fasta`, `reference_format`, and `notes`.
+- Included all currently available reference files under `reference/`: 5 top-level species FASTA references and 42 Mullis et al. 2019 expanded *Vibrio vulnificus* draft genomes under `reference/expanded_vv/genomes/`.
+- Added `scripts/validate_reference_manifest.sh` to verify manifest structure, listed file presence, gzip integrity for compressed genomes, and `.fai` sidecar indexes for plain FASTA references.
+- Ran `bash scripts/validate_reference_manifest.sh`; validation passed with 47 rows, 5 plain FASTA rows, 5 indexed plain FASTA rows, and 42 gzip FASTA rows.
+
+## 2026-08-14 Added non-Mullis Vibrio vulnificus strain 24-VB00699
+
+- Confirmed NCBI Assembly `GCF_056820805.1` as *Vibrio vulnificus* strain `24-VB00699`, assembly name `ASM5682080v1`, Complete Genome, RefSeq/GenBank identical, with BioSample `SAMN57199157`.
+- Downloaded the RefSeq genomic FASTA from NCBI into `reference/v_vulnificus_non_mullis/downloads/GCF_056820805.1_ASM5682080v1_genomic.fna.gz`.
+- Validated the downloaded gzip and linked it into `reference/v_vulnificus_non_mullis/genomes/`.
+- Added provenance metadata in `reference/v_vulnificus_non_mullis/metadata/reference_downloads.tsv` and documented the new non-Mullis reference directory in `reference/v_vulnificus_non_mullis/README.md`.
+- Updated `configs/reference_sequence_manifest.tsv` with `vv_24_vb00699` so existing manifest-driven scripts can discover the new reference.
+
+## 2026-08-14 Added non-Mullis Vibrio vulnificus strain 2142-77
+
+- Confirmed NCBI Assembly `GCF_009665475.1` as *Vibrio vulnificus* strain `2142-77`, assembly name `ASM966547v1`, Complete Genome, RefSeq/GenBank identical, with BioSample `SAMN10702673`.
+- Noted that NCBI reports taxonomy-check status `Inconclusive` for this assembly, even though the Assembly organism and species fields are *Vibrio vulnificus*.
+- Downloaded the RefSeq genomic FASTA from NCBI into `reference/v_vulnificus_non_mullis/downloads/GCF_009665475.1_ASM966547v1_genomic.fna.gz`.
+- Validated the downloaded gzip and confirmed the FASTA contains chromosome records `NZ_CP035731.1` and `NZ_CP035732.1`.
+- Linked the validated genome into `reference/v_vulnificus_non_mullis/genomes/`, updated `reference/v_vulnificus_non_mullis/metadata/reference_downloads.tsv`, and added `vv_2142_77` to `configs/reference_sequence_manifest.tsv`.
+
+## 2026-08-14 Added batch of non-Mullis Vibrio reference genomes
+
+- Confirmed 12 requested NCBI Assembly accessions with E-utilities and found one Assembly record for each accession.
+- Added two additional non-Mullis *Vibrio vulnificus* genomes: `vv_7356` from `GCF_046581405.1` and `vv_env1` from `GCF_003047125.1`.
+- Added five *Vibrio cidicii* genomes under `reference/v_cidicii_non_mullis/`: `vcidicii_2423_01`, `vcidicii_vc01`, `vcidicii_2020rz130`, `vcidicii_pnusav005519`, and `vcidicii_2538_88`.
+- Added five *Vibrio navarrensis* genomes under `reference/v_navarrensis_non_mullis/`: `vnavarrensis_atcc_51183`, `vnavarrensis_20_vb00237`, `vnavarrensis_2462_79`, `vnavarrensis_08_2462`, and `vnavarrensis_pnusav006652`.
+- Downloaded RefSeq FASTA files for the `GCF` accessions and GenBank FASTA files for `GCA_052253365.2` and `GCA_048162665.1`, which NCBI ESummary reported as GenBank-only in this intake.
+- Validated gzip integrity for all 12 downloaded FASTA files, linked them into species-specific `genomes/` directories, updated species metadata tables and README files, and added all 12 references to `configs/reference_sequence_manifest.tsv`.
+- Recorded NCBI taxonomy-check caveats for `GCF_015767675.1` as `Inconclusive`; all other batch accessions were reported as taxonomy-check `OK`.
+
+## 2026-08-14 Confirmed existing Vibrio parahaemolyticus RIMD 2210633 reference accession
+
+- Confirmed NCBI Assembly `GCF_000196095.1` as *Vibrio parahaemolyticus* RIMD 2210633 substr. RIMD 2210633, assembly name `ASM19609v1`, Complete Genome, with BioSample `SAMD00058707`.
+- Verified from the NCBI assembly report that the assembly RefSeq chromosome records are `NC_004603.1` and `NC_004605.1`, matching the existing local FASTA headers in `reference/v_parahaemolyticus_ref.fasta`.
+- Updated `configs/reference_sequence_manifest.tsv` so `v_parahaemolyticus` records Assembly accession `GCF_000196095.1` directly.
+- Added `reference/metadata/core_reference_accessions.tsv` to track accession provenance for top-level core references without duplicating already-present reference FASTA files.
+
+## 2026-08-14 Added non-core Vibrio parahaemolyticus reference genomes
+
+- Confirmed four requested *Vibrio parahaemolyticus* NCBI Assembly accessions with E-utilities: `GCF_001558495.2` strain ATCC 17802, `GCF_057321345.1` strain vp18, `GCF_013393865.1` strain LVP2, and `GCF_009665495.1` strain 2012AW-0154.
+- Downloaded the RefSeq genomic FASTA files into `reference/v_parahaemolyticus_non_core/downloads/`, validated gzip integrity, and linked valid genomes into `reference/v_parahaemolyticus_non_core/genomes/`.
+- Added `reference/v_parahaemolyticus_non_core/README.md` and `reference/v_parahaemolyticus_non_core/metadata/reference_downloads.tsv` to document accession provenance and local filenames.
+- Added manifest rows `vpara_atcc_17802`, `vpara_vp18`, `vpara_lvp2`, and `vpara_2012aw_0154` to `configs/reference_sequence_manifest.tsv`.
+- Noted that all four NCBI Assembly summaries reported taxonomy-check status `OK`; `vp18` includes chromosome and plasmid FASTA records.
+
+## 2026-08-14 Added alginolyticus, diabolicus, and ostreicida reference batch
+
+- Confirmed 12 requested NCBI Assembly accessions with E-utilities for *Vibrio diabolicus*, *Vibrio alginolyticus*, and *Vibrio ostreicida*; all exact requested accessions resolved and reported taxonomy-check status `OK`.
+- Verified `GCF_000354175.2` as the existing top-level *Vibrio alginolyticus* ATCC 17749 reference because the NCBI assembly report maps to local chromosomes `NC_022349.1` and `NC_022359.1`; no duplicate FASTA was downloaded for that assembly.
+- Downloaded 11 non-duplicate RefSeq genomic FASTA files into species-specific directories: `reference/v_alginolyticus_non_core/`, `reference/v_diabolicus_non_core/`, and `reference/v_ostreicida_non_core/`.
+- Validated gzip integrity for all 11 new downloads and linked them into the corresponding `genomes/` directories.
+- Added accession metadata and README files for the three new species-specific directories, updated `reference/metadata/core_reference_accessions.tsv` for `v_alginolyticus`, and added 11 new rows to `configs/reference_sequence_manifest.tsv`.
+- Recorded that `GCF_047497145.1` and `GCF_040969975.1` had blank NCBI infraspecies strain fields in ESummary, but FASTA headers identify strains `ZJ-0` and `3098`, respectively.
+
+## 2026-08-14 ANI matrix heatmap workflow scaffolded
+
+- Added `configs/ani_unknown_query_manifest.tsv` with all 6 Buck assemblies as the unknown query set.
+- Added `scripts/fastani_matrix_array.slurm` for rectangular FastANI runs where any normalized manifest can be used as the query set and any normalized manifest can be used as the reference set.
+- Added `scripts/summarize_fastani_matrix.py` to write a long ANI table, a genome-by-genome matrix, a species max-ANI matrix, and a species mean-ANI matrix from completed FastANI outputs.
+- Added `scripts/plot_fastani_matrix_heatmap.R` to render blue-to-red ANI heatmaps and highlight the six Buck assemblies with bold labels and black outlines.
+- Added `ani/reference_panel_matrix/README.md` with commands for both the full reference-panel-plus-Buck matrix and the focused Buck-vs-reference-panel heatmap.
+- Prepared stage directories for `ani/reference_panel_matrix/`, `ani/reference_panel_plus_unknown_matrix/`, and `ani/unknown_vs_reference_panel/`; no FastANI jobs were submitted or run on the login node.
+
+## 2026-08-14 Diagnosed and repaired FastANI matrix array job 1465273
+
+- Queried SLURM accounting for job `1465273` and confirmed all `fastani_matrix` array tasks failed in 0-2 seconds with exit code `1:0`, consistent with startup/script failure rather than memory or FastANI runtime failure.
+- Inspected representative logs under `ani/reference_panel_matrix/logs/slurm/`; task stderr reported `reference_list_file: unbound variable` before FastANI launched.
+- Repaired `scripts/fastani_matrix_array.slurm` so the containerized FastANI call uses the defined uppercase `REFERENCE_LIST_FILE` variable when passing `--rl`.
+- Verified `scripts/fastani_matrix_array.slurm` with `bash -n`.
+- Ran a non-compute dry run for array task 0 using `CONTAINER_RUNTIME=printf`; the script now reaches the container command construction without the previous unbound-variable failure and stops only because the dry-run runtime does not create a FastANI output file.

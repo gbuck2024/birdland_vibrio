@@ -7,6 +7,10 @@
 #    sbatch --array=0-2 scripts/vcg_mining_array.slurm
 # 2. After the array job completes, summarize the best hit per sample:
 #    sbatch --export=ALL,VCG_MODE=summary scripts/vcg_mining_array.slurm
+#
+# To reuse this workflow for another stage, override MANIFEST_FILE and STAGE_DIR.
+# Use sbatch -o/-e at submission time if the alternate stage should receive its
+# own SLURM stdout/stderr files.
 
 #SBATCH -J vcg_mining
 #SBATCH -p normal
@@ -32,7 +36,19 @@ cd "${PROJECT_DIR}"
 MODE="${VCG_MODE:-blast}"
 MANIFEST_FILE="${MANIFEST_FILE:-configs/vcg_mining_manifest.tsv}"
 STAGE_DIR="${STAGE_DIR:-vcg_mining}"
-REFERENCE_FASTA="${REFERENCE_FASTA:-${STAGE_DIR}/references/vcg_reference_alleles.fasta}"
+STAGE_REFERENCE_FASTA="${STAGE_DIR}/references/vcg_reference_alleles.fasta"
+SHARED_REFERENCE_FASTA="vcg_mining/references/vcg_reference_alleles.fasta"
+REFERENCE_NOTE=""
+if [ -z "${REFERENCE_FASTA:-}" ]; then
+  if [ -s "${STAGE_REFERENCE_FASTA}" ]; then
+    REFERENCE_FASTA="${STAGE_REFERENCE_FASTA}"
+  elif [ "${STAGE_DIR}" != "vcg_mining" ] && [ -s "${SHARED_REFERENCE_FASTA}" ]; then
+    REFERENCE_FASTA="${SHARED_REFERENCE_FASTA}"
+    REFERENCE_NOTE="stage-local reference missing; reusing shared vcg reference FASTA"
+  else
+    REFERENCE_FASTA="${STAGE_REFERENCE_FASTA}"
+  fi
+fi
 RESULTS_DIR="${STAGE_DIR}/results"
 LOG_DIR="${STAGE_DIR}/logs"
 SLURM_LOG_DIR="${LOG_DIR}/slurm"
@@ -168,6 +184,9 @@ log "Mode: ${MODE}"
 log "Manifest: ${MANIFEST_FILE}"
 log "Stage directory: ${STAGE_DIR}"
 log "Reference FASTA: ${REFERENCE_FASTA}"
+if [ -n "${REFERENCE_NOTE}" ]; then
+  log "Reference selection note: ${REFERENCE_NOTE}"
+fi
 
 require_file "${MANIFEST_FILE}" "vcg mining manifest"
 
@@ -218,8 +237,7 @@ assembly_dir="$(dirname "${assembly_fasta}")"
 assembly_dir_base="$(basename "${assembly_dir}")"
 
 if [ "${assembly_dir_base}" != "${sample_id}" ]; then
-  log "ERROR: Manifest row ${SLURM_ARRAY_TASK_ID} sample_id does not match assembly directory name: ${assembly_dir_base}" >&2
-  exit 1
+  log "NOTE: sample_id '${sample_id}' does not match assembly directory name '${assembly_dir_base}'; continuing because manifest sample IDs may be simplified labels."
 fi
 
 if [ "${assembly_base}" != "scaffolds.fasta" ] && [ "${assembly_base}" != "contigs.fasta" ]; then

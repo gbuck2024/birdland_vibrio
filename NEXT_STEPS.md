@@ -1,5 +1,24 @@
 # Next Steps
 
+## 2026-08-14 ANI matrix heatmap review
+
+- Review `ani/reference_panel_plus_unknown_matrix/figures/reference_panel_plus_unknown_matrix_genome_heatmap.pdf` for the full genome-by-genome ANI pattern across the 82-genome reference-plus-unknown panel.
+- Review `ani/reference_panel_plus_unknown_matrix/figures/reference_panel_plus_unknown_matrix_species_max_heatmap.pdf` for the species-level max ANI summary.
+- Regenerate the figures from the project root with:
+
+```bash
+module load R/gcc11/4.4.0
+Rscript scripts/plot_fastani_matrix_heatmap.R
+```
+
+- Use `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv` for detailed Buck unknown nearest-neighbor interpretation, especially same-species support near or above the usual `95-96%` ANI range.
+
+## 2026-07-01 unresolved-isolate vcg screening ready for manual submission
+
+- Treat the ambiguous-isolate `vcg` screen as summarized. The saved summary at `ambiguous_isolate_resolution/vcg_mining/results/vcg_best_hits_summary.tsv` reports `best_hit_found=no` for `Buck_BI0607_1`, `Buck_BI0607_2`, and `Buck_NB0507_14`.
+- Use this result conservatively alongside the existing Kraken2, multi-reference alignment, and taxon-filtered reassembly evidence. The missing `vcgC`/`vcgE` hits support keeping these isolates out of the confirmed `Vibrio vulnificus` branch, but this single-gene screen is not a standalone species assignment.
+- If this branch is revisited, check whether weaker BLAST parameters or a broader virulence-gene panel are scientifically justified before rerunning; do not lower thresholds just to force a hit.
+
 ## 2026-05-27 Expanded V. vulnificus RAxML tree plotting follow-up
 
 - Regenerate the annotated RAxML support tree figures from the project root with `module load R/gcc11/4.4.0 && Rscript scripts/plot_expanded_vv_raxml_tree.R`.
@@ -229,3 +248,19 @@ Rscript scripts/plot_vcg_tree.R
 - Submit the full workflow directly with `sbatch scripts/run_expanded_vv_vcg_tree_workflow.slurm`, or run `bash scripts/run_expanded_vv_vcg_tree_workflow.sh` inside an appropriate compute allocation.
 - After mining, inspect `phylogeny/expanded_vv_46/vcg_tree/metadata/expanded_vv_46_vcg_calls.tsv` to confirm the known Buck calls are preserved: `BS0607_9 = vcgE`, `CB0707_82 = vcgC`, and `NB0507_8 = vcgE`.
 - Compare `phylogeny/expanded_vv_46/vcg_tree/figures/expanded_vv_46_vcg_tree.pdf` against `phylogeny/expanded_vv_46/tree/raxmlng/expanded_vv_46_raxml_tree.pdf` to distinguish vcg-marker grouping from whole-genome relatedness.
+
+## Reference accession intake workflow
+
+- Treat `configs/reference_sequence_manifest.tsv` as the current project-wide dictionary of reference sequences available under `reference/`.
+- Current non-Mullis/non-core reference additions include *Vibrio vulnificus*, *Vibrio parahaemolyticus*, *Vibrio alginolyticus*, *Vibrio diabolicus*, *Vibrio ostreicida*, *Vibrio cidicii*, and *Vibrio navarrensis* genomes in species-specific directories under `reference/`.
+- For each new accession, confirm the accession metadata against NCBI before downloading, then place outputs in a clearly named subdirectory under `reference/` rather than mixing new files into existing stages.
+- After each new reference download, update `configs/reference_sequence_manifest.tsv` with a stable `reference_id`, relative FASTA path, reference format, and provenance note.
+- Run `bash scripts/validate_reference_manifest.sh` after each manifest update to verify paths, gzip integrity, and indexes for plain FASTA files.
+
+## ANI matrix heatmap workflow ready for manual submission
+
+- Review `ani/reference_panel_matrix/README.md` before submitting jobs.
+- Resubmit the repaired full reference-panel-plus-six-Buck matrix after failed job `1465273` with `sbatch --export=ALL,STAGE_DIR=ani/reference_panel_plus_unknown_matrix,QUERY_MANIFEST=configs/reference_sequence_manifest.tsv,REFERENCE_MANIFEST=configs/reference_sequence_manifest.tsv,EXTRA_QUERY_MANIFEST=configs/ani_unknown_query_manifest.tsv,EXTRA_REFERENCE_MANIFEST=configs/ani_unknown_query_manifest.tsv --array=0-81 scripts/fastani_matrix_array.slurm`.
+- Confirm within 1-2 minutes that the new array logs no longer report `reference_list_file: unbound variable` and that raw FastANI TSV files begin appearing in `ani/reference_panel_plus_unknown_matrix/outputs/`.
+- Use the same runner to run the focused six-Buck-vs-reference-panel matrix as `ani/unknown_vs_reference_panel/`.
+- After each FastANI array completes, run the `ANI_MODE=matrix` summary submission, then render heatmaps with `scripts/plot_fastani_matrix_heatmap.R`.

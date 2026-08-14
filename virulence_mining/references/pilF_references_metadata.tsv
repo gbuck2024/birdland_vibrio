@@ -1,0 +1,7 @@
+reference_id	accession	strain	biotype	length_bp	gene	paper	notes
+pilF_FJ899603_95-8-162	FJ899603.1	95-8-162	2	735	pilF	Roig2010	complete CDS
+pilF_FJ899604_95-8-6	FJ899604.1	95-8-6	2	735	pilF	Roig2010	complete CDS; gene qualifier absent but product is PilF/Tfp assembly protein
+pilF_FJ899605_95-8-7	FJ899605.1	95-8-7	2	735	pilF	Roig2010	complete CDS
+pilF_FJ899606_MLT404	FJ899606.1	MLT404	1	735	pilF	Roig2010	complete CDS
+pilF_FJ899607_CECT4869	FJ899607.1	CECT4869	2	735	pilF	Roig2010	complete CDS; locus listed as 736 bp but CDS is 735 bp
+pilF_FJ899608_MLT406	FJ899608.1	MLT406	1	735	pilF	Roig2010	complete CDS

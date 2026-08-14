@@ -1,0 +1,9 @@
+query_species	Vibrio alginolyticus	Vibrio cidicii	Vibrio diabolicus	Vibrio navarrensis	Vibrio ostreicida	Vibrio parahaemolyticus	Vibrio vulnificus	unknown
+Vibrio alginolyticus	100.0000	80.3301	92.8094	80.3551	NA	86.4368	81.1250	89.9134
+Vibrio cidicii	80.3686	100.0000	80.4185	95.7323	NA	80.5969	82.4434	98.0795
+Vibrio diabolicus	92.8034	80.2801	100.0000	80.2322	NA	87.1752	80.9049	94.9631
+Vibrio navarrensis	80.3030	95.7299	80.4963	100.0000	NA	80.4501	82.2883	95.4491
+Vibrio ostreicida	NA	NA	NA	NA	100.0000	NA	NA	NA
+Vibrio parahaemolyticus	86.5863	80.2496	87.2733	80.3185	NA	100.0000	81.6181	85.3537
+Vibrio vulnificus	81.0667	82.4007	80.9333	81.8638	NA	81.7015	100.0000	99.9542
+unknown	90.0765	97.6034	94.5355	95.1371	NA	85.2996	99.9690	100.0000
