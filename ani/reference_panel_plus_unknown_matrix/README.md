@@ -10,8 +10,10 @@ This stage combines the saved reference panel with the six Buck unknown assembli
 
 ## Current Outputs
 
-- `metrics/fastani_matrix_long.tsv`: long-form pairwise ANI table
+- `metrics/fastani_matrix_long.tsv`: long-form pairwise ANI table with alignment fraction (`fragment_mappings / query_fragments`)
 - `metrics/fastani_genome_matrix.tsv`: genome-by-genome ANI matrix
+- `metrics/fastani_alignment_fraction_matrix.tsv`: genome-by-genome alignment fraction matrix
+- `metrics/fastani_genome_matrix_af_ge_0_50.tsv`: ANI matrix retaining only cells with `AF >= 0.50`; lower-AF cells are written as `NA`
 - `metrics/fastani_species_max_matrix.tsv`: species-level max ANI matrix
 - `metrics/fastani_species_mean_matrix.tsv`: species-level mean ANI matrix
 - `figures/reference_panel_plus_unknown_matrix_genome_heatmap.pdf`
@@ -29,11 +31,11 @@ sbatch --export=ALL,ANI_MODE=matrix,STAGE_DIR=ani/reference_panel_plus_unknown_m
 
 ## Regenerate Figures
 
-The plotting step is lightweight and can be run from the project root:
+The plotting step is lightweight and can be run from the project root. By default, cells with `AF < 0.50` are grayed out in the genome heatmap:
 
 ```bash
 module load R/gcc11/4.4.0
 Rscript scripts/plot_fastani_matrix_heatmap.R
 ```
 
-The R script uses `ani/reference_panel_plus_unknown_matrix` by default. Override `STAGE_DIR`, `ANI_MATRIX_FILE`, `QUERY_METADATA_FILE`, `REFERENCE_METADATA_FILE`, or `HEATMAP_PREFIX` only when plotting a different compatible matrix stage.
+The R script uses `ani/reference_panel_plus_unknown_matrix` by default. Override `STAGE_DIR`, `ANI_MATRIX_FILE`, `AF_MATRIX_FILE`, `AF_THRESHOLD`, `QUERY_METADATA_FILE`, `REFERENCE_METADATA_FILE`, or `HEATMAP_PREFIX` only when plotting a different compatible matrix stage or threshold.

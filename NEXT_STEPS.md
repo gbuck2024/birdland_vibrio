@@ -1,8 +1,8 @@
 # Next Steps
 
-## 2026-08-14 ANI matrix heatmap review
+## 2026-08-15 ANI matrix heatmap review
 
-- Review `ani/reference_panel_plus_unknown_matrix/figures/reference_panel_plus_unknown_matrix_genome_heatmap.pdf` for the full genome-by-genome ANI pattern across the 82-genome reference-plus-unknown panel.
+- Review `ani/reference_panel_plus_unknown_matrix/figures/reference_panel_plus_unknown_matrix_genome_heatmap.pdf` for the full genome-by-genome ANI pattern across the 82-genome reference-plus-unknown panel. Cells with `AF < 0.50`, where `AF = fragment_mappings / query_fragments`, are now grayed out.
 - Review `ani/reference_panel_plus_unknown_matrix/figures/reference_panel_plus_unknown_matrix_species_max_heatmap.pdf` for the species-level max ANI summary.
 - Regenerate the figures from the project root with:
 
@@ -11,7 +11,7 @@ module load R/gcc11/4.4.0
 Rscript scripts/plot_fastani_matrix_heatmap.R
 ```
 
-- Use `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv` for detailed Buck unknown nearest-neighbor interpretation, especially same-species support near or above the usual `95-96%` ANI range.
+- Use `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv`, `fastani_alignment_fraction_matrix.tsv`, and `fastani_genome_matrix_af_ge_0_50.tsv` for detailed Buck unknown nearest-neighbor interpretation, especially same-species support near or above the usual `95-96%` ANI range with adequate genome coverage.
 
 ## 2026-07-01 unresolved-isolate vcg screening ready for manual submission
 

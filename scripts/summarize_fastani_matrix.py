@@ -17,6 +17,8 @@ QUERY_MANIFEST = PROJECT_DIR / Path(os.environ.get("QUERY_MANIFEST", "configs/re
 REFERENCE_MANIFEST = PROJECT_DIR / Path(os.environ.get("REFERENCE_MANIFEST", "configs/reference_sequence_manifest.tsv"))
 EXTRA_QUERY_MANIFEST = os.environ.get("EXTRA_QUERY_MANIFEST", "")
 EXTRA_REFERENCE_MANIFEST = os.environ.get("EXTRA_REFERENCE_MANIFEST", "")
+AF_FILTER_THRESHOLD = float(os.environ.get("AF_FILTER_THRESHOLD", "0.50"))
+AF_FILTER_LABEL = f"{AF_FILTER_THRESHOLD:.2f}".replace(".", "_")
 
 UNKNOWN_IDS = {
     value.strip()
@@ -125,6 +127,17 @@ def write_matrix(path: Path, row_ids: list[str], col_ids: list[str], values: dic
             writer.writerow([row_id, *[values.get((row_id, col_id), "NA") for col_id in col_ids]])
 
 
+def calculate_alignment_fraction(fragment_mappings: str, query_fragments: str) -> str:
+    try:
+        mappings = float(fragment_mappings)
+        fragments = float(query_fragments)
+    except ValueError:
+        return "NA"
+    if fragments <= 0:
+        return "NA"
+    return f"{mappings / fragments:.4f}"
+
+
 def main() -> int:
     queries = load_manifest_set(QUERY_MANIFEST, EXTRA_QUERY_MANIFEST)
     references = load_manifest_set(REFERENCE_MANIFEST, EXTRA_REFERENCE_MANIFEST)
@@ -136,6 +149,8 @@ def main() -> int:
     reference_by_path = {row["genome_fasta"]: row for row in references}
     long_rows: list[dict[str, str]] = []
     matrix_values: dict[tuple[str, str], str] = {}
+    af_values: dict[tuple[str, str], str] = {}
+    af_filtered_matrix_values: dict[tuple[str, str], str] = {}
     missing_outputs: list[str] = []
 
     for query in queries:
@@ -149,7 +164,11 @@ def main() -> int:
             ani_pct = result["ani_pct"] if result else "NA"
             fragment_mappings = result["fragment_mappings"] if result else "0"
             query_fragments = result["query_fragments"] if result else "0"
+            alignment_fraction = calculate_alignment_fraction(fragment_mappings, query_fragments)
             matrix_values[(query["genome_id"], reference["genome_id"])] = ani_pct
+            af_values[(query["genome_id"], reference["genome_id"])] = alignment_fraction
+            if alignment_fraction != "NA" and float(alignment_fraction) >= AF_FILTER_THRESHOLD:
+                af_filtered_matrix_values[(query["genome_id"], reference["genome_id"])] = ani_pct
             long_rows.append(
                 {
                     "query_id": query["genome_id"],
@@ -165,6 +184,7 @@ def main() -> int:
                     "ani_pct": ani_pct,
                     "fragment_mappings": fragment_mappings,
                     "query_fragments": query_fragments,
+                    "alignment_fraction": alignment_fraction,
                 }
             )
 
@@ -190,6 +210,7 @@ def main() -> int:
                 "ani_pct",
                 "fragment_mappings",
                 "query_fragments",
+                "alignment_fraction",
             ],
             delimiter="\t",
         )
@@ -201,6 +222,21 @@ def main() -> int:
         [row["genome_id"] for row in queries],
         [row["genome_id"] for row in references],
         matrix_values,
+        "query_id",
+    )
+    write_matrix(
+        METRICS_DIR / "fastani_alignment_fraction_matrix.tsv",
+        [row["genome_id"] for row in queries],
+        [row["genome_id"] for row in references],
+        af_values,
+        "query_id",
+    )
+    af_filtered_matrix_tsv = METRICS_DIR / f"fastani_genome_matrix_af_ge_{AF_FILTER_LABEL}.tsv"
+    write_matrix(
+        af_filtered_matrix_tsv,
+        [row["genome_id"] for row in queries],
+        [row["genome_id"] for row in references],
+        af_filtered_matrix_values,
         "query_id",
     )
 
@@ -224,6 +260,8 @@ def main() -> int:
 
     print(f"Wrote long ANI table: {long_tsv.relative_to(PROJECT_DIR)}")
     print(f"Wrote genome ANI matrix: {(METRICS_DIR / 'fastani_genome_matrix.tsv').relative_to(PROJECT_DIR)}")
+    print(f"Wrote alignment fraction matrix: {(METRICS_DIR / 'fastani_alignment_fraction_matrix.tsv').relative_to(PROJECT_DIR)}")
+    print(f"Wrote AF-filtered genome ANI matrix: {af_filtered_matrix_tsv.relative_to(PROJECT_DIR)}")
     print(f"Wrote species max ANI matrix: {(METRICS_DIR / 'fastani_species_max_matrix.tsv').relative_to(PROJECT_DIR)}")
     print(f"Wrote species mean ANI matrix: {(METRICS_DIR / 'fastani_species_mean_matrix.tsv').relative_to(PROJECT_DIR)}")
     print(f"Reference path lookup entries: {len(reference_by_path)}")

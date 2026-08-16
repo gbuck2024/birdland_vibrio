@@ -1,5 +1,13 @@
 # Work Completed
 
+## 2026-08-15 ANI heatmap alignment-fraction mask added
+
+- Updated `scripts/summarize_fastani_matrix.py` so the rectangular fastANI summary now records `alignment_fraction = fragment_mappings / query_fragments` in `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv`.
+- Regenerated the lightweight matrix summary for `ani/reference_panel_plus_unknown_matrix`, adding `metrics/fastani_alignment_fraction_matrix.tsv` and `metrics/fastani_genome_matrix_af_ge_0_50.tsv`.
+- Updated `scripts/plot_fastani_matrix_heatmap.R` so the genome heatmap reads the AF matrix and grays out cells with `AF < 0.50` or missing AF while leaving ANI colors for cells meeting the threshold.
+- Regenerated the heatmap figures with `module load R/gcc11/4.4.0 && Rscript scripts/plot_fastani_matrix_heatmap.R`.
+- Verified the long table contains `6,724` pairwise cells: `2,929` have `AF >= 0.50` and `3,795` are below threshold or missing.
+
 ## 2026-08-14 reference-panel-plus-unknown ANI heatmaps generated
 
 - Investigated SLURM job `1465438` and confirmed it completed successfully with exit code `0:0`; this was the `ANI_MODE=matrix` summary pass for `ani/reference_panel_plus_unknown_matrix`, not a new fastANI comparison array.

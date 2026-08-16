@@ -111,6 +111,10 @@
 /vcg_mining/tree/*.log
 !/vcg_mining/tree/*.nwk
 !/vcg_mining/tree/*.pdf
+/ambiguous_isolate_resolution/vcg_mining/results/*.blast.tsv
+/ambiguous_isolate_resolution/vcg_mining/results/blast_db/
+/ambiguous_isolate_resolution/vcg_mining/logs/
+!/ambiguous_isolate_resolution/vcg_mining/results/vcg_best_hits_summary.tsv
 /snp_phylogeny/bam/
 /snp_phylogeny/vcf/
 /snp_phylogeny/logs/

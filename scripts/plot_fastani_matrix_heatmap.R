@@ -17,6 +17,8 @@ figures_dir <- file.path(stage_path, "figures")
 dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
 
 matrix_file <- Sys.getenv("ANI_MATRIX_FILE", file.path(metrics_dir, "fastani_genome_matrix.tsv"))
+af_matrix_file <- Sys.getenv("AF_MATRIX_FILE", file.path(metrics_dir, "fastani_alignment_fraction_matrix.tsv"))
+af_threshold <- as.numeric(Sys.getenv("AF_THRESHOLD", "0.50"))
 query_manifest_file <- Sys.getenv("QUERY_METADATA_FILE", file.path(metrics_dir, "query_manifest.normalized.tsv"))
 reference_manifest_file <- Sys.getenv("REFERENCE_METADATA_FILE", file.path(metrics_dir, "reference_manifest.normalized.tsv"))
 prefix <- Sys.getenv("HEATMAP_PREFIX", basename(normalizePath(stage_path, mustWork = FALSE)))
@@ -42,6 +44,9 @@ if (!file.exists(query_manifest_file) || file.info(query_manifest_file)$size == 
 }
 if (!file.exists(reference_manifest_file) || file.info(reference_manifest_file)$size == 0) {
   stop("Reference metadata is missing or empty: ", reference_manifest_file, call. = FALSE)
+}
+if (!is.finite(af_threshold) || af_threshold < 0 || af_threshold > 1) {
+  stop("AF_THRESHOLD must be a number from 0 to 1.", call. = FALSE)
 }
 
 read_tsv <- function(path) {
@@ -77,10 +82,16 @@ metadata_order <- function(ids, metadata) {
   order(metadata$species, metadata$is_unknown != "yes", metadata$genome_id)
 }
 
-draw_heatmap <- function(mat, query_meta, ref_meta, output_stem, title_text) {
+draw_heatmap <- function(mat, query_meta, ref_meta, output_stem, title_text, af_mat = NULL) {
   row_order <- metadata_order(rownames(mat), query_meta)
   col_order <- metadata_order(colnames(mat), ref_meta)
   mat <- mat[row_order, col_order, drop = FALSE]
+  if (!is.null(af_mat)) {
+    if (!setequal(rownames(mat), rownames(af_mat)) || !setequal(colnames(mat), colnames(af_mat))) {
+      stop("AF matrix row/column IDs do not match ANI matrix IDs.", call. = FALSE)
+    }
+    af_mat <- af_mat[rownames(mat), colnames(mat), drop = FALSE]
+  }
 
   query_meta <- query_meta[match(rownames(mat), query_meta$genome_id), , drop = FALSE]
   ref_meta <- ref_meta[match(colnames(mat), ref_meta$genome_id), , drop = FALSE]
@@ -92,6 +103,10 @@ draw_heatmap <- function(mat, query_meta, ref_meta, output_stem, title_text) {
   plot_mat[is.na(plot_mat)] <- 0
   plot_mat[plot_mat < 0] <- 0
   plot_mat[plot_mat > 100] <- 100
+  low_af <- matrix(FALSE, nrow = nrow(plot_mat), ncol = ncol(plot_mat), dimnames = dimnames(plot_mat))
+  if (!is.null(af_mat)) {
+    low_af <- is.na(af_mat) | af_mat < af_threshold
+  }
 
   n_rows <- nrow(plot_mat)
   n_cols <- ncol(plot_mat)
@@ -116,6 +131,18 @@ draw_heatmap <- function(mat, query_meta, ref_meta, output_stem, title_text) {
       main = title_text
     )
     box()
+
+    if (any(low_af)) {
+      low_af_plot <- low_af[n_rows:1, , drop = FALSE]
+      for (i in seq_len(n_rows)) {
+        for (j in seq_len(n_cols)) {
+          if (low_af_plot[i, j]) {
+            rect(j - 0.5, i - 0.5, j + 0.5, i + 0.5, col = "gray82", border = NA)
+          }
+        }
+      }
+      rect(0.5, 0.5, n_cols + 0.5, n_rows + 0.5, border = "gray55", lwd = 0.5)
+    }
 
     display_rows <- rev(seq_len(n_rows))
     row_labels <- short_label(rownames(plot_mat))
@@ -177,6 +204,10 @@ draw_heatmap <- function(mat, query_meta, ref_meta, output_stem, title_text) {
     )
     axis(4, at = c(0, 80, 90, 95, 100), labels = c("0/NA", "80", "90", "95", "100"), las = 1)
     mtext("ANI (%)", side = 4, line = 2.5)
+    if (!is.null(af_mat)) {
+      rect(0.62, -16, 1.38, -9, col = "gray82", border = "gray55", xpd = NA)
+      mtext(paste0("Gray: AF < ", sprintf("%.2f", af_threshold)), side = 1, line = 4.5, cex = 0.75)
+    }
   }
 
   pdf_file <- file.path(figures_dir, paste0(output_stem, ".pdf"))
@@ -197,6 +228,12 @@ draw_heatmap <- function(mat, query_meta, ref_meta, output_stem, title_text) {
 query_meta <- read_tsv(query_manifest_file)
 ref_meta <- read_tsv(reference_manifest_file)
 mat <- read_matrix(matrix_file)
+af_mat <- NULL
+if (file.exists(af_matrix_file) && file.info(af_matrix_file)$size > 0) {
+  af_mat <- read_matrix(af_matrix_file)
+} else {
+  warning("AF matrix is missing or empty; heatmap will not gray low-AF cells: ", af_matrix_file, call. = FALSE)
+}
 
 required_meta <- c("genome_id", "species", "is_unknown")
 missing_query <- setdiff(required_meta, names(query_meta))
@@ -208,7 +245,14 @@ if (length(missing_ref) > 0) {
   stop("Reference metadata missing column(s): ", paste(missing_ref, collapse = ", "), call. = FALSE)
 }
 
-draw_heatmap(mat, query_meta, ref_meta, paste0(prefix, "_genome_heatmap"), "fastANI genome matrix")
+draw_heatmap(
+  mat,
+  query_meta,
+  ref_meta,
+  paste0(prefix, "_genome_heatmap"),
+  paste0("fastANI genome matrix (AF >= ", sprintf("%.2f", af_threshold), " colored)"),
+  af_mat
+)
 
 species_max_file <- file.path(metrics_dir, "fastani_species_max_matrix.tsv")
 if (file.exists(species_max_file) && file.info(species_max_file)$size > 0) {
