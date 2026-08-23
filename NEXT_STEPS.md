@@ -1,5 +1,35 @@
 # Next Steps
 
+## 2026-08-23 BI0607_2 GC-content versus coverage plot review
+
+- Use `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/figures/BI0607_2_gc_coverage_log10.pdf` as the primary plot for checking distinct contig populations, because the saved coverage summary indicates a wide coverage spread.
+- Use `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/figures/BI0607_2_gc_coverage_linear.pdf` only as a secondary view for absolute high-coverage context.
+- Review `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/metrics/BI0607_2_gc_coverage_taxon_summary.tsv` alongside the plot. Current broad groups show `Reyranella` contigs at high GC and high median coverage, `Vibrio` contigs around 47% GC but low median coverage, and `Bacillus` contigs around 47% GC with higher median coverage than the `Vibrio` group.
+- Regenerate the plots from the project root with:
+
+```bash
+module load R/gcc11/4.4.0
+Rscript scripts/plot_bi0607_2_gc_coverage.R
+```
+
+## 2026-08-22 BI0607_2 BlobToolKit taxonomy classification ready for manual submission
+
+- Review `scripts/kraken2_bi0607_2_spades_contigs.slurm`.
+- Submit only when ready with `sbatch scripts/kraken2_bi0607_2_spades_contigs.slurm`.
+- After completion, verify `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/taxonomy/Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7.spades_contigs.kraken2.tsv` and `.kreport.tsv` exist and are non-empty before importing taxonomy into BlobToolKit.
+
+## 2026-08-20 BI0607_2 BlobToolKit self-contig coverage BAM ready for SLURM
+
+- Submit the prepared self-mapping job from the project root with:
+
+```bash
+sbatch scripts/blobtoolkit_bi0607_2_self_mapping.slurm
+```
+
+- After the job completes, verify that the expected outputs exist under `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/`, especially the coordinate-sorted BAM, `.bai`, `quickcheck`, `flagstat`, `idxstats`, and `reference_name_check` files.
+- Confirm that `metrics/Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7.self_contigs.reference_name_check.txt` reports a pass before using the BAM for BlobToolKit coverage analysis.
+- Use the sorted BAM for coverage analysis because it is mapped against `assembly/assemblies/Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta`, not an external reference genome.
+
 ## 2026-08-15 ANI matrix heatmap review
 
 - Review `ani/reference_panel_plus_unknown_matrix/figures/reference_panel_plus_unknown_matrix_genome_heatmap.pdf` for the full genome-by-genome ANI pattern across the 82-genome reference-plus-unknown panel. Cells with `AF < 0.50`, where `AF = fragment_mappings / query_fragments`, are now grayed out.
@@ -12,6 +42,7 @@ Rscript scripts/plot_fastani_matrix_heatmap.R
 ```
 
 - Use `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv`, `fastani_alignment_fraction_matrix.tsv`, and `fastani_genome_matrix_af_ge_0_50.tsv` for detailed Buck unknown nearest-neighbor interpretation, especially same-species support near or above the usual `95-96%` ANI range with adequate genome coverage.
+- Use `ani/reference_panel_plus_unknown_matrix/metrics/buck_reciprocal_ani_af_summary.tsv` as the concise six-isolate table for reporting reciprocal ANI and AF support.
 
 ## 2026-07-01 unresolved-isolate vcg screening ready for manual submission
 
@@ -184,6 +215,7 @@ Rscript scripts/plot_vcg_tree.R
 - Confirm within 1-2 minutes that the array has started cleanly by checking `assembly/logs/slurm/` for the first stdout/stderr files and verifying that each task resolved the SPAdes executable correctly on the cluster.
 - After the array completes, submit `sbatch --export=ALL,SPADES_MODE=summary scripts/spades_assembly_array.slurm` to generate `assembly/metrics/assembly_summary.tsv`.
 - Review assembly size, contig count, scaffold count, N50, longest contig, and GC percentage before moving into annotation and gene-target analysis.
+
 - Keep `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` flagged as the highest-scrutiny assembly for contamination or non-target biology during post-assembly interpretation.
 
 ## 2026-04-18 ANI stage prepared for submission

@@ -1,5 +1,35 @@
 # Work Completed
 
+## 2026-08-23 BI0607_2 GC-content versus coverage plots generated
+
+- Added `scripts/plot_bi0607_2_gc_coverage.R` to join BlobToolKit contig identifiers, GC values, contig lengths, self-mapping coverage, and Kraken2 per-contig classifications for `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7`.
+- Generated reusable plot data and summaries under `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/metrics/`: `BI0607_2_gc_coverage_plot_data.tsv`, `BI0607_2_gc_coverage_summary.tsv`, and `BI0607_2_gc_coverage_taxon_summary.tsv`.
+- Generated linear and log-scaled coverage plots under `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/figures/`: `BI0607_2_gc_coverage_linear.pdf`, `.png`, `BI0607_2_gc_coverage_log10.pdf`, and `.png`.
+- Verified the plotting workflow with `module load R/gcc11/4.4.0 && Rscript scripts/plot_bi0607_2_gc_coverage.R`; no SLURM job was submitted because this is a lightweight plotting step.
+- The coverage distribution supports using the log-scaled coverage plot as the primary view: median coverage is `29.34`, 95th percentile is `153.54`, 99th percentile is `1222.38`, maximum is `8022.79`, and the 95th/5th percentile ratio is `118.74`.
+
+## 2026-08-22 BI0607_2 BlobToolKit Kraken2 contig classification script prepared
+
+- Added `scripts/kraken2_bi0607_2_spades_contigs.slurm` to classify `assembly/assemblies/Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta` with `containers/kraken2.sif` and `kraken2_db/db`.
+- Configured per-contig Kraken2 output and report files under `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/taxonomy/`, with parameters recorded under the existing BI0607_2 metadata directory.
+- The script validates all required input paths and refuses to overwrite existing output, report, or parameter files before running Kraken2.
+- Verified the script with `bash -n`; no SLURM job was submitted.
+
+## 2026-08-20 BI0607_2 BlobToolKit self-contig BAM workflow prepared
+
+- Added `scripts/blobtoolkit_bi0607_2_self_mapping.slurm` to map `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7` trimmed paired reads back to its own SPAdes `assembly/assemblies/Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta` for BlobToolKit coverage analysis.
+- The SLURM script activates the existing BlobToolKit conda environment at `/home/glametrie1/.conda/envs/blobtoolkit`, then loads `bwa/0.7.17` only if `bwa` is not already available.
+- The workflow writes all mapping outputs under `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/`, including BWA index sidecars, the mapped BAM, coordinate-sorted BAM, BAM index, `samtools quickcheck`, `samtools flagstat`, `samtools idxstats`, parameters, and a reference-name verification file.
+- Added `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/README.md` with inputs, submission command, expected outputs, and the requirement that BAM reference names match the SPAdes contig headers.
+- No mapping job was submitted and no compute-heavy alignment was run on the login node.
+
+## 2026-08-15 Buck reciprocal ANI/AF summary added
+
+- Added `scripts/summarize_buck_reciprocal_ani_af.py` to summarize the six Buck genomes from the existing `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv`.
+- The summary chooses each Buck isolate's candidate species from non-Buck references using the highest reciprocal ANI, reports mean reciprocal ANI, reports both `Buck->ref AF` and `ref AF -> Buck`, and adds a concise interpretation based on `95.0%` ANI and `0.50` reciprocal AF thresholds.
+- Generated `ani/reference_panel_plus_unknown_matrix/metrics/buck_reciprocal_ani_af_summary.tsv` and `buck_reciprocal_ani_af_summary.md`.
+- Verified the script with `python3 -m py_compile scripts/summarize_buck_reciprocal_ani_af.py` and regenerated the six-row summary successfully.
+
 ## 2026-08-15 ANI heatmap alignment-fraction mask added
 
 - Updated `scripts/summarize_fastani_matrix.py` so the rectangular fastANI summary now records `alignment_fraction = fragment_mappings / query_fragments` in `ani/reference_panel_plus_unknown_matrix/metrics/fastani_matrix_long.tsv`.

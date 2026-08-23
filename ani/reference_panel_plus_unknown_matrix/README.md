@@ -16,6 +16,8 @@ This stage combines the saved reference panel with the six Buck unknown assembli
 - `metrics/fastani_genome_matrix_af_ge_0_50.tsv`: ANI matrix retaining only cells with `AF >= 0.50`; lower-AF cells are written as `NA`
 - `metrics/fastani_species_max_matrix.tsv`: species-level max ANI matrix
 - `metrics/fastani_species_mean_matrix.tsv`: species-level mean ANI matrix
+- `metrics/buck_reciprocal_ani_af_summary.tsv`: six-row Buck isolate summary with candidate species, reciprocal ANI, and both AF directions
+- `metrics/buck_reciprocal_ani_af_summary.md`: Markdown version of the Buck reciprocal ANI/AF summary
 - `figures/reference_panel_plus_unknown_matrix_genome_heatmap.pdf`
 - `figures/reference_panel_plus_unknown_matrix_genome_heatmap.png`
 - `figures/reference_panel_plus_unknown_matrix_species_max_heatmap.pdf`
@@ -39,3 +41,13 @@ Rscript scripts/plot_fastani_matrix_heatmap.R
 ```
 
 The R script uses `ani/reference_panel_plus_unknown_matrix` by default. Override `STAGE_DIR`, `ANI_MATRIX_FILE`, `AF_MATRIX_FILE`, `AF_THRESHOLD`, `QUERY_METADATA_FILE`, `REFERENCE_METADATA_FILE`, or `HEATMAP_PREFIX` only when plotting a different compatible matrix stage or threshold.
+
+## Regenerate Buck Reciprocal Summary
+
+The Buck-only reciprocal ANI/AF summary is lightweight and can be regenerated from the project root after `metrics/fastani_matrix_long.tsv` exists:
+
+```bash
+python3 scripts/summarize_buck_reciprocal_ani_af.py
+```
+
+The script selects each Buck isolate's candidate species from non-Buck references using the highest reciprocal ANI, then reports `Buck->ref AF` and `ref AF -> Buck` so high ANI values can be interpreted against genome coverage.

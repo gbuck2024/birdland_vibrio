@@ -1,0 +1,15 @@
+metric	value
+0%	0
+1%	0
+5%	1.2931
+10%	1.88596
+25%	4.4298
+50%	29.3434
+75%	68.937825
+90%	111.76591
+95%	153.53757
+99%	1222.381306
+100%	8022.7949
+positive_coverage_max_min_ratio	37789.8959020254
+coverage_q95_q05_ratio	118.736037429433
+recommend_log10_coverage_plot	yes

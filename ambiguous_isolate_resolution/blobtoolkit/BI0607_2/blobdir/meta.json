@@ -1,0 +1,86 @@
+{
+ "id": "blobdir",
+ "assembly": {
+  "file": "assembly/assemblies/Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta",
+  "scaffold-count": 49312,
+  "span": 34165342
+ },
+ "fields": [
+  {
+   "id": "identifiers",
+   "type": "identifier"
+  },
+  {
+   "id": "gc",
+   "preload": true,
+   "scale": "scaleLinear",
+   "name": "GC",
+   "datatype": "float",
+   "range": [
+    0.1429,
+    1.0
+   ],
+   "type": "variable"
+  },
+  {
+   "preload": true,
+   "scale": "scaleLog",
+   "id": "length",
+   "name": "Length",
+   "clamp": false,
+   "datatype": "integer",
+   "range": [
+    78,
+    159504
+   ],
+   "type": "variable"
+  },
+  {
+   "scale": "scaleLinear",
+   "id": "ncount",
+   "name": "N count",
+   "datatype": "integer",
+   "range": [
+    0,
+    0
+   ],
+   "type": "variable"
+  },
+  {
+   "datatype": "float",
+   "type": "variable",
+   "scale": "scaleLog",
+   "id": "coverage",
+   "name": "coverage",
+   "children": [
+    {
+     "id": "base_coverage",
+     "clamp": 0.01,
+     "range": [
+      0.0,
+      8022.7949
+     ],
+     "children": [
+      {
+       "id": "Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7.self_contigs.sorted_cov",
+       "file": "ambiguous_isolate_resolution/blobtoolkit/BI0607_2/bam/Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7.self_contigs.sorted.bam=Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7.self_contigs.sorted",
+       "type": "variable"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "links": {},
+ "name": "blobdir",
+ "plot": {
+  "x": "gc",
+  "z": "length",
+  "y": "Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7.self_contigs.sorted_cov"
+ },
+ "record_type": "record",
+ "records": 49312,
+ "taxon": {},
+ "version": 1,
+ "revision": 0
+}
