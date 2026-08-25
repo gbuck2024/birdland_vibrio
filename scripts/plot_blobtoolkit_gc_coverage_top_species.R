@@ -151,12 +151,7 @@ plot_data$short_id <- factor(plot_data$short_id, levels = sample_ids)
 
 gc_limits <- range(plot_data$gc_percent)
 length_limits <- range(plot_data$length_bp)
-plot_palette <- c(
-  "Vibrio" = "#0072B2",
-  "Top species 1" = "#D55E00",
-  "Top species 2" = "#009E73",
-  "Top species 3" = "#CC79A7"
-)
+top_species_colors <- c("#D55E00", "#009E73", "#CC79A7")
 
 make_sample_plot_data <- function(sample_data, top_species) {
   sample_data$plot_group <- NA_character_
@@ -168,17 +163,24 @@ make_sample_plot_data <- function(sample_data, top_species) {
 
   for (rank in seq_along(top_species)) {
     hit <- sample_data$species_label == top_species[rank]
-    sample_data$plot_group[hit] <- paste0("Top species ", rank)
+    sample_data$plot_group[hit] <- top_species[rank]
     sample_data$species_rank[hit] <- rank
     sample_data$display_label[hit] <- top_species[rank]
   }
 
   sample_data <- sample_data[!is.na(sample_data$plot_group), , drop = FALSE]
-  sample_data$plot_group <- factor(sample_data$plot_group, levels = names(plot_palette))
+  sample_data$plot_group <- factor(sample_data$plot_group, levels = c("Vibrio", top_species))
   sample_data
 }
 
 make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, facet = FALSE) {
+  plot_levels <- levels(droplevels(data$plot_group))
+  top_levels <- setdiff(plot_levels, "Vibrio")
+  color_values <- c(
+    "Vibrio" = "#0072B2",
+    stats::setNames(top_species_colors[seq_along(top_levels)], top_levels)
+  )
+
   plot_title <- if (facet) {
     if (log10_y) {
       "Six-sample contig GC content and log10-scaled coverage"
@@ -192,7 +194,11 @@ make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, fa
   }
 
   label_data <- if (facet) {
-    do.call(rbind, lapply(split(data, data$short_id), label_positions, log10_y = log10_y))
+    do.call(rbind, lapply(names(split(data, data$short_id)), function(current_sample) {
+      current_labels <- label_positions(data[data$short_id == current_sample, , drop = FALSE], log10_y = log10_y)
+      current_labels$short_id <- current_sample
+      current_labels
+    }))
   } else {
     label_positions(data, log10_y = log10_y)
   }
@@ -212,7 +218,7 @@ make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, fa
       show.legend = FALSE
     ) +
     ggplot2::scale_x_continuous(limits = gc_limits) +
-    ggplot2::scale_color_manual(values = plot_palette, breaks = names(plot_palette), drop = FALSE) +
+    ggplot2::scale_color_manual(values = color_values, breaks = plot_levels, drop = FALSE) +
     ggplot2::scale_size_continuous(
       range = c(0.2, 5),
       trans = "sqrt",
@@ -305,6 +311,11 @@ plot_summary <- do.call(rbind, summary_rows)
 utils::write.table(plot_summary, summary_tsv, sep = "\t", quote = FALSE, row.names = FALSE)
 
 combined_plot_data <- do.call(rbind, sample_plot_rows)
+combined_plot_levels <- c(
+  "Vibrio",
+  sort(setdiff(unique(as.character(combined_plot_data$plot_group)), "Vibrio"))
+)
+combined_plot_data$plot_group <- factor(as.character(combined_plot_data$plot_group), levels = combined_plot_levels)
 dir.create(overview_figures_dir, recursive = TRUE, showWarnings = FALSE)
 
 facet_linear_plot <- make_gc_coverage_plot(combined_plot_data, log10_y = FALSE, facet = TRUE)
