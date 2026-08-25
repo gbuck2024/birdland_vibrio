@@ -156,16 +156,16 @@ plot_data$short_id <- factor(plot_data$short_id, levels = sample_ids)
 
 gc_limits <- range(plot_data$gc_percent)
 length_limits <- range(plot_data$length_bp)
-okabe_ito_palette <- c(
-  "#0072B2",
-  "#E69F00",
-  "#009E73",
-  "#D55E00",
-  "#CC79A7",
-  "#56B4E9",
-  "#F0E442",
-  "#000000",
-  "#999999"
+highlight_palette <- c(
+  "#0072B2", # Top Vibrio 1: strong blue
+  "#E69F00", # Top Vibrio 2: strong orange
+  "#009E73", # Top Vibrio 3: strong green
+  "#666666", # Other Vibrio: medium/dark gray
+  "#CC79A7", # Other species 1: purple
+  "#56B4E9", # Other species 2: cyan/light blue
+  "#D81B60", # Other species 3: reddish magenta
+  "#F0E442", # Extra cross-sample faceted label: yellow
+  "#000000"  # Extra cross-sample faceted label: black
 )
 
 make_sample_plot_data <- function(sample_data, top_vibrio_species, top_other_species) {
@@ -202,10 +202,10 @@ make_sample_plot_data <- function(sample_data, top_vibrio_species, top_other_spe
 
 make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, facet = FALSE) {
   plot_levels <- levels(droplevels(data$plot_group))
-  if (length(plot_levels) > length(okabe_ito_palette)) {
+  if (length(plot_levels) > length(highlight_palette)) {
     stop(
-      "Okabe-Ito palette supports up to ",
-      length(okabe_ito_palette),
+      "High-contrast highlight palette supports up to ",
+      length(highlight_palette),
       " visibly separated highlighted groups, but this plot has ",
       length(plot_levels),
       ": ",
@@ -213,7 +213,7 @@ make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, fa
       call. = FALSE
     )
   }
-  color_values <- stats::setNames(okabe_ito_palette[seq_along(plot_levels)], plot_levels)
+  color_values <- stats::setNames(highlight_palette[seq_along(plot_levels)], plot_levels)
 
   plot_title <- if (facet) {
     if (log10_y) {

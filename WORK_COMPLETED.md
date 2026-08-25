@@ -3,7 +3,7 @@
 ## 2026-08-24 Top-species BlobToolKit GC-content versus coverage plots generated
 
 - Added `scripts/plot_blobtoolkit_gc_coverage_top_species.R` to regenerate the six-sample GC-content versus coverage views using separate legend groups for the top three species-level `Vibrio` Kraken2 contig-hit labels, remaining `Other Vibrio` contigs, and the three most frequent non-Vibrio classified contig-hit labels for each sample.
-- Updated the color mapping to use visibly separated Okabe-Ito colors for the highlighted legend groups.
+- Updated the color mapping to use a visibly separated high-contrast legend order: top `Vibrio` species in blue, orange, and green; `Other Vibrio` in medium/dark gray; and the three non-Vibrio hit groups in purple, cyan/light blue, and reddish magenta.
 - Generated per-sample linear and true `scale_y_log10()` coverage plots under each sample's `ambiguous_isolate_resolution/blobtoolkit/<SHORT_ID>/figures/` directory using `*_top_species_gc_coverage_linear.*` and `*_top_species_gc_coverage_log10.*` filenames.
 - Generated matching six-sample faceted linear and log10 overview plots under `ambiguous_isolate_resolution/blobtoolkit/metrics/figures/` using `all_samples_top_species_gc_coverage_*_faceted.*` filenames.
 - Wrote the selected top `Vibrio` species labels, top non-Vibrio labels, and highlighted contig counts to `ambiguous_isolate_resolution/blobtoolkit/metrics/top_species_gc_coverage_highlight_summary.tsv`.
