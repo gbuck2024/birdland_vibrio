@@ -1,8 +1,9 @@
 #!/usr/bin/env Rscript
 
 # Generate per-sample and faceted GC x coverage plots from the validated
-# BlobToolKit master contig table, highlighting Vibrio plus the top three
-# non-Vibrio species-level Kraken2 contig hits in each sample.
+# BlobToolKit master contig table, highlighting the top three Vibrio
+# species-level Kraken2 contig hits, other Vibrio contigs, and the top three
+# non-Vibrio classified contig hits in each sample.
 
 args_all <- commandArgs(trailingOnly = FALSE)
 file_arg <- "--file="
@@ -105,17 +106,7 @@ clean_species_label <- function(taxon_label) {
   cleaned
 }
 
-top_species_for_sample <- function(sample_data) {
-  broad_labels <- c("Bacteria", "cellular organisms")
-  candidates <- sample_data[
-    sample_data$broad_taxon != "Vibrio" &
-      sample_data$broad_taxon != "Unclassified" &
-      !is.na(sample_data$species_label) &
-      !(sample_data$species_label %in% broad_labels),
-    ,
-    drop = FALSE
-  ]
-
+count_top_labels <- function(candidates, top_n = 3) {
   if (nrow(candidates) == 0) {
     character(0)
   } else {
@@ -125,25 +116,39 @@ top_species_for_sample <- function(sample_data) {
       FUN = sum
     )
     counts <- counts[order(-counts$contigs, -counts$total_bp, counts$species_label), , drop = FALSE]
-    head(counts$species_label, 3)
+    head(counts$species_label, top_n)
   }
 }
 
-label_positions <- function(data, log10_y = FALSE) {
-  groups <- sort(unique(data$plot_group))
-  rows <- lapply(groups, function(group_name) {
-    group_data <- data[data$plot_group == group_name, , drop = FALSE]
-    y_values <- if (log10_y) log10(group_data$coverage) else group_data$coverage
-    display_labels <- sort(unique(group_data$display_label))
-    data.frame(
-      plot_group = group_name,
-      display_label = display_labels[1],
-      gc_percent = stats::median(group_data$gc_percent),
-      coverage = if (log10_y) 10 ^ stats::median(y_values) else stats::median(y_values),
-      stringsAsFactors = FALSE
-    )
-  })
-  do.call(rbind, rows)
+is_species_level_vibrio <- function(species_label) {
+  !is.na(species_label) &
+    grepl("^Vibrio [^ ]+", species_label) &
+    !grepl("^Vibrio sp\\.?($| )", species_label) &
+    species_label != "Vibrio" &
+    !grepl(" subgroup$| group$", species_label)
+}
+
+top_vibrio_species_for_sample <- function(sample_data) {
+  candidates <- sample_data[
+    sample_data$broad_taxon == "Vibrio" &
+      is_species_level_vibrio(sample_data$species_label),
+    ,
+    drop = FALSE
+  ]
+  count_top_labels(candidates, top_n = 3)
+}
+
+top_other_species_for_sample <- function(sample_data) {
+  broad_labels <- c("Bacteria", "cellular organisms")
+  candidates <- sample_data[
+    sample_data$broad_taxon != "Vibrio" &
+      sample_data$broad_taxon != "Unclassified" &
+      !is.na(sample_data$species_label) &
+      !(sample_data$species_label %in% broad_labels),
+    ,
+    drop = FALSE
+  ]
+  count_top_labels(candidates, top_n = 3)
 }
 
 plot_data$species_label <- clean_species_label(plot_data$taxon_label)
@@ -151,35 +156,64 @@ plot_data$short_id <- factor(plot_data$short_id, levels = sample_ids)
 
 gc_limits <- range(plot_data$gc_percent)
 length_limits <- range(plot_data$length_bp)
-top_species_colors <- c("#D55E00", "#009E73", "#CC79A7")
+okabe_ito_palette <- c(
+  "#0072B2",
+  "#E69F00",
+  "#009E73",
+  "#D55E00",
+  "#CC79A7",
+  "#56B4E9",
+  "#F0E442",
+  "#000000",
+  "#999999"
+)
 
-make_sample_plot_data <- function(sample_data, top_species) {
+make_sample_plot_data <- function(sample_data, top_vibrio_species, top_other_species) {
   sample_data$plot_group <- NA_character_
   sample_data$species_rank <- NA_integer_
   sample_data$display_label <- NA_character_
 
-  sample_data$plot_group[sample_data$broad_taxon == "Vibrio"] <- "Vibrio"
-  sample_data$display_label[sample_data$broad_taxon == "Vibrio"] <- "Vibrio"
+  other_vibrio_hit <- sample_data$broad_taxon == "Vibrio"
+  sample_data$plot_group[other_vibrio_hit] <- "Other Vibrio"
+  sample_data$display_label[other_vibrio_hit] <- "Other Vibrio"
 
-  for (rank in seq_along(top_species)) {
-    hit <- sample_data$species_label == top_species[rank]
-    sample_data$plot_group[hit] <- top_species[rank]
+  for (rank in seq_along(top_vibrio_species)) {
+    hit <- sample_data$species_label == top_vibrio_species[rank]
+    sample_data$plot_group[hit] <- top_vibrio_species[rank]
     sample_data$species_rank[hit] <- rank
-    sample_data$display_label[hit] <- top_species[rank]
+    sample_data$display_label[hit] <- top_vibrio_species[rank]
+  }
+
+  other_offset <- length(top_vibrio_species)
+  for (rank in seq_along(top_other_species)) {
+    hit <- sample_data$species_label == top_other_species[rank]
+    sample_data$plot_group[hit] <- top_other_species[rank]
+    sample_data$species_rank[hit] <- other_offset + rank
+    sample_data$display_label[hit] <- top_other_species[rank]
   }
 
   sample_data <- sample_data[!is.na(sample_data$plot_group), , drop = FALSE]
-  sample_data$plot_group <- factor(sample_data$plot_group, levels = c("Vibrio", top_species))
+  sample_data$plot_group <- factor(
+    sample_data$plot_group,
+    levels = c(top_vibrio_species, "Other Vibrio", top_other_species)
+  )
   sample_data
 }
 
 make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, facet = FALSE) {
   plot_levels <- levels(droplevels(data$plot_group))
-  top_levels <- setdiff(plot_levels, "Vibrio")
-  color_values <- c(
-    "Vibrio" = "#0072B2",
-    stats::setNames(top_species_colors[seq_along(top_levels)], top_levels)
-  )
+  if (length(plot_levels) > length(okabe_ito_palette)) {
+    stop(
+      "Okabe-Ito palette supports up to ",
+      length(okabe_ito_palette),
+      " visibly separated highlighted groups, but this plot has ",
+      length(plot_levels),
+      ": ",
+      paste(plot_levels, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  color_values <- stats::setNames(okabe_ito_palette[seq_along(plot_levels)], plot_levels)
 
   plot_title <- if (facet) {
     if (log10_y) {
@@ -188,19 +222,9 @@ make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, fa
       "Six-sample contig GC content and coverage"
     }
   } else if (log10_y) {
-    paste0(sample_label, " Vibrio and top species contigs by GC content and log10-scaled coverage")
+    paste0(sample_label, " top Vibrio and other species contigs by GC content and log10-scaled coverage")
   } else {
-    paste0(sample_label, " Vibrio and top species contigs by GC content and coverage")
-  }
-
-  label_data <- if (facet) {
-    do.call(rbind, lapply(names(split(data, data$short_id)), function(current_sample) {
-      current_labels <- label_positions(data[data$short_id == current_sample, , drop = FALSE], log10_y = log10_y)
-      current_labels$short_id <- current_sample
-      current_labels
-    }))
-  } else {
-    label_positions(data, log10_y = log10_y)
+    paste0(sample_label, " top Vibrio and other species contigs by GC content and coverage")
   }
 
   p <- ggplot2::ggplot(
@@ -208,15 +232,6 @@ make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, fa
     ggplot2::aes(x = gc_percent, y = coverage, color = plot_group, size = length_bp)
   ) +
     ggplot2::geom_point(alpha = 0.45, stroke = 0) +
-    ggplot2::geom_text(
-      data = label_data,
-      ggplot2::aes(x = gc_percent, y = coverage, label = display_label, color = plot_group),
-      inherit.aes = FALSE,
-      size = 3.2,
-      fontface = "bold",
-      check_overlap = TRUE,
-      show.legend = FALSE
-    ) +
     ggplot2::scale_x_continuous(limits = gc_limits) +
     ggplot2::scale_color_manual(values = color_values, breaks = plot_levels, drop = FALSE) +
     ggplot2::scale_size_continuous(
@@ -229,7 +244,7 @@ make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, fa
       title = plot_title,
       x = "GC content (%)",
       y = if (log10_y) "Coverage (log10 scale)" else "Coverage",
-      color = "Highlighted contig group",
+      color = "Kraken2 contig group",
       size = "Contig length (bp)"
     ) +
     ggplot2::theme_bw(base_size = 11) +
@@ -264,8 +279,9 @@ summary_rows <- list()
 sample_plot_rows <- list()
 for (sample_id in sample_ids) {
   sample_data <- plot_data[plot_data$short_id == sample_id, , drop = FALSE]
-  top_species <- top_species_for_sample(sample_data)
-  sample_plot_data <- make_sample_plot_data(sample_data, top_species)
+  top_vibrio_species <- top_vibrio_species_for_sample(sample_data)
+  top_other_species <- top_other_species_for_sample(sample_data)
+  sample_plot_data <- make_sample_plot_data(sample_data, top_vibrio_species, top_other_species)
   if (nrow(sample_plot_data) == 0) {
     stop("No Vibrio or top species contigs available to plot for ", sample_id, call. = FALSE)
   }
@@ -297,7 +313,8 @@ for (sample_id in sample_ids) {
     highlighted_contigs = nrow(sample_plot_data),
     positive_coverage_highlighted_contigs = nrow(log_data),
     zero_coverage_highlighted_contigs_omitted_from_log = sum(sample_plot_data$coverage == 0),
-    top_species_labels = paste(top_species, collapse = "; "),
+    top_vibrio_species_labels = paste(top_vibrio_species, collapse = "; "),
+    top_other_species_labels = paste(top_other_species, collapse = "; "),
     highlighted_group_counts = paste(names(top_counts), as.integer(top_counts), sep = "=", collapse = "; "),
     figure_paths = paste(generated_paths, collapse = "; "),
     stringsAsFactors = FALSE
@@ -311,10 +328,7 @@ plot_summary <- do.call(rbind, summary_rows)
 utils::write.table(plot_summary, summary_tsv, sep = "\t", quote = FALSE, row.names = FALSE)
 
 combined_plot_data <- do.call(rbind, sample_plot_rows)
-combined_plot_levels <- c(
-  "Vibrio",
-  sort(setdiff(unique(as.character(combined_plot_data$plot_group)), "Vibrio"))
-)
+combined_plot_levels <- unique(as.character(combined_plot_data$plot_group))
 combined_plot_data$plot_group <- factor(as.character(combined_plot_data$plot_group), levels = combined_plot_levels)
 dir.create(overview_figures_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -338,7 +352,8 @@ for (i in seq_len(nrow(plot_summary))) {
     "positive_coverage_highlighted_contigs=", plot_summary$positive_coverage_highlighted_contigs[i], "; ",
     "zero_coverage_highlighted_contigs_omitted_from_log=",
     plot_summary$zero_coverage_highlighted_contigs_omitted_from_log[i], "\n",
-    "  top species: ", plot_summary$top_species_labels[i], "\n",
+    "  top Vibrio species: ", plot_summary$top_vibrio_species_labels[i], "\n",
+    "  top other species: ", plot_summary$top_other_species_labels[i], "\n",
     "  figures: ", plot_summary$figure_paths[i], "\n",
     sep = ""
   )

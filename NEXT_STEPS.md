@@ -2,10 +2,10 @@
 
 ## 2026-08-24 Top-species BlobToolKit GC-content versus coverage plot review
 
-- Review the per-sample `*_top_species_gc_coverage_log10.pdf` plots under `ambiguous_isolate_resolution/blobtoolkit/<SHORT_ID>/figures/` as the primary labeled views for separating `Vibrio` contigs from the three most frequent non-Vibrio classified contig-hit labels in each sample.
+- Review the per-sample `*_top_species_gc_coverage_log10.pdf` plots under `ambiguous_isolate_resolution/blobtoolkit/<SHORT_ID>/figures/` as the primary views for separating the top three species-level `Vibrio` contig-hit labels, remaining `Other Vibrio` contigs, and the three most frequent non-Vibrio classified contig-hit labels in each sample.
 - Use the matching `*_top_species_gc_coverage_linear.pdf` plots as secondary views for absolute high-coverage context.
 - Compare isolates with `ambiguous_isolate_resolution/blobtoolkit/metrics/figures/all_samples_top_species_gc_coverage_log10_faceted.pdf` and the matching linear overview.
-- Review `ambiguous_isolate_resolution/blobtoolkit/metrics/top_species_gc_coverage_highlight_summary.tsv` alongside the figures to confirm which three top-hit labels were selected for each sample.
+- Review `ambiguous_isolate_resolution/blobtoolkit/metrics/top_species_gc_coverage_highlight_summary.tsv` alongside the figures to confirm which top `Vibrio` species and non-Vibrio hit labels were selected for each sample.
 - Regenerate the full highlighted figure set from the project root with:
 
 ```bash
