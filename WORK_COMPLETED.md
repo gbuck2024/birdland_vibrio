@@ -1,5 +1,13 @@
 # Work Completed
 
+## 2026-08-24 Top-species BlobToolKit GC-content versus coverage plots generated
+
+- Added `scripts/plot_blobtoolkit_gc_coverage_top_species.R` to regenerate the six-sample GC-content versus coverage views using four highlighted colors per plot: blue `Vibrio` plus the three most frequent non-Vibrio classified Kraken2 contig-hit labels for that sample.
+- Generated per-sample linear and true `scale_y_log10()` coverage plots under each sample's `ambiguous_isolate_resolution/blobtoolkit/<SHORT_ID>/figures/` directory using `*_top_species_gc_coverage_linear.*` and `*_top_species_gc_coverage_log10.*` filenames.
+- Generated matching six-sample faceted linear and log10 overview plots under `ambiguous_isolate_resolution/blobtoolkit/metrics/figures/` using `all_samples_top_species_gc_coverage_*_faceted.*` filenames.
+- Wrote the selected top-hit labels and highlighted contig counts to `ambiguous_isolate_resolution/blobtoolkit/metrics/top_species_gc_coverage_highlight_summary.tsv`.
+- Verified the plotting workflow with `module load R/gcc11/4.4.0 && Rscript scripts/plot_blobtoolkit_gc_coverage_top_species.R`; no biological filtering of the master table was performed, but plots intentionally show only the four requested highlighted groups.
+
 ## 2026-08-24 Six-sample BlobToolKit GC-content versus coverage plots generated
 
 - Added `scripts/plot_blobtoolkit_gc_coverage_all_samples.R` to plot `ambiguous_isolate_resolution/blobtoolkit/metrics/all_samples.master_contig_table.tsv` without modifying the master TSV or upstream result tables.
