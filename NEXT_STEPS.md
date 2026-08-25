@@ -1,5 +1,17 @@
 # Next Steps
 
+## 2026-08-24 Six-sample BlobToolKit GC-content versus coverage plot review
+
+- Review the per-sample `*_master_gc_coverage_log10.pdf` plots under `ambiguous_isolate_resolution/blobtoolkit/<SHORT_ID>/figures/` as the primary exploratory population-structure views, because they use original positive coverage values with `scale_y_log10()` and omit only zero-coverage contigs.
+- Use the matching `*_master_gc_coverage_linear.pdf` files as secondary views for absolute high-coverage context.
+- Compare isolates with `ambiguous_isolate_resolution/blobtoolkit/metrics/figures/all_samples_gc_coverage_log10_faceted.pdf`; this overview uses the same broad taxon colors, point-size mapping, and fixed facet scales across all six samples.
+- Regenerate the full figure set from the project root with:
+
+```bash
+module load R/gcc11/4.4.0
+Rscript scripts/plot_blobtoolkit_gc_coverage_all_samples.R
+```
+
 ## 2026-08-23 BI0607_2 GC-content versus coverage plot review
 
 - Use `ambiguous_isolate_resolution/blobtoolkit/BI0607_2/figures/BI0607_2_gc_coverage_log10.pdf` as the primary plot for checking distinct contig populations, because the saved coverage summary indicates a wide coverage spread.

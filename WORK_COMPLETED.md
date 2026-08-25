@@ -1,5 +1,14 @@
 # Work Completed
 
+## 2026-08-24 Six-sample BlobToolKit GC-content versus coverage plots generated
+
+- Added `scripts/plot_blobtoolkit_gc_coverage_all_samples.R` to plot `ambiguous_isolate_resolution/blobtoolkit/metrics/all_samples.master_contig_table.tsv` without modifying the master TSV or upstream result tables.
+- The script uses `gc_percent` on the x-axis, original `coverage` on the y-axis, `length_bp` for point size, and fixed broad taxon levels/colors for `Vibrio`, `Bacillus`, `Reyranella`, `Other classified`, and `Unclassified`.
+- Generated per-sample linear and true `scale_y_log10()` coverage plots under each sample's `ambiguous_isolate_resolution/blobtoolkit/<SHORT_ID>/figures/` directory using `*_master_gc_coverage_linear.*` and `*_master_gc_coverage_log10.*` filenames.
+- Generated the six-sample faceted log10 overview at `ambiguous_isolate_resolution/blobtoolkit/metrics/figures/all_samples_gc_coverage_log10_faceted.pdf` and `.png`.
+- Verified the plotting workflow with `module load R/gcc11/4.4.0 && Rscript scripts/plot_blobtoolkit_gc_coverage_all_samples.R`; no biological filtering, coverage threshold, contig-length threshold, taxon-specific exclusion, pseudocount, or precomputed `coverage_log10` column was used.
+- The log plots omitted only zero-coverage contigs: `BI0607_1=519`, `BI0607_2=509`, `BS0607_9=1974`, `CB0707_82=19`, `NB0507_14=410`, and `NB0507_8=2`.
+
 ## 2026-08-23 BI0607_2 GC-content versus coverage plots generated
 
 - Added `scripts/plot_bi0607_2_gc_coverage.R` to join BlobToolKit contig identifiers, GC values, contig lengths, self-mapping coverage, and Kraken2 per-contig classifications for `Buck_BI0607_2_WKDL250009588-1A_233TFCLT4_L7`.

@@ -1,0 +1,1 @@
+PASS: samtools quickcheck completed for mapped and coordinate-sorted BAMs.

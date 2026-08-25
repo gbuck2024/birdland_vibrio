@@ -1,0 +1,12 @@
+sample_id=Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7
+short_id=BS0607_9
+manifest_file=configs/blobtoolkit_self_mapping_manifest.tsv
+contigs_fasta=assembly/assemblies/Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta
+db_dir=kraken2_db/db
+container_image=containers/kraken2.sif
+threads=8
+memory_mapping=1
+extra_args=
+output_file=ambiguous_isolate_resolution/blobtoolkit/BS0607_9/taxonomy/Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7.spades_contigs.kraken2.tsv
+report_file=ambiguous_isolate_resolution/blobtoolkit/BS0607_9/taxonomy/Buck_BS0607_9_WKDL250009588-1A_233TFCLT4_L7.spades_contigs.kreport.tsv
+force_kraken2=0

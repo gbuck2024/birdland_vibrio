@@ -1,0 +1,1 @@
+PASS: BAM reference names match the SPAdes contig names from assembly/assemblies/Buck_NB0507_8_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta.

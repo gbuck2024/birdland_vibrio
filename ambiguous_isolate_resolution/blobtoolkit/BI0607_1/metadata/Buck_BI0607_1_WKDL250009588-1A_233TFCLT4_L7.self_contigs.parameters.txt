@@ -1,0 +1,12 @@
+sample_id=Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7
+short_id=BI0607_1
+manifest_file=configs/blobtoolkit_self_mapping_manifest.tsv
+conda_env_path=/home/glametrie1/.conda/envs/blobtoolkit
+blobtools_version=blobtoolkit v4.4.5
+bwa_path=/cm/shared/tamucc/apps/bwa/0.7.17/bin/bwa
+samtools_path=/cm/shared/tamucc/apps/samtools/1.20/bin/samtools
+read1=trimmomatic/trimmed_reads/Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7_1_paired.fq.gz
+read2=trimmomatic/trimmed_reads/Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7_2_paired.fq.gz
+contigs_fasta=assembly/assemblies/Buck_BI0607_1_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta
+bwa_index_prefix=ambiguous_isolate_resolution/blobtoolkit/BI0607_1/index/BI0607_1.spades_contigs
+threads=8
