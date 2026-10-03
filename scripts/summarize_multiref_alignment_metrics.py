@@ -4,14 +4,16 @@
 from __future__ import annotations
 
 import csv
+import os
 import re
 import sys
 from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-SAMPLE_MANIFEST = PROJECT_DIR / "configs" / "alignment_manifest.tsv"
-REFERENCE_MANIFEST = PROJECT_DIR / "configs" / "multi_reference_reference_manifest.tsv"
-METRICS_DIR = PROJECT_DIR / "multi_reference_alignment" / "metrics"
+SAMPLE_MANIFEST = PROJECT_DIR / os.environ.get("SAMPLE_MANIFEST", "configs/alignment_manifest.tsv")
+REFERENCE_MANIFEST = PROJECT_DIR / os.environ.get("REFERENCE_MANIFEST", "configs/multi_reference_reference_manifest.tsv")
+STAGE_DIR = PROJECT_DIR / os.environ.get("STAGE_DIR", "multi_reference_alignment")
+METRICS_DIR = STAGE_DIR / "metrics"
 SUMMARY_TSV = METRICS_DIR / "multi_reference_alignment_summary.tsv"
 MAPPED_PCT_MATRIX_TSV = METRICS_DIR / "multi_reference_alignment_mapped_pct_matrix.tsv"
 

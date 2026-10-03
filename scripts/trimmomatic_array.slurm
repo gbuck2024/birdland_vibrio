@@ -91,7 +91,7 @@ if [ ! -s "${copy_r1}" ] || [ ! -s "${copy_r2}" ]; then
   exit 1
 fi
 
-if [ "$(stat -c '%s' "${copy_r1}")" -ne "${raw_r1_bytes}" ] || [ "$(stat -c '%s' "${copy_r2}")" -ne "${raw_r2_bytes}" ]; then
+if [ "$(stat -Lc '%s' "${copy_r1}")" -ne "${raw_r1_bytes}" ] || [ "$(stat -Lc '%s' "${copy_r2}")" -ne "${raw_r2_bytes}" ]; then
   echo "[$(timestamp)] ERROR: Copied input sizes no longer match manifest for ${sample_id}." >&2
   exit 1
 fi

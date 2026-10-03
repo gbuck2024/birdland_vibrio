@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-ROOT_DIR = PROJECT_DIR.parent
+ROOT_DIR = PROJECT_DIR
 RAW_EXTRACT_DIR = PROJECT_DIR / "fastqc_extracted"
 TRIMMED_EXTRACT_DIR = PROJECT_DIR / "trimmomatic" / "fastqc_trimmed_extracted"
 REVIEW_DIR = PROJECT_DIR / "trimmomatic" / "fastqc_trimmed_review"
@@ -297,9 +297,17 @@ def main() -> None:
     gc_fail = status_counts["Per sequence GC content"]["FAIL"]
     base_content_pass = status_counts["Per base sequence content"]["PASS"]
     base_content_warn = status_counts["Per base sequence content"]["WARN"]
+    base_content_fail = status_counts["Per base sequence content"]["FAIL"]
     tile_warn = status_counts["Per tile sequence quality"]["WARN"]
     tile_fail = status_counts["Per tile sequence quality"]["FAIL"]
     length_warn = status_counts["Sequence Length Distribution"]["WARN"]
+    total_reports = len(trimmed_reports)
+    reverse_report_count = len(reverse_reads)
+    quality_pass = status_counts["Per base sequence quality"]["PASS"]
+    per_sequence_quality_pass = status_counts["Per sequence quality scores"]["PASS"]
+    duplication_pass = status_counts["Sequence Duplication Levels"]["PASS"]
+    duplication_fail = status_counts["Sequence Duplication Levels"]["FAIL"]
+    adapter_pass = status_counts["Adapter Content"]["PASS"]
 
     report_lines: list[str] = []
     report_lines.append("# Trimmed FastQC Interpreted Report")
@@ -344,28 +352,33 @@ def main() -> None:
     report_lines.append("## Interpreted Findings")
     report_lines.append("")
     report_lines.append(
-        f"- All 12 trimmed reports still pass per-base and per-sequence quality score modules. Minimum mean base quality is {min(r['min_mean_quality'] for r in trimmed_reports):.2f} to {max(r['min_mean_quality'] for r in trimmed_reports):.2f}, so trimming did not damage overall read quality."
+        f"- Per-base sequence quality passes in {quality_pass} of {total_reports} trimmed reports and per-sequence quality scores pass in {per_sequence_quality_pass} of {total_reports}. Minimum mean base quality is {min(r['min_mean_quality'] for r in trimmed_reports):.2f} to {max(r['min_mean_quality'] for r in trimmed_reports):.2f}, so trimming did not damage overall read quality."
     )
     report_lines.append(
-        f"- Overrepresented sequences improved in {improved_overrep} of 12 files. After trimming, {overrep_pass} reports pass and {overrep_warn} reports remain WARN; the raw reverse-read FAIL is gone, indicating the strongest polyG-driven tail artifact was reduced."
+        f"- Overrepresented sequences improved in {improved_overrep} of {total_reports} files. After trimming, {overrep_pass} reports pass and {overrep_warn} reports remain WARN; no trimmed report fails this module."
     )
     report_lines.append(
-        f"- Per-sequence GC content improved in {improved_gc} of 12 files. After trimming, {gc_pass} reports pass, {gc_warn} warn, and {gc_fail} fail; the prior FAIL for `Buck_NB0507_14` read 2 is resolved to WARN, but most GC-content warnings persist."
+        f"- Per-sequence GC content improved in {improved_gc} of {total_reports} files. After trimming, {gc_pass} reports pass, {gc_warn} warn, and {gc_fail} fail; most residual GC-content calls are warnings rather than failures."
     )
     report_lines.append(
-        f"- Per-base sequence content improved in {improved_base_content} of 12 files. The trimmed set contains {base_content_pass} PASS and {base_content_warn} WARN calls, so this start-cycle composition signal was largely unchanged overall."
+        f"- Per-base sequence content improved in {improved_base_content} of {total_reports} files. The trimmed set contains {base_content_pass} PASS, {base_content_warn} WARN, and {base_content_fail} FAIL calls, so start-cycle composition bias remains the main residual content artifact."
     )
     report_lines.append(
-        f"- Per tile sequence quality improved in {improved_tile} of 12 files and remains unchanged overall at {tile_warn} WARN and {tile_fail} FAIL calls. This persistent split between reverse-read WARNs and forward-read FAILs points to a lane/tile artifact unaffected by trimming."
+        f"- Per tile sequence quality improved in {improved_tile} of {total_reports} files and remains at {tile_warn} WARN and {tile_fail} FAIL calls after trimming. This is consistent with a tile/lane artifact rather than adapter carryover."
     )
     report_lines.append(
-        f"- Sequence duplication levels still fail in all 12 trimmed reports. Deduplicated fractions are {min(r['dedup_percentage'] for r in trimmed_reports):.2f}% to {max(r['dedup_percentage'] for r in trimmed_reports):.2f}%, so duplication remains a library/depth characteristic rather than a trimming problem."
+        f"- Sequence duplication levels pass in {duplication_pass} of {total_reports} reports and fail in {duplication_fail}. Deduplicated fractions are {min(r['dedup_percentage'] for r in trimmed_reports):.2f}% to {max(r['dedup_percentage'] for r in trimmed_reports):.2f}%, so duplication varies strongly by sample set and library depth."
     )
+    if reverse_polyg and raw_reverse_polyg:
+        report_lines.append(
+            f"- Adapter Content passes in {adapter_pass} of {total_reports} trimmed reports. Reverse reads show PolyG as the highest adapter-content track in {len(reverse_polyg)} of {reverse_report_count} files, with trimmed PolyG peaks of {min(r['max_adapter'] for r in reverse_polyg):.2f}% to {max(r['max_adapter'] for r in reverse_polyg):.2f}% versus {min(r['max_adapter'] for r in raw_reverse_polyg):.2f}% to {max(r['max_adapter'] for r in raw_reverse_polyg):.2f}% in the raw review."
+        )
+    else:
+        report_lines.append(
+            f"- Adapter Content passes in {adapter_pass} of {total_reports} trimmed reports."
+        )
     report_lines.append(
-        f"- Adapter Content still passes in all 12 trimmed reports. Reverse reads continue to show PolyG as the highest adapter-content track in {len(reverse_polyg)} of 6 files, with trimmed PolyG peaks of {min(r['max_adapter'] for r in reverse_polyg):.2f}% to {max(r['max_adapter'] for r in reverse_polyg):.2f}% versus {min(r['max_adapter'] for r in raw_reverse_polyg):.2f}% to {max(r['max_adapter'] for r in raw_reverse_polyg):.2f}% in the raw review."
-    )
-    report_lines.append(
-        f"- Sequence length distribution now warns in {length_warn} of 12 reports, which is expected after variable-length trimming and is not a reason to stop the pipeline."
+        f"- Sequence length distribution now warns in {length_warn} of {total_reports} reports, which is expected after variable-length trimming and is not a reason to stop the pipeline."
     )
 
     report_lines.append("")

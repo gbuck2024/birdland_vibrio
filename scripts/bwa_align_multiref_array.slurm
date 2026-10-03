@@ -20,9 +20,9 @@ fi
 
 cd "${PROJECT_DIR}"
 
-SAMPLE_MANIFEST="configs/alignment_manifest.tsv"
-REFERENCE_MANIFEST="configs/multi_reference_reference_manifest.tsv"
-STAGE_DIR="multi_reference_alignment"
+SAMPLE_MANIFEST="${SAMPLE_MANIFEST:-configs/alignment_manifest.tsv}"
+REFERENCE_MANIFEST="${REFERENCE_MANIFEST:-configs/multi_reference_reference_manifest.tsv}"
+STAGE_DIR="${STAGE_DIR:-multi_reference_alignment}"
 BAM_DIR="${STAGE_DIR}/bam"
 LOG_DIR="${STAGE_DIR}/logs"
 SLURM_LOG_DIR="${LOG_DIR}/slurm"

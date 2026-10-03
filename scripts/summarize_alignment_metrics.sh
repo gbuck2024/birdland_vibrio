@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-METRICS_DIR="alignment/metrics"
+ALIGNMENT_DIR="${ALIGNMENT_DIR:-alignment}"
+METRICS_DIR="${ALIGNMENT_DIR}/metrics"
 OUTFILE="${METRICS_DIR}/alignment_summary.tsv"
 
 echo -e "sample\ttotal_reads\tmapped_reads\tmapped_pct\tproperly_paired\tproperly_paired_pct\tsecondary\tsupplementary\tsingletons\tmate_diff_chr\tidx_mapped_sum\tidx_unmapped_sum" > "$OUTFILE"

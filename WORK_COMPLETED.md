@@ -1,5 +1,95 @@
 # Work Completed
 
+## 2026-10-03 SRA single-reference BWA-MEM completed
+
+- Submitted SRA-only single-reference BWA-MEM array job `1506133` with `MANIFEST_FILE=configs/alignment_manifest_sra.tsv` and `ALIGNMENT_DIR=alignment_sra`.
+- Monitored job `1506133`; all six array tasks completed successfully with exit code `0:0`.
+- Verified all six SRA samples have non-empty sorted BAMs, BAM indexes, `flagstat`, and `idxstats` outputs under `alignment_sra/`.
+- Generated `alignment_sra/metrics/alignment_summary.tsv` with `ALIGNMENT_DIR=alignment_sra bash scripts/summarize_alignment_metrics.sh`.
+- Mapped percentages to `reference/v_vulnificus_ref.fasta` were `24.70%` to `27.34%` for five SRA isolates and `91.55%` for `SRR37852097_L7`.
+- Note: SLURM stdout/stderr for this run were written under `alignment/logs/slurm/` because `#SBATCH -o/-e` paths are evaluated before the script reads `ALIGNMENT_DIR`; alignment outputs and metrics were correctly written to `alignment_sra/`.
+
+## 2026-10-03 SRA BWA-MEM and self-mapping preparation
+
+- Prepared SRA-only BWA-MEM inputs in `configs/alignment_manifest_sra.tsv` for the six new paired trimmed read sets.
+- Updated `scripts/bwa_align_array.slurm` to accept `MANIFEST_FILE`, `REFERENCE_FASTA`, and `ALIGNMENT_DIR` overrides so the SRA single-reference alignment can run in `alignment_sra/` without rerunning or overwriting the original Buck alignment stage.
+- Updated `scripts/summarize_alignment_metrics.sh` to accept `ALIGNMENT_DIR`, allowing SRA-specific summary generation under `alignment_sra/metrics/alignment_summary.tsv`.
+- Updated `scripts/bwa_align_multiref_array.slurm` and `scripts/summarize_multiref_alignment_metrics.py` to accept SRA-specific sample manifests and stage directories for optional multi-reference BWA-MEM comparison in `multi_reference_alignment_sra/`.
+- Added `alignment_sra/README.md` and `multi_reference_alignment_sra/README.md` with exact submission and summary commands.
+- Prepared `configs/assembly_manifest_sra.tsv` and `assembly_sra/README.md` because self-mapping for GC-versus-coverage plots requires each SRA isolate's own SPAdes `contigs.fasta`.
+- Prepared `configs/blobtoolkit_self_mapping_manifest_sra.tsv` and `ambiguous_isolate_resolution/blobtoolkit_sra/README.md` for future self-contig BWA-MEM mapping after SRA assemblies exist.
+- Updated `.gitignore` for the new SRA alignment, assembly, multi-reference, and BlobToolKit/self-mapping output directories so generated BAMs, logs, indexes, and bulky outputs are not staged by `git add .`.
+- Verified script syntax and manifest readability; the SRA self-mapping manifest is intentionally pending the six expected `assembly_sra/assemblies/<sample_id>/contigs.fasta` files.
+
+## 2026-10-03 SRA post-trim FastQC and interpretation completed
+
+- Updated `scripts/fastqc_trimmed.slurm` to accept `FASTQC_TRIMMED_INPUT_GLOB`, preserving the default all-sample behavior while allowing SRA-only post-trim FastQC.
+- Submitted SRA-only post-trim FastQC job `1506122` with `FASTQC_TRIMMED_INPUT_GLOB='SRR*_L7_1_paired.fq.gz'`; SLURM reported `COMPLETED` with exit code `0:0` after `00:01:07`.
+- Verified the job selected six SRA trimmed read pairs and wrote 12 SRA post-trim FastQC HTML/ZIP outputs under `trimmomatic/fastqc_trimmed/reports/`.
+- Ran `bash scripts/extract_fastqc_trimmed_reports.sh`; it extracted and verified 24 trimmed FastQC archives, including the original Buck reports and the new SRA reports.
+- Fixed `scripts/analyze_fastqc_trimmed_reports.py` so project documentation paths resolve to this repository and report text uses computed totals instead of the original hardcoded six-sample counts.
+- Reran `python3 scripts/analyze_fastqc_trimmed_reports.py`; `trimmomatic/fastqc_trimmed_review/fastqc_trimmed_interpreted_report.md` now covers 24 trimmed FastQC reports.
+
+## 2026-10-03 SRA-only Trimmomatic completed
+
+- Submitted SRA-only Trimmomatic SLURM array job `1506116` using `bash scripts/submit_trimmomatic_array.sh`; the helper submitted six tasks with array range `0-5`.
+- Monitored job `1506116`; all six array tasks completed successfully with exit code `0:0`.
+- Verified non-empty paired trimmed outputs for all six SRA samples under `trimmomatic/trimmed_reads/` and confirmed matching unpaired output files under `trimmomatic/unpaired_reads/`.
+- Reviewed task logs under `trimmomatic/logs/slurm/trimmomatic_1506116_*.out`; each task reported `Completed sample` for its assigned SRA accession.
+
+## 2026-10-03 SRA-only Trimmomatic preparation completed
+
+- Updated `scripts/prepare_trimmomatic_inputs.sh` to accept `TRIMMOMATIC_INPUT_GLOB`, preserving the default all-sample behavior while allowing SRA-only manifest generation.
+- Repaired Trimmomatic input staging for symlinked SRA raw reads by dereferencing source symlinks during copy and comparing target file sizes with `stat -L`.
+- Updated `scripts/trimmomatic_array.slurm` to use the same target-size validation for staged inputs.
+- Generated `trimmomatic/metrics/trimmomatic_input_manifest.tsv` with `TRIMMOMATIC_INPUT_GLOB='SRR*_L7_1.fq.gz'`; the manifest contains only the six new SRA paired-end samples and reports array range `0-5`.
+- Verified the six manifest samples are all `SRR` accessions, all staged copied inputs are present and non-empty, no existing SRA trimmed outputs are present, and the Trimmomatic jar plus `TruSeq3-PE.fa` adapter file are available.
+- No Trimmomatic SLURM job was submitted during preparation.
+
+## 2026-10-03 Raw FastQC extraction and interpretation refreshed
+
+- Ran `bash scripts/extract_fastqc_reports.sh` after SRA raw FastQC completion; it extracted and verified 24 FastQC archives under `fastqc_extracted/`.
+- Reran `python3 scripts/analyze_fastqc_reports.py`; `fastqc_review/fastqc_interpreted_report.md` now reports 24 analyzed raw FastQC reports.
+
+## 2026-10-03 SRA-only raw FastQC completed
+
+- Monitored raw FastQC SLURM job `1506114`; `sacct` reported `COMPLETED` with exit code `0:0` after `00:00:22`.
+- Confirmed the job used `FASTQC_INPUT_GLOB='SRR*_L7_*.fq.gz'` and selected only the 12 expected paired SRA-linked raw FASTQ inputs for the six new isolates.
+- Verified all 12 expected SRA FastQC HTML reports and all 12 expected ZIP archives listed in `configs/sra_raw_fastqc_manifest.tsv` are present and non-empty under `fastqc/`.
+- Reviewed `fastqc/logs/slurm/fastqc_1506114.err`; it contained FastQC progress output and no `/cm/local/apps/slurm/var/spool/fastqc` path error.
+
+## 2026-10-03 SRA-only raw FastQC selector added
+
+- Updated `scripts/fastqc.slurm` to accept `FASTQC_INPUT_GLOB`, while preserving the default `*.fq.gz` behavior for the existing raw FastQC workflow.
+- Added SLURM-log reporting of the project directory, raw-read directory, output directory, input glob, and exact selected input files before FastQC runs.
+- Recorded the SRA-only submission command in `NEXT_STEPS.md`: `sbatch --export=ALL,FASTQC_INPUT_GLOB='SRR*_L7_*.fq.gz' scripts/fastqc.slurm`.
+- No FastQC job was submitted and no compute-heavy QC was run on the login node.
+
+## 2026-10-03 Raw FastQC SLURM path repair
+
+- Reviewed failed raw FastQC job `1506112`, which exited immediately with `mkdir: cannot create directory '/cm/local/apps/slurm/var/spool/fastqc': Permission denied`.
+- Repaired `scripts/fastqc.slurm` so SLURM submissions use `SLURM_SUBMIT_DIR` as the project directory, matching the already established path-resolution pattern in `scripts/fastqc_trimmed.slurm` and `scripts/download_sra.sh`.
+- Verified the repaired script with `bash -n scripts/fastqc.slurm`.
+- Rechecked `configs/sra_raw_fastqc_manifest.tsv`; all 12 listed SRA raw FASTQ inputs are present and non-empty.
+- No FastQC resubmission was performed in this repair step.
+
+## 2026-10-03 SRA raw FastQC prepared
+
+- Initially prepared SRA raw FastQC using the existing `scripts/fastqc.slurm` workflow to preserve reproducibility.
+- Verified that the existing script still passes Bash syntax validation and discovers raw reads from top-level `fq_raw/*.fq.gz`.
+- Confirmed the six SRA runs have non-empty top-level paired-read links in `fq_raw/`: `SRR37851509`, `SRR37851510`, `SRR37852094`, `SRR37852095`, `SRR37852096`, and `SRR37852097`.
+- Created `configs/sra_raw_fastqc_manifest.tsv` to record the 12 expected SRA FastQC HTML/ZIP outputs before submission.
+- Created the missing raw FastQC support directories `fastqc/logs/slurm/` and `fastqc/metrics/`. No FastQC job was submitted and no compute-heavy QC was run on the login node.
+
+## 2026-09-22 SRA raw-read downloader repaired
+
+- Repaired `scripts/download_sra.sh` so it is syntax-valid, SLURM-ready, resumable, and uses strict Bash mode with project-root path detection.
+- Added `configs/sra_accessions.txt` as the tracked accession list for the six requested SRA runs: `SRR37852097`, `SRR37851510`, `SRR37851509`, `SRR37852096`, `SRR37852095`, and `SRR37852094`.
+- The downloader stages SRA Toolkit cache files under `sra_download/sra_cache/`, gzipped paired FASTQs under `sra_download/fastq/`, logs under `sra_download/logs/`, and a run manifest under `sra_download/metrics/`.
+- After validating that both mates exist and are non-empty, the script creates organized relative symlinks in `fq_raw/sra_202609/` and top-level compatibility symlinks in `fq_raw/` named `${SRR}_L7_1.fq.gz` and `${SRR}_L7_2.fq.gz`, so the existing FastQC and Trimmomatic preparation scripts can discover the SRA reads without special-case logic.
+- After SLURM job `1498901` failed because `prefetch` and `fasterq-dump` were unavailable in the batch environment, the script was updated to support either native SRA Toolkit commands or a Singularity/Apptainer image supplied through `SRA_SIF`; it now recognizes the installed `containers/sra-tools.sif` image by default.
+- No SRA downloads were run in this repair step; validation was limited to script/config checks.
+
 ## 2026-08-24 Top-species BlobToolKit GC-content versus coverage plots generated
 
 - Added `scripts/plot_blobtoolkit_gc_coverage_top_species.R` to regenerate the six-sample GC-content versus coverage views using separate legend groups for the top three species-level `Vibrio` Kraken2 contig-hit labels, remaining `Other Vibrio` contigs, and the three most frequent non-Vibrio classified contig-hit labels for each sample.

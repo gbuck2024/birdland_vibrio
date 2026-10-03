@@ -1,0 +1,7 @@
+short_id	sample_id	trimmed_r1	trimmed_r2	spades_contigs
+SRR37851509	SRR37851509_L7	trimmomatic/trimmed_reads/SRR37851509_L7_1_paired.fq.gz	trimmomatic/trimmed_reads/SRR37851509_L7_2_paired.fq.gz	assembly_sra/assemblies/SRR37851509_L7/contigs.fasta
+SRR37851510	SRR37851510_L7	trimmomatic/trimmed_reads/SRR37851510_L7_1_paired.fq.gz	trimmomatic/trimmed_reads/SRR37851510_L7_2_paired.fq.gz	assembly_sra/assemblies/SRR37851510_L7/contigs.fasta
+SRR37852094	SRR37852094_L7	trimmomatic/trimmed_reads/SRR37852094_L7_1_paired.fq.gz	trimmomatic/trimmed_reads/SRR37852094_L7_2_paired.fq.gz	assembly_sra/assemblies/SRR37852094_L7/contigs.fasta
+SRR37852095	SRR37852095_L7	trimmomatic/trimmed_reads/SRR37852095_L7_1_paired.fq.gz	trimmomatic/trimmed_reads/SRR37852095_L7_2_paired.fq.gz	assembly_sra/assemblies/SRR37852095_L7/contigs.fasta
+SRR37852096	SRR37852096_L7	trimmomatic/trimmed_reads/SRR37852096_L7_1_paired.fq.gz	trimmomatic/trimmed_reads/SRR37852096_L7_2_paired.fq.gz	assembly_sra/assemblies/SRR37852096_L7/contigs.fasta
+SRR37852097	SRR37852097_L7	trimmomatic/trimmed_reads/SRR37852097_L7_1_paired.fq.gz	trimmomatic/trimmed_reads/SRR37852097_L7_2_paired.fq.gz	assembly_sra/assemblies/SRR37852097_L7/contigs.fasta

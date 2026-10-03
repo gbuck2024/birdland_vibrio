@@ -1,27 +1,27 @@
 # Trimmed FastQC Interpreted Report
 
-Generated: 2026-04-09 16:29:19 CDT
+Generated: 2026-10-03 18:07:15 CDT
 
 ## Scope
 
-Analyzed 12 extracted FastQC reports from `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/trimmomatic/fastqc_trimmed/reports` using `summary.txt` and `fastqc_data.txt`.
+Analyzed 24 extracted FastQC reports from `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/trimmomatic/fastqc_trimmed/reports` using `summary.txt` and `fastqc_data.txt`.
 Compared each trimmed report to the matching raw-read report from `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/fastqc_extracted`.
 
 ## Module Status Overview
 
 | Module | PASS | WARN | FAIL | Improved vs raw | Unchanged | Worsened |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Adapter Content | 12 | 0 | 0 | 0 | 12 | 0 |
-| Basic Statistics | 12 | 0 | 0 | 0 | 12 | 0 |
-| Overrepresented sequences | 10 | 2 | 0 | 6 | 6 | 0 |
-| Per base N content | 12 | 0 | 0 | 0 | 12 | 0 |
-| Per base sequence content | 4 | 8 | 0 | 0 | 11 | 1 |
-| Per base sequence quality | 12 | 0 | 0 | 0 | 12 | 0 |
-| Per sequence GC content | 2 | 10 | 0 | 2 | 9 | 1 |
-| Per sequence quality scores | 12 | 0 | 0 | 0 | 12 | 0 |
-| Per tile sequence quality | 0 | 6 | 6 | 0 | 12 | 0 |
-| Sequence Duplication Levels | 0 | 0 | 12 | 0 | 12 | 0 |
-| Sequence Length Distribution | 0 | 12 | 0 | 0 | 0 | 12 |
+| Adapter Content | 24 | 0 | 0 | 0 | 24 | 0 |
+| Basic Statistics | 24 | 0 | 0 | 0 | 24 | 0 |
+| Overrepresented sequences | 22 | 2 | 0 | 6 | 18 | 0 |
+| Per base N content | 24 | 0 | 0 | 6 | 18 | 0 |
+| Per base sequence content | 4 | 8 | 12 | 0 | 23 | 1 |
+| Per base sequence quality | 24 | 0 | 0 | 6 | 18 | 0 |
+| Per sequence GC content | 5 | 19 | 0 | 5 | 18 | 1 |
+| Per sequence quality scores | 24 | 0 | 0 | 0 | 24 | 0 |
+| Per tile sequence quality | 0 | 16 | 8 | 4 | 20 | 0 |
+| Sequence Duplication Levels | 12 | 0 | 12 | 0 | 24 | 0 |
+| Sequence Length Distribution | 0 | 24 | 0 | 0 | 12 | 12 |
 
 ## Pair Summary
 
@@ -39,17 +39,29 @@ Compared each trimmed report to the matching raw-read report from `/work/VibrioV
 | Buck_NB0507_14_WKDL250009588-1A_233TFCLT4 | 2 | 147,813,319 | 22 Gbp | 44 | 35.99 | -7.42 | 6.28 | PASS | none |
 | Buck_NB0507_8_WKDL250009588-1A_233TFCLT4 | 1 | 165,150,467 | 24.7 Gbp | 46 | 38.39 | -37.13 | 9.79 | PASS | none |
 | Buck_NB0507_8_WKDL250009588-1A_233TFCLT4 | 2 | 165,150,467 | 24.6 Gbp | 46 | 35.95 | -7.40 | 10.03 | PASS | none |
+| SRR37851509 | 1 | 798,851 | 187.2 Mbp | 45 | 33.19 | -8.86 | 78.05 | PASS | none |
+| SRR37851509 | 2 | 798,851 | 171.9 Mbp | 45 | 31.46 | -10.27 | 80.79 | PASS | none |
+| SRR37851510 | 1 | 590,950 | 129.2 Mbp | 45 | 32.20 | -9.06 | 83.05 | PASS | none |
+| SRR37851510 | 2 | 590,950 | 132.2 Mbp | 45 | 31.91 | -9.42 | 84.90 | PASS | none |
+| SRR37852094 | 1 | 909,878 | 208.9 Mbp | 44 | 32.81 | -9.04 | 75.96 | PASS | none |
+| SRR37852094 | 2 | 909,878 | 195.5 Mbp | 44 | 31.59 | -9.24 | 78.59 | PASS | none |
+| SRR37852095 | 1 | 914,516 | 212.6 Mbp | 44 | 32.91 | -8.93 | 76.24 | PASS | none |
+| SRR37852095 | 2 | 914,516 | 198.6 Mbp | 44 | 31.83 | -9.32 | 78.77 | PASS | none |
+| SRR37852096 | 1 | 730,326 | 170.6 Mbp | 44 | 33.17 | -8.87 | 80.03 | PASS | none |
+| SRR37852096 | 2 | 730,326 | 158.3 Mbp | 44 | 31.29 | -10.18 | 82.76 | PASS | none |
+| SRR37852097 | 1 | 669,214 | 156.5 Mbp | 46 | 33.32 | -8.87 | 80.35 | PASS | none |
+| SRR37852097 | 2 | 669,214 | 139 Mbp | 46 | 31.26 | -9.71 | 82.92 | PASS | none |
 
 ## Interpreted Findings
 
-- All 12 trimmed reports still pass per-base and per-sequence quality score modules. Minimum mean base quality is 35.54 to 38.43, so trimming did not damage overall read quality.
-- Overrepresented sequences improved in 6 of 12 files. After trimming, 10 reports pass and 2 reports remain WARN; the raw reverse-read FAIL is gone, indicating the strongest polyG-driven tail artifact was reduced.
-- Per-sequence GC content improved in 2 of 12 files. After trimming, 2 reports pass, 10 warn, and 0 fail; the prior FAIL for `Buck_NB0507_14` read 2 is resolved to WARN, but most GC-content warnings persist.
-- Per-base sequence content improved in 0 of 12 files. The trimmed set contains 4 PASS and 8 WARN calls, so this start-cycle composition signal was largely unchanged overall.
-- Per tile sequence quality improved in 0 of 12 files and remains unchanged overall at 6 WARN and 6 FAIL calls. This persistent split between reverse-read WARNs and forward-read FAILs points to a lane/tile artifact unaffected by trimming.
-- Sequence duplication levels still fail in all 12 trimmed reports. Deduplicated fractions are 6.03% to 10.03%, so duplication remains a library/depth characteristic rather than a trimming problem.
-- Adapter Content still passes in all 12 trimmed reports. Reverse reads continue to show PolyG as the highest adapter-content track in 6 of 6 files, with trimmed PolyG peaks of 0.08% to 0.31% versus 0.69% to 1.68% in the raw review.
-- Sequence length distribution now warns in 12 of 12 reports, which is expected after variable-length trimming and is not a reason to stop the pipeline.
+- Per-base sequence quality passes in 24 of 24 trimmed reports and per-sequence quality scores pass in 24 of 24. Minimum mean base quality is 31.26 to 38.43, so trimming did not damage overall read quality.
+- Overrepresented sequences improved in 6 of 24 files. After trimming, 22 reports pass and 2 reports remain WARN; no trimmed report fails this module.
+- Per-sequence GC content improved in 5 of 24 files. After trimming, 5 reports pass, 19 warn, and 0 fail; most residual GC-content calls are warnings rather than failures.
+- Per-base sequence content improved in 0 of 24 files. The trimmed set contains 4 PASS, 8 WARN, and 12 FAIL calls, so start-cycle composition bias remains the main residual content artifact.
+- Per tile sequence quality improved in 4 of 24 files and remains at 16 WARN and 8 FAIL calls after trimming. This is consistent with a tile/lane artifact rather than adapter carryover.
+- Sequence duplication levels pass in 12 of 24 reports and fail in 12. Deduplicated fractions are 6.03% to 84.90%, so duplication varies strongly by sample set and library depth.
+- Adapter Content passes in 24 of 24 trimmed reports. Reverse reads show PolyG as the highest adapter-content track in 6 of 12 files, with trimmed PolyG peaks of 0.08% to 0.31% versus 0.69% to 1.68% in the raw review.
+- Sequence length distribution now warns in 24 of 24 reports, which is expected after variable-length trimming and is not a reason to stop the pipeline.
 
 ## Sample-Specific Notes
 
@@ -59,6 +71,12 @@ Compared each trimmed report to the matching raw-read report from `/work/VibrioV
 - Buck_CB0707_82_WKDL250009588-1A_233TFCLT4: read 1 still has fail per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has warn per-tile quality; read 2 retains a GC-content warning; read 2 retains a base-content warning; read 2 overrepresented sequences improved to PASS.
 - Buck_NB0507_14_WKDL250009588-1A_233TFCLT4: read 1 still has fail per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has warn per-tile quality; read 2 retains a GC-content warning; read 2 retains a base-content warning; read 2 overrepresented sequences improved to PASS.
 - Buck_NB0507_8_WKDL250009588-1A_233TFCLT4: read 1 still has fail per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has warn per-tile quality; read 2 retains a GC-content warning; read 2 retains a base-content warning; read 2 overrepresented sequences improved to PASS.
+- SRR37851509: read 1 still has warn per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has fail per-tile quality; read 2 retains a GC-content warning; read 2 retains a base-content warning.
+- SRR37851510: read 1 still has warn per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has warn per-tile quality; read 2 retains a GC-content warning; read 2 retains a base-content warning.
+- SRR37852094: read 1 still has warn per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has warn per-tile quality; read 2 retains a base-content warning.
+- SRR37852095: read 1 still has warn per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has warn per-tile quality; read 2 retains a GC-content warning; read 2 retains a base-content warning.
+- SRR37852096: read 1 still has warn per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has fail per-tile quality; read 2 retains a base-content warning.
+- SRR37852097: read 1 still has warn per-tile quality; read 1 retains a GC-content warning; read 1 retains a base-content warning; read 2 still has warn per-tile quality; read 2 retains a base-content warning.
 
 ## Recommended Next Steps
 

@@ -20,9 +20,9 @@ fi
 
 cd "${PROJECT_DIR}"
 
-MANIFEST_FILE="configs/alignment_manifest.tsv"
-REFERENCE_FASTA="reference/v_vulnificus_ref.fasta"
-ALIGNMENT_DIR="alignment"
+MANIFEST_FILE="${MANIFEST_FILE:-configs/alignment_manifest.tsv}"
+REFERENCE_FASTA="${REFERENCE_FASTA:-reference/v_vulnificus_ref.fasta}"
+ALIGNMENT_DIR="${ALIGNMENT_DIR:-alignment}"
 BAM_DIR="${ALIGNMENT_DIR}/bam"
 LOG_DIR="${ALIGNMENT_DIR}/logs"
 SLURM_LOG_DIR="${LOG_DIR}/slurm"

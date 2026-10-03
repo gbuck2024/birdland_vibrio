@@ -1,0 +1,13 @@
+sample_id	read	raw_fastq	expected_fastqc_html	expected_fastqc_zip	status
+SRR37851509	1	fq_raw/SRR37851509_L7_1.fq.gz	fastqc/SRR37851509_L7_1_fastqc.html	fastqc/SRR37851509_L7_1_fastqc.zip	pending_fastqc
+SRR37851509	2	fq_raw/SRR37851509_L7_2.fq.gz	fastqc/SRR37851509_L7_2_fastqc.html	fastqc/SRR37851509_L7_2_fastqc.zip	pending_fastqc
+SRR37851510	1	fq_raw/SRR37851510_L7_1.fq.gz	fastqc/SRR37851510_L7_1_fastqc.html	fastqc/SRR37851510_L7_1_fastqc.zip	pending_fastqc
+SRR37851510	2	fq_raw/SRR37851510_L7_2.fq.gz	fastqc/SRR37851510_L7_2_fastqc.html	fastqc/SRR37851510_L7_2_fastqc.zip	pending_fastqc
+SRR37852094	1	fq_raw/SRR37852094_L7_1.fq.gz	fastqc/SRR37852094_L7_1_fastqc.html	fastqc/SRR37852094_L7_1_fastqc.zip	pending_fastqc
+SRR37852094	2	fq_raw/SRR37852094_L7_2.fq.gz	fastqc/SRR37852094_L7_2_fastqc.html	fastqc/SRR37852094_L7_2_fastqc.zip	pending_fastqc
+SRR37852095	1	fq_raw/SRR37852095_L7_1.fq.gz	fastqc/SRR37852095_L7_1_fastqc.html	fastqc/SRR37852095_L7_1_fastqc.zip	pending_fastqc
+SRR37852095	2	fq_raw/SRR37852095_L7_2.fq.gz	fastqc/SRR37852095_L7_2_fastqc.html	fastqc/SRR37852095_L7_2_fastqc.zip	pending_fastqc
+SRR37852096	1	fq_raw/SRR37852096_L7_1.fq.gz	fastqc/SRR37852096_L7_1_fastqc.html	fastqc/SRR37852096_L7_1_fastqc.zip	pending_fastqc
+SRR37852096	2	fq_raw/SRR37852096_L7_2.fq.gz	fastqc/SRR37852096_L7_2_fastqc.html	fastqc/SRR37852096_L7_2_fastqc.zip	pending_fastqc
+SRR37852097	1	fq_raw/SRR37852097_L7_1.fq.gz	fastqc/SRR37852097_L7_1_fastqc.html	fastqc/SRR37852097_L7_1_fastqc.zip	pending_fastqc
+SRR37852097	2	fq_raw/SRR37852097_L7_2.fq.gz	fastqc/SRR37852097_L7_2_fastqc.html	fastqc/SRR37852097_L7_2_fastqc.zip	pending_fastqc

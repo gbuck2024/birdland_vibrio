@@ -1,0 +1,8 @@
+# SRA run accessions to add to the raw-read workflow.
+# One run accession per line. Blank lines and comments are ignored.
+SRR37852097
+SRR37851510
+SRR37851509
+SRR37852096
+SRR37852095
+SRR37852094

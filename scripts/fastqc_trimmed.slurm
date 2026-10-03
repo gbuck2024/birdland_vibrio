@@ -29,6 +29,7 @@ METRICS_DIR="${STEP_DIR}/metrics"
 SLURM_LOG_DIR="${PROJECT_DIR}/trimmomatic/logs/slurm"
 LOG_FILE="${LOG_DIR}/fastqc_trimmed.log"
 MANIFEST_FILE="${METRICS_DIR}/fastqc_trimmed_manifest.tsv"
+FASTQC_TRIMMED_INPUT_GLOB="${FASTQC_TRIMMED_INPUT_GLOB:-*_L7_1_paired.fq.gz}"
 
 cd "$PROJECT_DIR"
 
@@ -47,16 +48,17 @@ module purge
 module load fastqc/0.12.1
 
 shopt -s nullglob
-R1_FILES=("${TRIMMED_DIR}"/*_L7_1_paired.fq.gz)
+R1_FILES=("${TRIMMED_DIR}"/${FASTQC_TRIMMED_INPUT_GLOB})
 
 log "START fastqc_trimmed.slurm"
 log "Project directory: ${PROJECT_DIR}"
 log "Trimmed read directory: ${TRIMMED_DIR}"
 log "Report directory: ${REPORT_DIR}"
 log "Manifest path: ${MANIFEST_FILE}"
+log "FASTQC_TRIMMED_INPUT_GLOB: ${FASTQC_TRIMMED_INPUT_GLOB}"
 
 if [ "${#R1_FILES[@]}" -eq 0 ]; then
-  log "ERROR: No forward trimmed reads matching *_L7_1_paired.fq.gz were found."
+  log "ERROR: No forward trimmed reads matching ${FASTQC_TRIMMED_INPUT_GLOB} were found."
   exit 1
 fi
 

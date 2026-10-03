@@ -1,5 +1,36 @@
 # Next Steps
 
+## 2026-10-03 SRA multi-reference BWA-MEM comparison
+
+- SRA-only single-reference BWA-MEM job `1506133` completed successfully and `alignment_sra/metrics/alignment_summary.tsv` is available.
+- Five SRA isolates mapped around `24.70%` to `27.34%` to the saved `V. vulnificus` reference, while `SRR37852097_L7` mapped at `91.55%`.
+- Next, run the SRA multi-reference BWA-MEM comparison to determine whether the lower-mapping isolates fit another candidate `Vibrio` reference better.
+- Submit from the project root with:
+
+```bash
+sbatch --export=ALL,SAMPLE_MANIFEST=configs/alignment_manifest_sra.tsv,REFERENCE_MANIFEST=configs/multi_reference_reference_manifest.tsv,STAGE_DIR=multi_reference_alignment_sra --array=0-29 scripts/bwa_align_multiref_array.slurm
+```
+
+- After completion, summarize with:
+
+```bash
+SAMPLE_MANIFEST=configs/alignment_manifest_sra.tsv REFERENCE_MANIFEST=configs/multi_reference_reference_manifest.tsv STAGE_DIR=multi_reference_alignment_sra python3 scripts/summarize_multiref_alignment_metrics.py
+```
+
+- GC-versus-coverage self-mapping is prepared in `configs/blobtoolkit_self_mapping_manifest_sra.tsv`, but it cannot run until SRA assemblies exist under `assembly_sra/assemblies/<sample_id>/contigs.fasta`.
+
+## 2026-10-03 SRA raw FastQC submission
+
+- The raw FastQC workflow accepts `FASTQC_INPUT_GLOB` for reproducible input selection. Running `sbatch scripts/fastqc.slurm` still scans top-level `fq_raw/*.fq.gz`, so it will include both the original Buck read pairs and the new SRA-linked read pairs.
+
+## 2026-09-22 SRA read download and pipeline intake
+
+- Review `configs/sra_accessions.txt` before downloading and edit it if additional SRA run accessions should be added.
+- Confirm SRA Toolkit is available before resubmitting. The current installed image is `containers/sra-tools.sif`; the script also accepts `containers/sratoolkit.sif` or an explicit `SRA_SIF=/path/to/image.sif`.
+- Submit `sbatch scripts/download_sra.sh` only when network/download time and storage quota are appropriate. The script stages raw downloaded reads in `sra_download/`, creates organized links in `fq_raw/sra_202609/`, and creates top-level relative `fq_raw/${SRR}_L7_1.fq.gz` and `fq_raw/${SRR}_L7_2.fq.gz` compatibility links for the existing pipeline.
+- After download completion, rerun `bash scripts/prepare_trimmomatic_inputs.sh` so the new SRA-linked raw read pairs are added to `trimmomatic/metrics/trimmomatic_input_manifest.tsv`.
+- Submit raw FastQC and trimming through the existing workflow. Do not run compute-heavy QC or trimming directly on the login node.
+
 ## 2026-08-24 Top-species BlobToolKit GC-content versus coverage plot review
 
 - Review the per-sample `*_top_species_gc_coverage_log10.pdf` plots under `ambiguous_isolate_resolution/blobtoolkit/<SHORT_ID>/figures/` as the primary views for separating the top three species-level `Vibrio` contig-hit labels, remaining `Other Vibrio` contigs, and the three most frequent non-Vibrio classified contig-hit labels in each sample.
