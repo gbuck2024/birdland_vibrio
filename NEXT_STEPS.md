@@ -1,5 +1,24 @@
 # Next Steps
 
+## 2026-10-09 NB0507-14 matched-isolate resequencing comparison
+
+- The lightweight old-full vs new comparison has been generated under `comparison_nb0507_14_resequencing/`.
+- Complete the heavy matched-depth and genome-identity steps through SLURM before treating the interpretation as final.
+- Submit downsampling:
+
+```bash
+sbatch scripts/nb0507_14_resequencing_downsample.slurm
+```
+
+- Then follow the exact SPAdes, self-mapping, Kraken2, FastANI, and SNP commands in `comparison_nb0507_14_resequencing/README.md`.
+- After all jobs finish, regenerate summaries and figures:
+
+```bash
+python3 scripts/summarize_nb0507_14_resequencing.py
+module load R/gcc11/4.4.0
+Rscript scripts/plot_nb0507_14_resequencing.R
+```
+
 ## 2026-10-03 SRA multi-reference BWA-MEM comparison
 
 - SRA-only single-reference BWA-MEM job `1506133` completed successfully and `alignment_sra/metrics/alignment_summary.tsv` is available.
@@ -8,7 +27,12 @@
 - Submit from the project root with:
 
 ```bash
-sbatch --export=ALL,SAMPLE_MANIFEST=configs/alignment_manifest_sra.tsv,REFERENCE_MANIFEST=configs/multi_reference_reference_manifest.tsv,STAGE_DIR=multi_reference_alignment_sra --array=0-29 scripts/bwa_align_multiref_array.slurm
+sbatch \
+  -o multi_reference_alignment_sra/logs/slurm/bwa_multiref_%A_%a.out \
+  -e multi_reference_alignment_sra/logs/slurm/bwa_multiref_%A_%a.err \
+  --export=ALL,SAMPLE_MANIFEST=configs/alignment_manifest_sra.tsv,REFERENCE_MANIFEST=configs/multi_reference_reference_manifest.tsv,STAGE_DIR=multi_reference_alignment_sra \
+  --array=0-29 \
+  scripts/bwa_align_multiref_array.slurm
 ```
 
 - After completion, summarize with:
@@ -18,6 +42,137 @@ SAMPLE_MANIFEST=configs/alignment_manifest_sra.tsv REFERENCE_MANIFEST=configs/mu
 ```
 
 - GC-versus-coverage self-mapping is prepared in `configs/blobtoolkit_self_mapping_manifest_sra.tsv`, but it cannot run until SRA assemblies exist under `assembly_sra/assemblies/<sample_id>/contigs.fasta`.
+
+## 2026-10-08 SRA Kraken2 classification and self-mapping preparation
+
+- Kraken2 classification is appropriate now because it uses the completed SRA trimmed read pairs directly and does not require assemblies.
+- Submit SRA Kraken2 classification from the project root with:
+
+```bash
+sbatch \
+  -o kraken2_classification_sra/logs/slurm/kraken2_classify_%A_%a.out \
+  -e kraken2_classification_sra/logs/slurm/kraken2_classify_%A_%a.err \
+  --export=ALL,MANIFEST_FILE=configs/kraken2_classification_manifest_sra.tsv,STAGE_DIR=kraken2_classification_sra \
+  --array=0-5 \
+  scripts/kraken2_classify_array.slurm
+```
+
+- After the Kraken2 array completes, summarize with:
+
+```bash
+sbatch \
+  -o kraken2_classification_sra/logs/slurm/kraken2_summary_%j.out \
+  -e kraken2_classification_sra/logs/slurm/kraken2_summary_%j.err \
+  --export=ALL,KRAKEN2_CLASSIFICATION_MODE=summary,MANIFEST_FILE=configs/kraken2_classification_manifest_sra.tsv,STAGE_DIR=kraken2_classification_sra \
+  scripts/kraken2_classify_array.slurm
+```
+
+- SRA self-mapping for GC-versus-coverage plots is too early until SPAdes contigs exist. First submit SRA SPAdes:
+
+```bash
+sbatch \
+  -o assembly_sra/logs/slurm/spades_assembly_%A_%a.out \
+  -e assembly_sra/logs/slurm/spades_assembly_%A_%a.err \
+  --export=ALL,MANIFEST_FILE=configs/assembly_manifest_sra.tsv,STAGE_DIR=assembly_sra \
+  --array=0-5 \
+  scripts/spades_assembly_array.slurm
+```
+
+- After SRA SPAdes completes and `assembly_sra/assemblies/<sample_id>/contigs.fasta` files exist, submit self-mapping:
+
+```bash
+sbatch \
+  -o ambiguous_isolate_resolution/blobtoolkit_sra/logs/slurm/self_mapping_%A_%a.out \
+  -e ambiguous_isolate_resolution/blobtoolkit_sra/logs/slurm/self_mapping_%A_%a.err \
+  --export=ALL,MANIFEST_FILE=configs/blobtoolkit_self_mapping_manifest_sra.tsv,STAGE_ROOT=ambiguous_isolate_resolution/blobtoolkit_sra \
+  --array=0-5 \
+  scripts/blobtoolkit_self_mapping_array.slurm
+```
+
+## 2026-10-08 SRA ANI matrix preparation
+
+- The SRA ANI matrix path is prepared as a rectangular fastANI stage comparing six SRA SPAdes contig assemblies against the saved 76-genome `Vibrio` reference panel.
+- Submit comparisons from the project root with:
+
+```bash
+sbatch \
+  -o ani/sra_vs_reference_panel/logs/slurm/fastani_matrix_%A_%a.out \
+  -e ani/sra_vs_reference_panel/logs/slurm/fastani_matrix_%A_%a.err \
+  --export=ALL,STAGE_DIR=ani/sra_vs_reference_panel,QUERY_MANIFEST=configs/ani_query_manifest_sra.tsv,REFERENCE_MANIFEST=configs/reference_sequence_manifest.tsv \
+  --array=0-5 \
+  scripts/fastani_matrix_array.slurm
+```
+
+## 2026-10-08 SRA reciprocal ANI/AF and GC x coverage follow-up
+
+- Run the reverse fastANI direction needed for reciprocal AF with:
+
+```bash
+sbatch \
+  -o ani/sra_reciprocal_reference_to_sra/logs/slurm/fastani_reciprocal_%A_%a.out \
+  -e ani/sra_reciprocal_reference_to_sra/logs/slurm/fastani_reciprocal_%A_%a.err \
+  --export=ALL,STAGE_DIR=ani/sra_reciprocal_reference_to_sra,QUERY_MANIFEST=configs/ani_reciprocal_reference_query_manifest_sra.tsv,REFERENCE_MANIFEST=configs/ani_query_manifest_sra.tsv \
+  --array=0-4 \
+  scripts/fastani_matrix_array.slurm
+```
+
+- After the reverse fastANI array completes, summarize the reverse matrix and combine reciprocal AF:
+
+```bash
+sbatch \
+  -o ani/sra_reciprocal_reference_to_sra/logs/slurm/fastani_reciprocal_summary_%j.out \
+  -e ani/sra_reciprocal_reference_to_sra/logs/slurm/fastani_reciprocal_summary_%j.err \
+  --export=ALL,ANI_MODE=matrix,STAGE_DIR=ani/sra_reciprocal_reference_to_sra,QUERY_MANIFEST=configs/ani_reciprocal_reference_query_manifest_sra.tsv,REFERENCE_MANIFEST=configs/ani_query_manifest_sra.tsv \
+  scripts/fastani_matrix_array.slurm
+
+python3 scripts/summarize_sra_reciprocal_ani_af.py
+```
+
+- To build SRA GC x coverage plots with contig taxonomy overlays, first add BlobToolKit coverage JSON and classify SPAdes contigs:
+
+```bash
+sbatch \
+  -o ambiguous_isolate_resolution/blobtoolkit_sra/logs/slurm/add_self_coverage_%A_%a.out \
+  -e ambiguous_isolate_resolution/blobtoolkit_sra/logs/slurm/add_self_coverage_%A_%a.err \
+  --export=ALL,MANIFEST_FILE=configs/blobtoolkit_self_mapping_manifest_sra.tsv,STAGE_ROOT=ambiguous_isolate_resolution/blobtoolkit_sra \
+  --array=0-5 \
+  scripts/blobtoolkit_add_self_coverage_array.slurm
+
+sbatch \
+  -o ambiguous_isolate_resolution/blobtoolkit_sra/logs/slurm/kraken2_contigs_%A_%a.out \
+  -e ambiguous_isolate_resolution/blobtoolkit_sra/logs/slurm/kraken2_contigs_%A_%a.err \
+  --export=ALL,MANIFEST_FILE=configs/blobtoolkit_self_mapping_manifest_sra.tsv,STAGE_ROOT=ambiguous_isolate_resolution/blobtoolkit_sra \
+  --array=0-5 \
+  scripts/kraken2_contig_classify_array.slurm
+```
+
+- After both arrays complete, build the master contig table and plots:
+
+```bash
+python3 scripts/build_blobtoolkit_master_contig_tables.py \
+  --manifest configs/blobtoolkit_self_mapping_manifest_sra.tsv \
+  --stage-root ambiguous_isolate_resolution/blobtoolkit_sra \
+  --combined-output ambiguous_isolate_resolution/blobtoolkit_sra/metrics/all_samples.master_contig_table.tsv
+
+module load R/gcc11/4.4.0
+MASTER_CONTIG_TABLE=ambiguous_isolate_resolution/blobtoolkit_sra/metrics/all_samples.master_contig_table.tsv \
+BLOBTOOLKIT_DIR=ambiguous_isolate_resolution/blobtoolkit_sra \
+Rscript scripts/plot_blobtoolkit_gc_coverage_all_samples.R
+
+MASTER_CONTIG_TABLE=ambiguous_isolate_resolution/blobtoolkit_sra/metrics/all_samples.master_contig_table.tsv \
+BLOBTOOLKIT_DIR=ambiguous_isolate_resolution/blobtoolkit_sra \
+Rscript scripts/plot_blobtoolkit_gc_coverage_top_species.R
+```
+
+- After all six comparison tasks complete, summarize with:
+
+```bash
+sbatch \
+  -o ani/sra_vs_reference_panel/logs/slurm/fastani_matrix_summary_%j.out \
+  -e ani/sra_vs_reference_panel/logs/slurm/fastani_matrix_summary_%j.err \
+  --export=ALL,ANI_MODE=matrix,STAGE_DIR=ani/sra_vs_reference_panel,QUERY_MANIFEST=configs/ani_query_manifest_sra.tsv,REFERENCE_MANIFEST=configs/reference_sequence_manifest.tsv \
+  scripts/fastani_matrix_array.slurm
+```
 
 ## 2026-10-03 SRA raw FastQC submission
 

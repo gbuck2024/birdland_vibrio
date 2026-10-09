@@ -10,13 +10,22 @@ This stage is prepared for de novo SPAdes assembly of the six new SRA isolates. 
 ## Submit
 
 ```bash
-sbatch --export=ALL,MANIFEST_FILE=configs/assembly_manifest_sra.tsv,STAGE_DIR=assembly_sra --array=0-5 scripts/spades_assembly_array.slurm
+sbatch \
+  -o assembly_sra/logs/slurm/spades_assembly_%A_%a.out \
+  -e assembly_sra/logs/slurm/spades_assembly_%A_%a.err \
+  --export=ALL,MANIFEST_FILE=configs/assembly_manifest_sra.tsv,STAGE_DIR=assembly_sra \
+  --array=0-5 \
+  scripts/spades_assembly_array.slurm
 ```
 
 After completion, summarize:
 
 ```bash
-sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_sra.tsv,STAGE_DIR=assembly_sra scripts/spades_assembly_array.slurm
+sbatch \
+  -o assembly_sra/logs/slurm/spades_summary_%j.out \
+  -e assembly_sra/logs/slurm/spades_summary_%j.err \
+  --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_sra.tsv,STAGE_DIR=assembly_sra \
+  scripts/spades_assembly_array.slurm
 ```
 
 ## Expected Outputs
@@ -25,4 +34,3 @@ sbatch --export=ALL,SPADES_MODE=summary,MANIFEST_FILE=configs/assembly_manifest_
 - `assembly_sra/assemblies/<sample_id>/scaffolds.fasta`
 - `assembly_sra/assemblies/<sample_id>/assembly_graph.fastg`
 - `assembly_sra/metrics/assembly_summary.tsv`
-

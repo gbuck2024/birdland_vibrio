@@ -1,0 +1,21 @@
+  1.41	1	1	U	0	unclassified
+ 98.59	70	0	R	1	root
+ 98.59	70	0	R1	131567	  cellular organisms
+ 98.59	70	0	D	2	    Bacteria
+ 98.59	70	0	K	3379134	      Pseudomonadati
+ 98.59	70	0	P	1224	        Pseudomonadota
+ 98.59	70	1	C	1236	          Gammaproteobacteria
+ 97.18	69	0	O	135623	            Vibrionales
+ 97.18	69	1	F	641	              Vibrionaceae
+ 95.77	68	20	G	662	                Vibrio
+ 64.79	46	3	G1	717610	                  Vibrio harveyi group
+ 57.75	41	26	S	670	                    Vibrio parahaemolyticus
+ 12.68	9	0	S1	1338033	                      Vibrio parahaemolyticus O1:Kuk
+ 12.68	9	9	S2	1338034	                        Vibrio parahaemolyticus O1:Kuk str. FDA_R31
+  5.63	4	4	S1	1211705	                      Vibrio parahaemolyticus BB22OP
+  2.82	2	2	S1	1429044	                      Vibrio parahaemolyticus UCM-V493
+  1.41	1	1	S	663	                    Vibrio alginolyticus
+  1.41	1	1	S	680	                    Vibrio campbellii
+  1.41	1	0	S	672	                  Vibrio vulnificus
+  1.41	1	1	S1	196600	                    Vibrio vulnificus YJ016
+  1.41	1	1	S	1763883	                  Vibrio cidicii

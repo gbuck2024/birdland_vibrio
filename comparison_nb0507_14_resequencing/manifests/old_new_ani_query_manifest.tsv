@@ -1,0 +1,3 @@
+genome_id	genome_fasta	species	genome_type	is_unknown	notes
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7	assembly/assemblies/Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7/contigs.fasta	unknown	spades_contigs	yes	Old Buck NB0507-14 assembly for matched-isolate resequencing comparison.
+SRR37852095_L7	assembly_sra/assemblies/SRR37852095_L7/contigs.fasta	unknown	sra_spades_contigs	yes	New SRA resequencing assembly for matched-isolate comparison.

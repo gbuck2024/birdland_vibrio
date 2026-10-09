@@ -1,0 +1,1 @@
+PASS: BAM reference names match the SPAdes contig names from assembly_sra/assemblies/SRR37852094_L7/contigs.fasta.

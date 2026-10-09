@@ -1,0 +1,10 @@
+sample_id=SRR37851509_L7
+short_id=SRR37851509
+manifest_file=configs/blobtoolkit_self_mapping_manifest_sra.tsv
+conda_env_path=/home/glametrie1/.conda/envs/blobtoolkit
+blobtools_version=blobtoolkit v4.4.5
+contigs_fasta=assembly_sra/assemblies/SRR37851509_L7/contigs.fasta
+sorted_bam=ambiguous_isolate_resolution/blobtoolkit_sra/SRR37851509/bam/SRR37851509_L7.self_contigs.sorted.bam
+coverage_json=ambiguous_isolate_resolution/blobtoolkit_sra/SRR37851509/blobdir/SRR37851509_L7.self_contigs.sorted_cov.json
+force_blobdir=0
+force_coverage=0

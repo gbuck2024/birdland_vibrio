@@ -1,0 +1,24 @@
+  1.19	1	1	U	0	unclassified
+ 98.81	83	0	R	1	root
+ 98.81	83	0	R1	131567	  cellular organisms
+ 98.81	83	1	D	2	    Bacteria
+ 97.62	82	0	K	3379134	      Pseudomonadati
+ 97.62	82	1	P	1224	        Pseudomonadota
+ 96.43	81	4	C	1236	          Gammaproteobacteria
+ 91.67	77	0	O	135623	            Vibrionales
+ 91.67	77	1	F	641	              Vibrionaceae
+ 90.48	76	36	G	662	                Vibrio
+ 39.29	33	2	G1	717610	                  Vibrio harveyi group
+ 29.76	25	0	G2	2315253	                    Vibrio diabolicus subgroup
+ 28.57	24	24	S	50719	                      Vibrio diabolicus
+  1.19	1	1	S	150340	                      Vibrio antiquarius
+  3.57	3	3	S	670	                    Vibrio parahaemolyticus
+  2.38	2	1	S	680	                    Vibrio campbellii
+  1.19	1	1	S1	1224742	                      Vibrio campbellii CAIM 519 = NBRC 15631 = ATCC 25920
+  1.19	1	1	S	663	                    Vibrio alginolyticus
+  5.95	5	0	G1	2614977	                  unclassified Vibrio
+  3.57	3	3	S	391586	                    Vibrio sp. 16
+  1.19	1	1	S	3374281	                    Vibrio sp. D3
+  1.19	1	1	S	2751176	                    Vibrio sp. B1ASS3
+  1.19	1	1	S	1918945	                  Vibrio spartinae
+  1.19	1	1	S	29495	                  Vibrio navarrensis

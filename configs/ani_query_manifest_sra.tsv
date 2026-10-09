@@ -1,0 +1,7 @@
+genome_id	genome_fasta	species	genome_type	is_unknown	notes
+SRR37851509_L7	assembly_sra/assemblies/SRR37851509_L7/contigs.fasta	unknown	sra_spades_contigs	yes	SRA isolate; Kraken2 and BWA-MEM suggest Vibrio parahaemolyticus; ANI confirmation pending.
+SRR37851510_L7	assembly_sra/assemblies/SRR37851510_L7/contigs.fasta	unknown	sra_spades_contigs	yes	SRA isolate; Kraken2 and BWA-MEM suggest Vibrio parahaemolyticus; ANI confirmation pending.
+SRR37852094_L7	assembly_sra/assemblies/SRR37852094_L7/contigs.fasta	unknown	sra_spades_contigs	yes	SRA isolate; Kraken2 and BWA-MEM suggest Vibrio alginolyticus; ANI confirmation pending.
+SRR37852095_L7	assembly_sra/assemblies/SRR37852095_L7/contigs.fasta	unknown	sra_spades_contigs	yes	SRA isolate; Kraken2 mixed/ambiguous with top Vibrio diabolicus and BWA-MEM closer to Vibrio alginolyticus; ANI confirmation pending.
+SRR37852096_L7	assembly_sra/assemblies/SRR37852096_L7/contigs.fasta	unknown	sra_spades_contigs	yes	SRA isolate; Kraken2 mixed/ambiguous with top Vibrio diabolicus and BWA-MEM closer to Vibrio alginolyticus; ANI confirmation pending.
+SRR37852097_L7	assembly_sra/assemblies/SRR37852097_L7/contigs.fasta	unknown	sra_spades_contigs	yes	SRA isolate; Kraken2 and BWA-MEM suggest Vibrio vulnificus; ANI confirmation pending.

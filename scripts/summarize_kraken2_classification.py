@@ -4,15 +4,17 @@
 from __future__ import annotations
 
 import csv
+import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-MANIFEST_FILE = PROJECT_DIR / "configs" / "kraken2_classification_manifest.tsv"
-REPORT_DIR = PROJECT_DIR / "kraken2_classification" / "reports"
-OUTPUT_DIR = PROJECT_DIR / "kraken2_classification" / "outputs"
-METRICS_DIR = PROJECT_DIR / "kraken2_classification" / "metrics"
+MANIFEST_FILE = PROJECT_DIR / os.environ.get("MANIFEST_FILE", "configs/kraken2_classification_manifest.tsv")
+STAGE_DIR = PROJECT_DIR / os.environ.get("STAGE_DIR", "kraken2_classification")
+REPORT_DIR = STAGE_DIR / "reports"
+OUTPUT_DIR = STAGE_DIR / "outputs"
+METRICS_DIR = STAGE_DIR / "metrics"
 SUMMARY_TSV = METRICS_DIR / "kraken2_classification_summary.tsv"
 
 

@@ -1,0 +1,15 @@
+100.00	109	0	R	1	root
+100.00	109	0	R1	131567	  cellular organisms
+100.00	109	0	D	2	    Bacteria
+100.00	109	0	K	3379134	      Pseudomonadati
+100.00	109	0	P	1224	        Pseudomonadota
+100.00	109	3	C	1236	          Gammaproteobacteria
+ 97.25	106	0	O	135623	            Vibrionales
+ 97.25	106	1	F	641	              Vibrionaceae
+ 96.33	105	51	G	662	                Vibrio
+ 47.71	52	3	G1	717610	                  Vibrio harveyi group
+ 44.04	48	40	S	663	                    Vibrio alginolyticus
+  7.34	8	8	S1	1219076	                      Vibrio alginolyticus NBRC 15630 = ATCC 17749
+  0.92	1	0	G2	2315253	                    Vibrio diabolicus subgroup
+  0.92	1	1	S	50719	                      Vibrio diabolicus
+  1.83	2	2	S	671	                  Vibrio proteolyticus

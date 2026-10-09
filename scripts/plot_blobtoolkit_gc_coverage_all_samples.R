@@ -23,8 +23,14 @@ input_tsv <- Sys.getenv(
     "all_samples.master_contig_table.tsv"
   )
 )
-blobtoolkit_dir <- file.path(project_dir, "ambiguous_isolate_resolution", "blobtoolkit")
-overview_figures_dir <- file.path(blobtoolkit_dir, "metrics", "figures")
+blobtoolkit_dir <- Sys.getenv(
+  "BLOBTOOLKIT_DIR",
+  file.path(project_dir, "ambiguous_isolate_resolution", "blobtoolkit")
+)
+overview_figures_dir <- Sys.getenv(
+  "OVERVIEW_FIGURES_DIR",
+  file.path(blobtoolkit_dir, "metrics", "figures")
+)
 
 required_packages <- c("ggplot2", "scales")
 missing_packages <- required_packages[!vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)]

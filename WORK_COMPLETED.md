@@ -1,5 +1,49 @@
 # Work Completed
 
+## 2026-10-09 NB0507-14 matched-isolate resequencing comparison stage prepared
+
+- Created isolated stage `comparison_nb0507_14_resequencing/` for comparing old `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` and new `SRR37852095_L7` as a matched isolate.
+- Added `scripts/summarize_nb0507_14_resequencing.py` to parse existing raw/post-trim FastQC, Trimmomatic, SPAdes, self-contig mapping, BlobToolKit-style master contig tables, and Kraken2 reports into curated comparison tables.
+- Generated current lightweight outputs under `comparison_nb0507_14_resequencing/metrics/`: `matched_isolate_comparison.tsv`, `matched_isolate_comparison.md`, `assembly_comparison.tsv`, `coverage_comparison.tsv`, `taxonomy_comparison.tsv`, and pending `old_vs_new_ani.tsv`.
+- Added `scripts/plot_nb0507_14_resequencing.R` and generated PDF/PNG figures for read retention, N50/contig count, assembly size, coverage distributions, side-by-side GC x coverage, Kraken composition, and old-full/downsampled/new summary.
+- Added manifests and SLURM-ready scripts for the remaining compute-heavy components without running them on the login node: reproducible downsampling, reciprocal FastANI, and MUMmer-based whole-genome SNP/indel screening.
+- Current interpretation is provisional: old-full vs new summaries show the new run is much smaller but cleaner and more contiguous, while FastANI/SNP and matched-depth downsampled old outputs remain pending SLURM execution.
+
+## 2026-10-08 SRA contig taxonomy and GC x coverage plots completed
+
+- Monitored SRA contig-level Kraken2 job `1514344`; direct SLURM accounting later had controller/socket errors, but all six task logs reported completed classifications for the SRA SPAdes contigs.
+- Verified all six SRA contig Kraken2 output/report pairs exist and are non-empty under `ambiguous_isolate_resolution/blobtoolkit_sra/<short_id>/taxonomy/`.
+- Updated `scripts/build_blobtoolkit_master_contig_tables.py` to raise Python's CSV field-size limit, because Kraken2 contig LCA fields can exceed the default parser limit.
+- Built per-sample SRA master contig tables and the combined `ambiguous_isolate_resolution/blobtoolkit_sra/metrics/all_samples.master_contig_table.tsv` with `624` total contig rows.
+- Generated broad-taxon GC x coverage plots for all six SRA samples and the faceted overview under `ambiguous_isolate_resolution/blobtoolkit_sra/`.
+- Updated `scripts/plot_blobtoolkit_gc_coverage_top_species.R` so large SRA highlight sets fall back to an expanded R color palette instead of failing at more than nine groups.
+- Generated SRA top-species GC x coverage plots, the faceted linear/log10 overviews, and `ambiguous_isolate_resolution/blobtoolkit_sra/metrics/top_species_gc_coverage_highlight_summary.tsv`.
+
+## 2026-10-08 SRA validation follow-up paths prepared
+
+- Reviewed `assembly_sra/metrics/assembly_summary.tsv` and added `assembly_sra/metrics/assembly_review.md`; all six SRA assemblies are approximately `4.97-5.19 Mb` with coherent GC content and reasonable fragmentation for `Vibrio` assemblies.
+- Added `configs/ani_reciprocal_reference_query_manifest_sra.tsv` with the unique best reference genomes needed to calculate reference-to-SRA reciprocal ANI/AF.
+- Added `ani/sra_reciprocal_reference_to_sra/README.md` and `scripts/summarize_sra_reciprocal_ani_af.py` to combine SRA-to-reference and reference-to-SRA ANI/AF into `ani/sra_vs_reference_panel/metrics/sra_reciprocal_ani_af_summary.*` after the reverse fastANI jobs run.
+- Updated `scripts/plot_blobtoolkit_gc_coverage_all_samples.R` and `scripts/plot_blobtoolkit_gc_coverage_top_species.R` so `BLOBTOOLKIT_DIR` can redirect plots to the SRA BlobToolKit stage.
+- Updated `ambiguous_isolate_resolution/blobtoolkit_sra/README.md` and `NEXT_STEPS.md` with the prepared commands to add BlobToolKit coverage JSON, classify SRA contigs with Kraken2, build master contig tables, and generate GC x coverage plots with taxonomy overlays.
+
+## 2026-10-08 SRA ANI matrix pathway prepared
+
+- Added `configs/ani_query_manifest_sra.tsv` for the six completed SRA SPAdes contig assemblies under `assembly_sra/assemblies/`.
+- Added `ani/sra_vs_reference_panel/README.md` documenting the SRA-vs-reference-panel fastANI matrix stage, exact manual `sbatch` commands, expected outputs, and optional heatmap generation.
+- Updated `.gitignore` so SRA ANI raw outputs and logs remain ignored while curated metrics and figures can be tracked.
+- Updated `NEXT_STEPS.md` with the SRA ANI comparison and matrix-summary commands.
+- Verified the relevant fastANI matrix scripts and manifests are syntax/readability-ready. No ANI jobs were submitted in this preparation step.
+
+## 2026-10-08 SRA multi-reference, Kraken2, and self-mapping runbooks prepared
+
+- Confirmed no SRA self-contig mapping can run yet because `assembly_sra/assemblies/<sample_id>/contigs.fasta` files are not present.
+- Left SRA multi-reference BWA-MEM ready for manual SLURM submission using the existing `scripts/bwa_align_multiref_array.slurm` with SRA-specific manifest, stage directory, and SLURM log paths.
+- Added `configs/kraken2_classification_manifest_sra.tsv` for the six new SRA trimmed read pairs.
+- Updated `scripts/kraken2_classify_array.slurm` and `scripts/summarize_kraken2_classification.py` so Kraken2 classification and summary can be redirected to an SRA-specific stage with `MANIFEST_FILE` and `STAGE_DIR`.
+- Added `kraken2_classification_sra/README.md` and updated SRA stage READMEs with exact manual `sbatch` commands that keep logs and outputs in SRA-specific directories.
+- Verified Bash syntax for the relevant SLURM scripts and Python syntax for the Kraken2 summary parser. No SLURM jobs were submitted in this preparation step.
+
 ## 2026-10-03 SRA single-reference BWA-MEM completed
 
 - Submitted SRA-only single-reference BWA-MEM array job `1506133` with `MANIFEST_FILE=configs/alignment_manifest_sra.tsv` and `ALIGNMENT_DIR=alignment_sra`.

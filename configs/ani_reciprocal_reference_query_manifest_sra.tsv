@@ -1,0 +1,6 @@
+genome_id	genome_fasta	species	genome_type	is_unknown	notes
+v_parahaemolyticus	reference/v_parahaemolyticus_ref.fasta	Vibrio parahaemolyticus	complete_two_chromosome	no	Best forward ANI reference for SRR37851509_L7 and SRR37851510_L7.
+v_alginolyticus	reference/v_alginolyticus_ref.fasta	Vibrio alginolyticus	complete_two_chromosome	no	Best forward ANI reference for SRR37852094_L7.
+vdiabolicus_mzt14	reference/v_diabolicus_non_core/genomes/GCF_056531025.1_ASM5653102v1_genomic.fna.gz	Vibrio diabolicus	complete_two_chromosome	no	Best forward ANI reference for SRR37852095_L7.
+vdiabolicus_fa3	reference/v_diabolicus_non_core/genomes/GCF_011801455.1_ASM1180145v1_genomic.fna.gz	Vibrio diabolicus	complete_two_chromosome	no	Best forward ANI reference for SRR37852096_L7.
+mullis2019_18036	reference/expanded_vv/genomes/GCF_004214655.1_ASM421465v1_genomic.fna.gz	Vibrio vulnificus	mullis2019_draft_genome	no	Best forward ANI reference for SRR37852097_L7.

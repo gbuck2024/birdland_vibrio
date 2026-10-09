@@ -25,12 +25,17 @@ input_tsv <- Sys.getenv(
     "all_samples.master_contig_table.tsv"
   )
 )
-blobtoolkit_dir <- file.path(project_dir, "ambiguous_isolate_resolution", "blobtoolkit")
-overview_figures_dir <- file.path(blobtoolkit_dir, "metrics", "figures")
-summary_tsv <- file.path(
-  blobtoolkit_dir,
-  "metrics",
-  "top_species_gc_coverage_highlight_summary.tsv"
+blobtoolkit_dir <- Sys.getenv(
+  "BLOBTOOLKIT_DIR",
+  file.path(project_dir, "ambiguous_isolate_resolution", "blobtoolkit")
+)
+overview_figures_dir <- Sys.getenv(
+  "OVERVIEW_FIGURES_DIR",
+  file.path(blobtoolkit_dir, "metrics", "figures")
+)
+summary_tsv <- Sys.getenv(
+  "TOP_SPECIES_SUMMARY_TSV",
+  file.path(blobtoolkit_dir, "metrics", "top_species_gc_coverage_highlight_summary.tsv")
 )
 
 required_packages <- c("ggplot2", "scales")
@@ -202,18 +207,11 @@ make_sample_plot_data <- function(sample_data, top_vibrio_species, top_other_spe
 
 make_gc_coverage_plot <- function(data, sample_label = NULL, log10_y = FALSE, facet = FALSE) {
   plot_levels <- levels(droplevels(data$plot_group))
-  if (length(plot_levels) > length(highlight_palette)) {
-    stop(
-      "High-contrast highlight palette supports up to ",
-      length(highlight_palette),
-      " visibly separated highlighted groups, but this plot has ",
-      length(plot_levels),
-      ": ",
-      paste(plot_levels, collapse = ", "),
-      call. = FALSE
-    )
+  if (length(plot_levels) <= length(highlight_palette)) {
+    color_values <- stats::setNames(highlight_palette[seq_along(plot_levels)], plot_levels)
+  } else {
+    color_values <- stats::setNames(grDevices::hcl.colors(length(plot_levels), palette = "Dark 3"), plot_levels)
   }
-  color_values <- stats::setNames(highlight_palette[seq_along(plot_levels)], plot_levels)
 
   plot_title <- if (facet) {
     if (log10_y) {

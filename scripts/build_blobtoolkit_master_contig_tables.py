@@ -8,8 +8,11 @@ import csv
 import json
 import math
 import re
+import sys
 from pathlib import Path
 
+
+csv.field_size_limit(sys.maxsize)
 
 COLUMNS = [
     "short_id",

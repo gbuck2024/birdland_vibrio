@@ -1,0 +1,30 @@
+  0.58	1	1	U	0	unclassified
+ 99.42	172	0	R	1	root
+ 99.42	172	0	R1	131567	  cellular organisms
+ 99.42	172	0	D	2	    Bacteria
+ 99.42	172	0	K	3379134	      Pseudomonadati
+ 99.42	172	0	P	1224	        Pseudomonadota
+ 99.42	172	0	C	1236	          Gammaproteobacteria
+ 99.42	172	0	O	135623	            Vibrionales
+ 99.42	172	0	F	641	              Vibrionaceae
+ 99.42	172	15	G	662	                Vibrio
+ 78.03	135	79	S	672	                  Vibrio vulnificus
+ 30.06	52	52	S1	1246305	                    Vibrio vulnificus Env1
+  1.16	2	2	S1	196600	                    Vibrio vulnificus YJ016
+  0.58	1	1	S1	748003	                    Vibrio vulnificus VVyb1(BT3)
+  0.58	1	1	S1	914127	                    Vibrio vulnificus MO6-24/O
+  5.78	10	1	G1	717610	                  Vibrio harveyi group
+  2.31	4	4	S	670	                    Vibrio parahaemolyticus
+  1.73	3	3	S	680	                    Vibrio campbellii
+  0.58	1	1	S	663	                    Vibrio alginolyticus
+  0.58	1	1	S	669	                    Vibrio harveyi
+  1.16	2	2	S	666	                  Vibrio cholerae
+  1.16	2	2	S	3035453	                  Vibrio apostichopi
+  1.16	2	2	S	29495	                  Vibrio navarrensis
+  0.58	1	1	S	671	                  Vibrio proteolyticus
+  0.58	1	1	S	1763883	                  Vibrio cidicii
+  0.58	1	1	S	55601	                  Vibrio anguillarum
+  0.58	1	1	S	47951	                  Vibrio cyclitrophicus
+  0.58	1	0	G1	2614977	                  unclassified Vibrio
+  0.58	1	1	S	2163016	                    Vibrio sp. dhg
+  0.58	1	1	S	28172	                  Vibrio metschnikovii

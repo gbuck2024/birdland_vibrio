@@ -1,0 +1,6 @@
+assembly_sra/assemblies/SRR37851509_L7/contigs.fasta
+assembly_sra/assemblies/SRR37851510_L7/contigs.fasta
+assembly_sra/assemblies/SRR37852094_L7/contigs.fasta
+assembly_sra/assemblies/SRR37852095_L7/contigs.fasta
+assembly_sra/assemblies/SRR37852096_L7/contigs.fasta
+assembly_sra/assemblies/SRR37852097_L7/contigs.fasta

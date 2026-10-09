@@ -30,8 +30,8 @@ fi
 cd "${PROJECT_DIR}"
 
 MODE="${KRAKEN2_CLASSIFICATION_MODE:-classify}"
-MANIFEST_FILE="configs/kraken2_classification_manifest.tsv"
-STAGE_DIR="kraken2_classification"
+MANIFEST_FILE="${MANIFEST_FILE:-configs/kraken2_classification_manifest.tsv}"
+STAGE_DIR="${STAGE_DIR:-kraken2_classification}"
 OUTPUT_DIR="${STAGE_DIR}/outputs"
 REPORT_DIR="${STAGE_DIR}/reports"
 METRICS_DIR="${STAGE_DIR}/metrics"
@@ -104,7 +104,7 @@ run_in_container "command -v kraken2 >/dev/null 2>&1"
 
 if [ "${MODE}" = "summary" ]; then
   require_file "${SUMMARY_SCRIPT}" "Kraken2 summary parser"
-  python3 "${SUMMARY_SCRIPT}"
+  MANIFEST_FILE="${MANIFEST_FILE}" STAGE_DIR="${STAGE_DIR}" python3 "${SUMMARY_SCRIPT}"
   log "END kraken2_classify_array.slurm"
   exit 0
 fi
