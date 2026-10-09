@@ -1,2 +1,2 @@
 comparison	high_confidence_snp_differences	indel_events	aligned_reference_bases	aligned_genome_fraction	method
-old_vs_new	PENDING_SLURM	PENDING_SLURM	PENDING_SLURM	PENDING_SLURM	nucmer_maxmatch_delta_filter_1_show_snps_ClrT
+old_vs_new	3544	250	5413340	1.043023	nucmer_maxmatch_delta_filter_1_show_snps_ClrT

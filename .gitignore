@@ -362,6 +362,7 @@
 /comparison_nb0507_14_resequencing/ani/outputs/
 /comparison_nb0507_14_resequencing/ani/logs/
 /comparison_nb0507_14_resequencing/snp/logs/
+/comparison_nb0507_14_resequencing/snp/outputs/
 !/comparison_nb0507_14_resequencing/
 !/comparison_nb0507_14_resequencing/README.md
 !/comparison_nb0507_14_resequencing/manifests/
@@ -386,11 +387,19 @@
 !/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metrics/
 !/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metrics/*.txt
 !/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metrics/*.tsv
+/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metrics/*.sorted.flagstat.txt
+/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metrics/*.sorted.idxstats.txt
+/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metrics/*.master_contig_table.tsv
 !/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/taxonomy/
 !/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/taxonomy/*.kreport.tsv
+!/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metadata/
+!/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metadata/*.txt
+/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metadata/*bam_reference_names.txt
+/comparison_nb0507_14_resequencing/downsampled_old_self_mapping/*/metadata/*spades_contig_names.txt
 !/comparison_nb0507_14_resequencing/kraken2_downsampled_old/
 !/comparison_nb0507_14_resequencing/kraken2_downsampled_old/metrics/
 !/comparison_nb0507_14_resequencing/kraken2_downsampled_old/metrics/*.tsv
+/comparison_nb0507_14_resequencing/metrics/*.master_contig_table.tsv
 
 # Local reference files and indexes
 /reference/*

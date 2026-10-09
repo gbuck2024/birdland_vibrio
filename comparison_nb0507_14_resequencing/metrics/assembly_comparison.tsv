@@ -1,4 +1,4 @@
 condition	sample_id	assembly_size_bp	contig_count	contigs_ge_1000bp	n50_bp	longest_contig_bp	gc_pct	scaffold_count	scaffolds_ge_1000bp	scaffold_total_bases	scaffold_n50_bp	scaffold_longest_bp	scaffold_gc_pct
 A_old_full	Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7	46406154	72565	7649	874	63004	54.42	67877	7158	46534830	1016	63004	54.29
-B_old_downsampled	Buck_NB0507_14_downsampled_to_SRR37852095_L7	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+B_old_downsampled	Buck_NB0507_14_downsampled_to_SRR37852095_L7	10866197	13807	554	9016	493987	50.68	13271	352	10894788	26907	948233	50.54
 C_new	SRR37852095_L7	5190047	102	35	556107	1858277	44.80	97	30	5190384	791739	1858277	44.79

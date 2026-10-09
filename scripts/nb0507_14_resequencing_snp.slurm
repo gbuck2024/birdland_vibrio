@@ -1,6 +1,7 @@
 #!/bin/bash
 # Lightweight whole-genome alignment/SNP screen for old-vs-new assemblies.
-# Uses MUMmer when available. Results are assembly-level and should not be
+# Runs MUMmer4 from a local Singularity image so this job does not depend on a
+# cluster MUMmer module. Results are assembly-level and should not be
 # overinterpreted in repeats or poorly aligned regions.
 
 #SBATCH -J nb0507_snp
@@ -33,6 +34,17 @@ OUT_DIR="${STAGE_DIR}/outputs"
 METRICS_DIR="${STAGE_DIR}/metrics"
 LOG_DIR="${STAGE_DIR}/logs"
 PREFIX="${OUT_DIR}/old_vs_new"
+SUMMARY_PATH="${METRICS_DIR}/old_vs_new_snp_summary.tsv"
+TMP_PREFIX="${OUT_DIR}/old_vs_new.tmp.${SLURM_JOB_ID:-$$}"
+THREADS="${SLURM_CPUS_PER_TASK:-4}"
+SINGULARITY_BIN="${SINGULARITY_BIN:-/usr/bin/singularity}"
+MUMMER4_SIF="${MUMMER4_SIF:-containers/mummer4.sif}"
+MUMMER4_IMAGE_SOURCE="${MUMMER4_IMAGE_SOURCE:-docker://staphb/mummer:4.0.0}"
+
+cleanup_tmp() {
+  rm -f "${TMP_PREFIX}.delta" "${TMP_PREFIX}.1delta" "${TMP_PREFIX}.snps.tsv" "${TMP_PREFIX}.coords.tsv"
+}
+trap cleanup_tmp EXIT
 
 mkdir -p "${OUT_DIR}" "${METRICS_DIR}" "${LOG_DIR}"
 for path in "${OLD_FASTA}" "${NEW_FASTA}"; do
@@ -42,23 +54,69 @@ for path in "${OLD_FASTA}" "${NEW_FASTA}"; do
   fi
 done
 
-if command -v module >/dev/null 2>&1; then
-  module load mummer 2>/dev/null || module load MUMmer 2>/dev/null || true
+if [ -s "${PREFIX}.delta" ] && [ -s "${PREFIX}.1delta" ] && [ -s "${PREFIX}.snps.tsv" ] && [ -s "${PREFIX}.coords.tsv" ] && [ -s "${SUMMARY_PATH}" ]; then
+  echo "Existing complete SNP comparison found for ${PREFIX}; skipping to avoid overwriting results."
+  python3 scripts/summarize_nb0507_14_resequencing.py
+  exit 0
 fi
 
-for cmd in nucmer delta-filter show-snps show-coords; do
-  if ! command -v "${cmd}" >/dev/null 2>&1; then
-    echo "ERROR: Required MUMmer command not found: ${cmd}" >&2
+if [ -s "${PREFIX}.delta" ] && [ -s "${PREFIX}.1delta" ] && [ -s "${PREFIX}.snps.tsv" ] && [ -s "${PREFIX}.coords.tsv" ]; then
+  echo "Existing complete MUMmer output found for ${PREFIX}; reusing it for the summary."
+else
+  if [ ! -x "${SINGULARITY_BIN}" ]; then
+    echo "ERROR: Singularity is not executable at ${SINGULARITY_BIN}" >&2
     exit 1
   fi
-done
 
-nucmer --maxmatch --threads "${SLURM_CPUS_PER_TASK:-4}" --prefix "${PREFIX}" "${OLD_FASTA}" "${NEW_FASTA}"
-delta-filter -1 "${PREFIX}.delta" > "${PREFIX}.1delta"
-show-snps -ClrT "${PREFIX}.1delta" > "${PREFIX}.snps.tsv"
-show-coords -rclT "${PREFIX}.1delta" > "${PREFIX}.coords.tsv"
+  if [ ! -s "${MUMMER4_SIF}" ]; then
+    mkdir -p "$(dirname "${MUMMER4_SIF}")"
+    TMP_SIF="${MUMMER4_SIF}.tmp.${SLURM_JOB_ID:-$$}"
+    echo "Building MUMmer4 container: ${MUMMER4_SIF}"
+    "${SINGULARITY_BIN}" build "${TMP_SIF}" "${MUMMER4_IMAGE_SOURCE}"
+    mv "${TMP_SIF}" "${MUMMER4_SIF}"
+    chmod 755 "${MUMMER4_SIF}"
+  fi
 
-python3 - "${OLD_FASTA}" "${NEW_FASTA}" "${PREFIX}.snps.tsv" "${PREFIX}.coords.tsv" "${METRICS_DIR}/old_vs_new_snp_summary.tsv" <<'PY'
+  run_mummer() {
+    local cmd="$1"
+    shift
+    "${SINGULARITY_BIN}" exec --cleanenv --bind "${PROJECT_DIR}:${PROJECT_DIR}" "${MUMMER4_SIF}" \
+      "${cmd}" "$@"
+  }
+
+  container_has_cmd() {
+    local cmd="$1"
+    "${SINGULARITY_BIN}" exec --cleanenv "${MUMMER4_SIF}" sh -lc 'command -v "$1" >/dev/null 2>&1' sh "${cmd}"
+  }
+
+  for cmd in nucmer delta-filter show-snps show-coords; do
+    if ! container_has_cmd "${cmd}"; then
+      echo "ERROR: Required MUMmer command unavailable in ${MUMMER4_SIF}: ${cmd}" >&2
+      exit 1
+    fi
+  done
+
+  cleanup_tmp
+  run_mummer nucmer --maxmatch --threads "${THREADS}" --prefix "${PROJECT_DIR}/${TMP_PREFIX}" \
+    "${PROJECT_DIR}/${OLD_FASTA}" "${PROJECT_DIR}/${NEW_FASTA}"
+  run_mummer delta-filter -1 "${PROJECT_DIR}/${TMP_PREFIX}.delta" > "${TMP_PREFIX}.1delta"
+  run_mummer show-snps -ClrT "${PROJECT_DIR}/${TMP_PREFIX}.1delta" > "${TMP_PREFIX}.snps.tsv"
+  run_mummer show-coords -rclT "${PROJECT_DIR}/${TMP_PREFIX}.1delta" > "${TMP_PREFIX}.coords.tsv"
+
+  for path in "${TMP_PREFIX}.delta" "${TMP_PREFIX}.1delta" "${TMP_PREFIX}.snps.tsv" "${TMP_PREFIX}.coords.tsv"; do
+    if [ ! -s "${path}" ]; then
+      echo "ERROR: MUMmer output was not created or is empty: ${path}" >&2
+      exit 1
+    fi
+  done
+
+  mv "${TMP_PREFIX}.delta" "${PREFIX}.delta"
+  mv "${TMP_PREFIX}.1delta" "${PREFIX}.1delta"
+  mv "${TMP_PREFIX}.snps.tsv" "${PREFIX}.snps.tsv"
+  mv "${TMP_PREFIX}.coords.tsv" "${PREFIX}.coords.tsv"
+fi
+
+python3 - "${OLD_FASTA}" "${NEW_FASTA}" "${PREFIX}.snps.tsv" "${PREFIX}.coords.tsv" "${SUMMARY_PATH}" <<'PY'
 import sys
 from pathlib import Path
 
