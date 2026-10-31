@@ -1,5 +1,12 @@
 # Work Completed
 
+## 2026-10-31 NB0507-14 comparison figures reviewed and repaired
+
+- Verified the downsampled old assembly and self-mapping metrics are present and its orange series appears in the regenerated assembly and coverage plots.
+- Found the downsampled read Kraken2 report is absent; the former read-composition and summary plots showed an empty downsampled position. Updated `scripts/plot_nb0507_14_resequencing.R` to use the available contig classifications for all three conditions in those panels.
+- Shortened the downsampled axis label so it is fully visible, excluded the downsampled condition from raw-to-trimmed retention because it was created after trimming, and regenerated all seven PDF/PNG figure pairs.
+- The downsampled read Kraken2 classification remains optional; no new heavy jobs were submitted.
+
 ## 2026-10-09 NB0507-14 matched-isolate resequencing comparison stage prepared
 
 - Created isolated stage `comparison_nb0507_14_resequencing/` for comparing old `Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7` and new `SRR37852095_L7` as a matched isolate.

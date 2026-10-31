@@ -22,6 +22,15 @@ Primary outputs:
 - `metrics/old_vs_new_ani.tsv`
 - `figures/`
 
+The current figures compare old full, old downsampled, and new assemblies using
+assembly metrics, self-mapping coverage, and contig Kraken2 classifications.
+`kraken_composition` shows the percentage of contigs assigned to `Vibrio`,
+unclassified, or other taxa. The summary's Kraken2 panel shows the percentage
+of assembly bases assigned to `Vibrio`. The downsampled read Kraken2 report is
+not yet available, so read composition cannot be compared across all three.
+Raw-to-trimmed read retention applies only to the old full and new runs; the
+downsampled control was created after trimming.
+
 ## Matched-depth downsample control
 
 Submit the old-read downsampling job. It uses fixed seed `20261009` unless `SEED=` is overridden.

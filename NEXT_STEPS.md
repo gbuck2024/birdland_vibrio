@@ -1,17 +1,16 @@
 # Next Steps
 
+## 2026-10-31 NB0507-14 figure follow-up
+
+- The old full, old downsampled, and new assemblies are now visible together in assembly, coverage, GC-versus-coverage, and contig Kraken2 figures under `comparison_nb0507_14_resequencing/figures/`.
+- If read-level composition is needed for all three, submit the downsampled read Kraken2 classification commands in `comparison_nb0507_14_resequencing/README.md`, then rerun the summarizer. The current Kraken2 figures use contig classifications and are complete without this optional job.
+- Continue any outstanding ANI and SNP comparison work through the stage README before final biological interpretation.
+
 ## 2026-10-09 NB0507-14 matched-isolate resequencing comparison
 
-- The lightweight old-full vs new comparison has been generated under `comparison_nb0507_14_resequencing/`.
-- Complete the heavy matched-depth and genome-identity steps through SLURM before treating the interpretation as final.
-- Submit downsampling:
-
-```bash
-sbatch scripts/nb0507_14_resequencing_downsample.slurm
-```
-
-- Then follow the exact SPAdes, self-mapping, Kraken2, FastANI, and SNP commands in `comparison_nb0507_14_resequencing/README.md`.
-- After all jobs finish, regenerate summaries and figures:
+- The old-full, old-downsampled, and new comparison is under `comparison_nb0507_14_resequencing/`.
+- Downsampling, downsampled assembly, and self-mapping outputs are present. Check the stage README for any remaining FastANI, SNP, or optional read Kraken2 work before treating the interpretation as final.
+- After new stage outputs are available, regenerate summaries and figures:
 
 ```bash
 python3 scripts/summarize_nb0507_14_resequencing.py
