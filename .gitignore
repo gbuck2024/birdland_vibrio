@@ -1,6 +1,11 @@
 # Sequencing reads and bulky intermediates
 /fq_raw/
 /sra_download/
+!/sra_download/
+/sra_download/*
+!/sra_download/metrics/
+/sra_download/metrics/*
+!/sra_download/metrics/sra_download_manifest.tsv
 /sra_download/fastq/
 /sra_download/sra_cache/
 /sra_download/logs/
@@ -12,26 +17,35 @@
 /*.fastq.gz
 /*.fq
 /*.fq.gz
+# Read files may also appear in nested stage directories.
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
 
 # Generated QC outputs and extracted archives
 /fastqc/
 /fastqc_extracted/
 /multiqc_out/
 /trimmomatic/fastqc_trimmed/
+!/trimmomatic/fastqc_trimmed/
+/trimmomatic/fastqc_trimmed/*
+!/trimmomatic/fastqc_trimmed/metrics/
+/trimmomatic/fastqc_trimmed/metrics/*
+!/trimmomatic/fastqc_trimmed/metrics/fastqc_trimmed_manifest.tsv
 /trimmomatic/fastqc_trimmed_extracted/
 
 # Generated review metrics and runtime logs, but keep curated Markdown reports
 /fastqc_review/logs/
-/fastqc_review/*.tsv
 /fastqc_review/*.out
 /fastqc_review/*.err
 !/fastqc_review/*.md
 /trimmomatic/fastqc_trimmed_review/logs/
-/trimmomatic/fastqc_trimmed_review/*.tsv
 !/trimmomatic/fastqc_trimmed_review/*.md
 
 # Pipeline-generated manifests and step logs
-/trimmomatic/metrics/trimmomatic_input_manifest.tsv
+# This small manifest records the exact input pairs used for trimming.
+!/trimmomatic/metrics/trimmomatic_input_manifest.tsv
 /trimmomatic/logs/
 /fastqc/logs/
 /alignment/bam/
@@ -143,7 +157,6 @@
 !/ani/sra_reciprocal_reference_to_sra/figures/*.pdf
 !/ani/sra_reciprocal_reference_to_sra/figures/*.png
 !/ani/sra_reciprocal_reference_to_sra/figures/.gitkeep
-/vcg_mining/results/*.blast.tsv
 /vcg_mining/results/blast_db/
 /vcg_mining/logs/
 /vcg_mining/extracted_sequences/
@@ -154,8 +167,9 @@
 /vcg_mining/tree/*.log
 !/vcg_mining/tree/*.nwk
 !/vcg_mining/tree/*.pdf
-/ambiguous_isolate_resolution/vcg_mining/results/*.blast.tsv
 /ambiguous_isolate_resolution/vcg_mining/results/blast_db/
+# These three empty hit files are represented by the curated summary.
+/ambiguous_isolate_resolution/vcg_mining/results/*.blast.tsv
 /ambiguous_isolate_resolution/vcg_mining/logs/
 !/ambiguous_isolate_resolution/vcg_mining/results/vcg_best_hits_summary.tsv
 /ambiguous_isolate_resolution/blobtoolkit/*/bam/*
@@ -321,7 +335,10 @@
 /ambiguous_isolate_resolution/taxonomic_filtering/assemblies/
 !/ambiguous_isolate_resolution/taxonomic_filtering/metrics/
 !/ambiguous_isolate_resolution/taxonomic_filtering/metrics/taxon_filtered_assembly_summary.tsv
-/kraken2_db/metadata/
+# Keep small build-parameter manifests, not the Kraken2 database itself.
+/kraken2_db/metadata/*
+!/kraken2_db/metadata/*.tsv
+!/kraken2_db/metadata/*.md
 /assembly_filtered_isolate_rerun/assemblies/
 /assembly_filtered_isolate_rerun/logs/
 !/assembly_filtered_isolate_rerun/metrics/
@@ -349,6 +366,23 @@
 *.k2d
 
 # Matched-isolate resequencing comparison stage
+/comparison_nb0507_14_resequencing/reyranella_validation/read_mapping/index/
+/comparison_nb0507_14_resequencing/reyranella_validation/read_mapping/bam/
+/comparison_nb0507_14_resequencing/reyranella_validation/read_mapping/logs/
+/comparison_nb0507_14_resequencing/reyranella_validation/read_mapping_depth_matched/index/
+/comparison_nb0507_14_resequencing/reyranella_validation/read_mapping_depth_matched/bam/
+/comparison_nb0507_14_resequencing/reyranella_validation/read_mapping_depth_matched/logs/
+/comparison_nb0507_14_resequencing/reyranella_validation/kmer_validation/logs/
+/comparison_nb0507_14_resequencing/reyranella_validation/kmer_validation/.run_lock/
+# Downloaded genome references and generated BLAST databases are rebuildable.
+/comparison_nb0507_14_resequencing/reyranella_validation/references/
+/comparison_nb0507_14_resequencing/reyranella_validation/*_db.n*
+/comparison_nb0507_14_resequencing/reyranella_validation/*.fasta.fai
+/comparison_nb0507_14_resequencing/reyranella_validation/*.fna.fai
+/comparison_nb0507_14_resequencing/reyranella_validation/reyranella_1kb_contigs.fasta
+/comparison_nb0507_14_resequencing/reyranella_validation/reyranella_1kb_contigs.fasta.fai
+# An empty remote-search placeholder is not an interpreted BLAST result.
+/comparison_nb0507_14_resequencing/reyranella_validation/NODE_432_vs_NCBI_nt.tsv
 /comparison_nb0507_14_resequencing/downsampled_old_reads/
 /comparison_nb0507_14_resequencing/downsampled_old_assembly/assemblies/
 /comparison_nb0507_14_resequencing/downsampled_old_assembly/logs/
@@ -455,6 +489,21 @@
 !/reference/v_ostreicida_non_core/metadata/reference_downloads.tsv
 /reference/v_ostreicida_non_core/downloads/
 /reference/v_ostreicida_non_core/genomes/
+
+# Phase II: keep interpreted tables, provenance, and figures from named runs.
+# Dense per-contig matrices are reproducible from the tracked scripts and inputs.
+/comparison_nb0507_14_resequencing/phase_ii_kmeans/logs/
+/comparison_nb0507_14_resequencing/phase_ii_kmeans/*/assignments.tsv
+/comparison_nb0507_14_resequencing/phase_ii_kmeans/*/features_raw.tsv
+/comparison_nb0507_14_resequencing/phase_ii_kmeans/*/features_standardized.tsv
+/comparison_nb0507_14_resequencing/phase_ii_kmeans/*/COMPLETE
+/comparison_nb0507_14_resequencing/phase_ii_feature_ablation/logs/*
+!/comparison_nb0507_14_resequencing/phase_ii_feature_ablation/logs/.gitkeep
+/comparison_nb0507_14_resequencing/phase_ii_feature_ablation/*/assignments.tsv
+/comparison_nb0507_14_resequencing/phase_ii_feature_ablation/*/features_raw.tsv
+/comparison_nb0507_14_resequencing/phase_ii_feature_ablation/*/CLUSTERING_COMPLETE
+/comparison_nb0507_14_resequencing/phase_ii_feature_ablation/*/COMPLETE
+/comparison_nb0507_14_resequencing/phase_ii_cluster_biology/*/COMPLETE
 
 # Python and notebook artifacts
 __pycache__/

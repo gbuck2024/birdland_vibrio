@@ -1,0 +1,36 @@
+{
+  "question": "Biological composition of frozen Phase II contig clusters",
+  "observation_unit": "assembly contig",
+  "master": "comparison_nb0507_14_resequencing/metrics/downsampled_old.master_contig_table.tsv",
+  "master_sha256": "35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa",
+  "candidate_ids": "comparison_nb0507_14_resequencing/reyranella_validation/reyranella_1kb_ids.txt",
+  "candidate_ids_sha256": "10810a094313b52958c0904ae74f684b4bab5177b53df204b53628a59c487984",
+  "baseline": "comparison_nb0507_14_resequencing/phase_ii_kmeans/baseline_seed20261102",
+  "baseline_assignments_sha256": "082f2ee39b8d4dead2f8c1e88315076ab78b214b856bab837668a7f4da639e84",
+  "ablation": "comparison_nb0507_14_resequencing/phase_ii_feature_ablation/ablation_seed20261102",
+  "ablation_assignments_sha256": "5c656ce69ce47afd258666bae1a662c0084cb6f3e3a4812700962c86770b6618",
+  "baseline_full_agreement": {
+    "2": "identical partition (cluster labels may differ)",
+    "5": "identical partition (cluster labels may differ)"
+  },
+  "k": [
+    2,
+    5
+  ],
+  "models": [
+    "full",
+    "gc_coverage",
+    "gc_length",
+    "length_coverage"
+  ],
+  "background": "All noncandidate contigs within each candidate-occupied log2 length band anchored at 1000 bp; expected count sums candidate count in each band times background cluster fraction in that band",
+  "candidate_band_counts": {
+    "0": 40,
+    "1": 1
+  },
+  "background_band_counts": {
+    "0": 163,
+    "1": 68
+  },
+  "classification": "Original master broad_taxon; Kraken2 assignments are provisional"
+}

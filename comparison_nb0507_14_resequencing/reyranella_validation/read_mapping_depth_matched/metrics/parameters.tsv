@@ -1,0 +1,17 @@
+reference	comparison_nb0507_14_resequencing/downsampled_old_assembly/assemblies/Buck_NB0507_14_downsampled_to_SRR37852095_L7/contigs.fasta
+manifest	comparison_nb0507_14_resequencing/manifests/reyranella_read_mapping_depth_matched.tsv
+candidates	comparison_nb0507_14_resequencing/reyranella_validation/reyranella_1kb_ids.txt
+reference_contigs	13807
+candidate_ids	41
+expected_read_pairs_per_sample	914516
+reference_sha256	08d26c889f01226f068f3d0882f91716248e2629a25f9575ceae2e5c6eddae6e
+manifest_sha256	513804a168d732963a7621e48645b82aee63b22db9b37adabf710b62062da772
+candidates_sha256	10810a094313b52958c0904ae74f684b4bab5177b53df204b53628a59c487984
+bowtie2_version	2.5.3
+samtools_version	1.20
+bowtie2_options	--very-sensitive -p 8
+samtools_sort_options	-@ 4 -m 2G
+coverage_options	-q 20 -Q 20 --ff 0xF04
+candidate_depth_options	-a -s -q 20 -Q 20 -G 0x800; 5x threshold
+candidate_read_classes	MAPQ 0 ambiguous; MAPQ 1-19 intermediate; MAPQ >=20 unique-placement proxy
+proper_pair_definition	both primary mapped mates on same contig with SAM 0x2; distinct QNAMEs

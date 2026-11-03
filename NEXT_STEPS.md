@@ -1,5 +1,42 @@
 # Next Steps
 
+## 2026-11-02 Frozen Phase II cluster biology
+
+- Review `comparison_nb0507_14_resequencing/phase_ii_cluster_biology/biology_20261102/report.md`, the five source TSVs, and the two composition SVGs. The exact Kraken2 counts and assembled bp for every cluster are in `kraken_composition.tsv`; GC, length, and self-mapping coverage five-number summaries are in `feature_distributions.tsv`.
+- Compare the candidate-rich clusters with completed old-versus-new read-mapping evidence and the pending independent 31-mer analysis. Interpret the Kraken2 assignments as provisional and account for old-assembly self-mapping bias and candidate selection by Kraken2.
+- The analysis is already complete. Do not submit its default SLURM run over `biology_20261102/`; use a distinct `RUN_ID` only if a fresh run is needed, as documented in the stage README.
+
+## 2026-11-02 Phase II feature ablation prepared
+
+- The four-model NB0507-14 ablation workflow is ready under `comparison_nb0507_14_resequencing/phase_ii_feature_ablation/`. It uses the same validated 13,807-contig master table and transforms as the baseline, with the 41 candidate IDs reserved for post-fit evaluation. No ablation job has been submitted.
+- Submit `sbatch scripts/nb0507_14_phase_ii_feature_ablation.slurm` from the project root. The batch script loads the locally verified Python dependency module and R module. Use a new `RUN_ID` if its default output directory already exists.
+- After SLURM exit 0, verify `COMPLETE`, all 28 model/k metrics, 386,596 assignment rows, 42 pairwise ARI rows, candidate counts totaling 41 for each model/k, and eight PDFs. Review silhouette, cluster sizes, ARI, and plots; compare candidate distribution with independent read evidence before biological interpretation.
+
+## 2026-11-02 Phase II K-means baseline prepared
+
+- `scripts/nb0507_14_phase_ii_kmeans.py` and `.slurm` are ready for the 13,807 downsampled old NB0507-14 contigs. The curated metrics table matches the original self-mapping table byte for byte (SHA-256 `35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa`). No clustering job has been submitted.
+- Supply a compute-node Python with NumPy, scikit-learn, and Matplotlib, create the log directory, then submit from the project root as shown in `comparison_nb0507_14_resequencing/phase_ii_kmeans/README.md`. The default run directory is `phase_ii_kmeans/baseline_seed20261102/`; choose a new `RUN_ID` for any rerun.
+- After job exit 0, verify `COMPLETE`, the provenance hashes, 13,807 feature rows, 96,649 assignment rows, all cluster-size totals, and 41 candidate counts for each k. Review silhouette estimates, cluster sizes, and plots before choosing any downstream model; validate interpretations against independent read evidence.
+
+## 2026-11-02 Independent 31-mer validation prepared
+
+- The separate `comparison_nb0507_14_resequencing/reyranella_validation/kmer_validation/` stage is ready. It uses the previously audited depth-matched old and new FASTQs and the full old assembly to define exclusive canonical 31-mer markers. No whole-dataset counting job has been submitted or completed.
+- Run the synthetic test and submit from the project root:
+
+```bash
+python3 -m unittest discover -s scripts -p 'test_reyranella_kmer_validation.py' -v
+mkdir -p comparison_nb0507_14_resequencing/reyranella_validation/kmer_validation/logs
+sbatch scripts/reyranella_kmer_validation.slurm
+```
+
+- After a successful SLURM exit, check the 82-row `reports/candidate_31mer_support.tsv`, two-row `metrics/input_audit.tsv`, and marker classes. Compare read-pair counts, sequenced/usable bases, and marker fractions before interpretation. See the stage README for definitions and limitations.
+
+## 2026-11-02 Depth-matched Reyranella mapping completed
+
+- Full-old-read job `1558466` completed successfully (`COMPLETED`, exit `0:0`); its outputs remain under `comparison_nb0507_14_resequencing/reyranella_validation/read_mapping/`. Do not resubmit that job or overwrite those outputs.
+- Depth-matched job `1559028` completed (`COMPLETED`, exit `0:0`) in `read_mapping_depth_matched/`. Both BAMs passed `samtools quickcheck`; both full-reference coverage tables contain 13,807 rows, the candidate report has 41 rows, and the class summary and input audit each have two rows.
+- Next, compare the full-old-read and matched-depth reports, considering ≥5× breadth, proper-pair support, and MAPQ classes. Matched pair counts do not ensure equal sequenced bases. Do not resubmit either job over its existing outputs.
+
 ## 2026-10-31 NB0507-14 figure follow-up
 
 - The old full, old downsampled, and new assemblies are now visible together in assembly, coverage, GC-versus-coverage, and contig Kraken2 figures under `comparison_nb0507_14_resequencing/figures/`.

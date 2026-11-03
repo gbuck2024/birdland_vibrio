@@ -1,0 +1,56 @@
+{
+  "question": "How does removing each of GC, length, or self-mapping coverage change unsupervised contig clusters?",
+  "master": "comparison_nb0507_14_resequencing/metrics/downsampled_old.master_contig_table.tsv",
+  "master_sha256": "35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa",
+  "original": "comparison_nb0507_14_resequencing/downsampled_old_self_mapping/NB0507_14_downsampled/metrics/NB0507_14_downsampled.master_contig_table.tsv",
+  "original_sha256": "35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa",
+  "candidate_ids": "comparison_nb0507_14_resequencing/reyranella_validation/reyranella_1kb_ids.txt",
+  "candidate_ids_sha256": "10810a094313b52958c0904ae74f684b4bab5177b53df204b53628a59c487984",
+  "n_contigs": 13807,
+  "features": [
+    "gc_percent",
+    "log10_length_bp",
+    "log10_coverage_plus_1"
+  ],
+  "models": {
+    "full": [
+      "gc_percent",
+      "log10_length_bp",
+      "log10_coverage_plus_1"
+    ],
+    "gc_coverage": [
+      "gc_percent",
+      "log10_coverage_plus_1"
+    ],
+    "gc_length": [
+      "gc_percent",
+      "log10_length_bp"
+    ],
+    "length_coverage": [
+      "log10_length_bp",
+      "log10_coverage_plus_1"
+    ]
+  },
+  "transforms": "GC percent; log10(length bp); log10(self-mapping coverage + 1)",
+  "scaling": "StandardScaler, population SD, fit independently on all contigs for each model",
+  "clustering": "Euclidean KMeans, Lloyd",
+  "k": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "seed": 20261102,
+  "n_init": 20,
+  "silhouette": "Euclidean score on 2000 contigs sampled with fixed seed; same sample across models",
+  "candidate_usage": "41 IDs loaded only after all fits and model metrics; never used for model selection",
+  "inertia_warning": "Inertia is not directly comparable across feature dimensions",
+  "versions": {
+    "numpy": "2.2.6",
+    "sklearn": "1.7.2"
+  },
+  "slurm_job_id": "1559050"
+}

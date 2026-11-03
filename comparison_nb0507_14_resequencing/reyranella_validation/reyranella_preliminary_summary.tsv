@@ -1,0 +1,8 @@
+metric	value
+candidate_contigs	41
+contigs_with_blast_hits	26
+total_blast_alignments	50
+best_hit_aligned_query_bp	20813
+best_hit_weighted_identity_percent	83.49
+reference_accession	GCF_000312425.1
+reference_organism	Reyranella massiliensis

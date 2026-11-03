@@ -1,0 +1,141 @@
+model	k	cluster	provisional_class	contigs	assembled_bp	contig_fraction	bp_fraction
+full	2	0	Vibrio	484	6118457	0.952756	0.979786
+full	2	0	Reyranella	1	1927	0.001969	0.000309
+full	2	0	Bacillus	0	0	0.0	0.0
+full	2	0	Other classified	8	116701	0.015748	0.018688
+full	2	0	Unclassified	15	7605	0.029528	0.001218
+full	2	1	Vibrio	3115	1077582	0.234228	0.233167
+full	2	1	Reyranella	1811	782966	0.136176	0.169418
+full	2	1	Bacillus	14	4141	0.001053	0.000896
+full	2	1	Other classified	4133	1454760	0.310775	0.31478
+full	2	1	Unclassified	4226	1302058	0.317768	0.281739
+full	5	0	Vibrio	72	38442	0.027078	0.027168
+full	5	0	Reyranella	896	517445	0.336969	0.365687
+full	5	0	Bacillus	2	1007	0.000752	0.000712
+full	5	0	Other classified	1158	607966	0.435502	0.429659
+full	5	0	Unclassified	531	250135	0.199699	0.176774
+full	5	1	Vibrio	94	26776	0.016148	0.016271
+full	5	1	Reyranella	911	265835	0.156502	0.161542
+full	5	1	Bacillus	0	0	0.0	0.0
+full	5	1	Other classified	2738	776358	0.470366	0.471774
+full	5	1	Unclassified	2078	576645	0.356983	0.350413
+full	5	2	Vibrio	2127	635993	0.539437	0.546936
+full	5	2	Reyranella	5	1613	0.001268	0.001387
+full	5	2	Bacillus	12	3134	0.003043	0.002695
+full	5	2	Other classified	220	62028	0.055795	0.053342
+full	5	2	Unclassified	1579	460060	0.400457	0.395639
+full	5	3	Vibrio	357	6000337	0.986188	0.981697
+full	5	3	Reyranella	0	0	0.0	0.0
+full	5	3	Bacillus	0	0	0.0	0.0
+full	5	3	Other classified	4	111391	0.01105	0.018224
+full	5	3	Unclassified	1	482	0.002762	7.9e-05
+full	5	4	Vibrio	949	494491	0.928571	0.932035
+full	5	4	Reyranella	0	0	0.0	0.0
+full	5	4	Bacillus	0	0	0.0	0.0
+full	5	4	Other classified	21	13718	0.020548	0.025856
+full	5	4	Unclassified	52	22341	0.050881	0.042109
+gc_coverage	2	0	Vibrio	382	114310	0.042921	0.036242
+gc_coverage	2	0	Reyranella	1809	783820	0.203258	0.248507
+gc_coverage	2	0	Bacillus	2	1007	0.000225	0.000319
+gc_coverage	2	0	Other classified	3937	1389991	0.44236	0.440691
+gc_coverage	2	0	Unclassified	2770	864989	0.311236	0.274241
+gc_coverage	2	1	Vibrio	3217	7081729	0.655594	0.918264
+gc_coverage	2	1	Reyranella	3	1073	0.000611	0.000139
+gc_coverage	2	1	Bacillus	12	3134	0.002445	0.000406
+gc_coverage	2	1	Other classified	204	181470	0.041573	0.023531
+gc_coverage	2	1	Unclassified	1471	444674	0.299776	0.057659
+gc_coverage	5	0	Vibrio	66	22651	0.018152	0.014521
+gc_coverage	5	0	Reyranella	1045	523640	0.287404	0.335704
+gc_coverage	5	0	Bacillus	2	1007	0.00055	0.000646
+gc_coverage	5	0	Other classified	1568	667528	0.431243	0.42795
+gc_coverage	5	0	Unclassified	955	345002	0.262651	0.22118
+gc_coverage	5	1	Vibrio	1237	606906	0.854872	0.871969
+gc_coverage	5	1	Reyranella	0	0	0.0	0.0
+gc_coverage	5	1	Bacillus	0	0	0.0	0.0
+gc_coverage	5	1	Other classified	44	28196	0.030408	0.04051
+gc_coverage	5	1	Unclassified	166	60916	0.11472	0.087521
+gc_coverage	5	2	Vibrio	534	6041084	0.953571	0.981722
+gc_coverage	5	2	Reyranella	0	0	0.0	0.0
+gc_coverage	5	2	Bacillus	0	0	0.0	0.0
+gc_coverage	5	2	Other classified	8	108039	0.014286	0.017557
+gc_coverage	5	2	Unclassified	18	4437	0.032143	0.000721
+gc_coverage	5	3	Vibrio	65	19772	0.013576	0.013499
+gc_coverage	5	3	Reyranella	762	259531	0.159148	0.177192
+gc_coverage	5	3	Bacillus	0	0	0.0	0.0
+gc_coverage	5	3	Other classified	2319	711634	0.484336	0.485861
+gc_coverage	5	3	Unclassified	1642	473750	0.342941	0.323448
+gc_coverage	5	4	Vibrio	1697	505626	0.502666	0.50965
+gc_coverage	5	4	Reyranella	5	1722	0.001481	0.001736
+gc_coverage	5	4	Bacillus	12	3134	0.003555	0.003159
+gc_coverage	5	4	Other classified	202	56064	0.059834	0.05651
+gc_coverage	5	4	Unclassified	1460	425558	0.432464	0.428945
+gc_length	2	0	Vibrio	3398	7137817	0.651582	0.914757
+gc_length	2	0	Reyranella	5	1749	0.000959	0.000224
+gc_length	2	0	Bacillus	12	3134	0.002301	0.000402
+gc_length	2	0	Other classified	228	186950	0.04372	0.023959
+gc_length	2	0	Unclassified	1572	473313	0.301438	0.060658
+gc_length	2	1	Vibrio	201	58222	0.023394	0.019007
+gc_length	2	1	Reyranella	1807	783144	0.210312	0.255659
+gc_length	2	1	Bacillus	2	1007	0.000233	0.000329
+gc_length	2	1	Other classified	3913	1384511	0.455424	0.451977
+gc_length	2	1	Unclassified	2669	836350	0.310638	0.273028
+gc_length	5	0	Vibrio	53	25440	0.023493	0.019891
+gc_length	5	0	Reyranella	789	483821	0.349734	0.378288
+gc_length	5	0	Bacillus	1	675	0.000443	0.000528
+gc_length	5	0	Other classified	1011	562273	0.448138	0.439627
+gc_length	5	0	Unclassified	402	206767	0.178191	0.161666
+gc_length	5	1	Vibrio	651	550126	0.830357	0.870785
+gc_length	5	1	Reyranella	1	502	0.001276	0.000795
+gc_length	5	1	Bacillus	0	0	0.0	0.0
+gc_length	5	1	Other classified	25	20471	0.031888	0.032403
+gc_length	5	1	Unclassified	107	60660	0.13648	0.096018
+gc_length	5	2	Vibrio	311	5917641	0.990446	0.981651
+gc_length	5	2	Reyranella	0	0	0.0	0.0
+gc_length	5	2	Bacillus	0	0	0.0	0.0
+gc_length	5	2	Other classified	3	110611	0.009554	0.018349
+gc_length	5	2	Unclassified	0	0	0.0	0.0
+gc_length	5	3	Vibrio	2481	673732	0.584866	0.579436
+gc_length	5	3	Reyranella	4	1111	0.000943	0.000956
+gc_length	5	3	Bacillus	12	3134	0.002829	0.002695
+gc_length	5	3	Other classified	218	57633	0.051391	0.049567
+gc_length	5	3	Unclassified	1527	427128	0.359972	0.367347
+gc_length	5	4	Vibrio	103	29100	0.016583	0.016492
+gc_length	5	4	Reyranella	1018	299459	0.163903	0.169716
+gc_length	5	4	Bacillus	1	332	0.000161	0.000188
+gc_length	5	4	Other classified	2884	820473	0.464337	0.464996
+gc_length	5	4	Unclassified	2205	615108	0.355015	0.348607
+length_coverage	2	0	Vibrio	3189	1141852	0.238323	0.243294
+length_coverage	2	0	Reyranella	1811	782966	0.135341	0.166826
+length_coverage	2	0	Bacillus	14	4141	0.001046	0.000882
+length_coverage	2	0	Other classified	4136	1459889	0.309095	0.311058
+length_coverage	2	0	Unclassified	4231	1304460	0.316195	0.27794
+length_coverage	2	1	Vibrio	410	6054187	0.962441	0.98077
+length_coverage	2	1	Reyranella	1	1927	0.002347	0.000312
+length_coverage	2	1	Bacillus	0	0	0.0	0.0
+length_coverage	2	1	Other classified	5	111572	0.011737	0.018075
+length_coverage	2	1	Unclassified	10	5203	0.023474	0.000843
+length_coverage	5	0	Vibrio	1121	317822	0.313742	0.294046
+length_coverage	5	0	Reyranella	478	154960	0.133781	0.143368
+length_coverage	5	0	Bacillus	1	332	0.00028	0.000307
+length_coverage	5	0	Other classified	969	303930	0.271201	0.281194
+length_coverage	5	0	Unclassified	1004	303813	0.280996	0.281085
+length_coverage	5	1	Vibrio	572	456456	0.237838	0.288422
+length_coverage	5	1	Reyranella	660	430024	0.274428	0.27172
+length_coverage	5	1	Bacillus	1	675	0.000416	0.000427
+length_coverage	5	1	Other classified	794	482041	0.330146	0.304588
+length_coverage	5	1	Unclassified	378	213403	0.157173	0.134843
+length_coverage	5	2	Vibrio	1346	361438	0.185912	0.178475
+length_coverage	5	2	Reyranella	674	199909	0.093094	0.098714
+length_coverage	5	2	Bacillus	12	3134	0.001657	0.001548
+length_coverage	5	2	Other classified	2369	673260	0.32721	0.332451
+length_coverage	5	2	Unclassified	2839	787400	0.392127	0.388812
+length_coverage	5	3	Vibrio	323	5938895	0.990798	0.981716
+length_coverage	5	3	Reyranella	0	0	0.0	0.0
+length_coverage	5	3	Bacillus	0	0	0.0	0.0
+length_coverage	5	3	Other classified	3	110611	0.009202	0.018284
+length_coverage	5	3	Unclassified	0	0	0.0	0.0
+length_coverage	5	4	Vibrio	237	121428	0.901141	0.94796
+length_coverage	5	4	Reyranella	0	0	0.0	0.0
+length_coverage	5	4	Bacillus	0	0	0.0	0.0
+length_coverage	5	4	Other classified	6	1619	0.022814	0.012639
+length_coverage	5	4	Unclassified	20	5047	0.076046	0.039401

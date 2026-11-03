@@ -1,0 +1,35 @@
+{
+  "master": "comparison_nb0507_14_resequencing/metrics/downsampled_old.master_contig_table.tsv",
+  "master_sha256": "35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa",
+  "original": "comparison_nb0507_14_resequencing/downsampled_old_self_mapping/NB0507_14_downsampled/metrics/NB0507_14_downsampled.master_contig_table.tsv",
+  "original_sha256": "35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa",
+  "candidate_ids": "comparison_nb0507_14_resequencing/reyranella_validation/reyranella_1kb_ids.txt",
+  "candidate_ids_sha256": "10810a094313b52958c0904ae74f684b4bab5177b53df204b53628a59c487984",
+  "input_rows": 13807,
+  "features": [
+    "gc_percent",
+    "log10_length_bp",
+    "log10_coverage_plus_1"
+  ],
+  "training_excludes_candidate_ids_and_taxonomy": true,
+  "standardization": "StandardScaler population SD, fit across all 13807 contigs",
+  "k": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "seed": 20261102,
+  "n_init": 20,
+  "silhouette_sample_size": 2000,
+  "silhouette_method": "sklearn.metrics.silhouette_score random sample; Euclidean distance",
+  "versions": {
+    "numpy": "2.2.6",
+    "sklearn": "1.7.2",
+    "matplotlib": "3.10.9"
+  },
+  "slurm_job_id": "1559048"
+}

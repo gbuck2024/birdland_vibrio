@@ -1,5 +1,51 @@
 # Work Completed
 
+## 2026-11-02 Frozen Phase II cluster biology completed
+
+- Verified completed baseline and ablation outputs (jobs `1559048` and `1559050` in saved provenance; completion markers present). The baseline full-model partitions agree exactly with the ablation full-model partitions at k=2 and k=5, allowing one four-model comparison without changing frozen assignments.
+- Ran `scripts/nb0507_14_phase_ii_cluster_biology.py` against the original 13,807-contig master table and 41 candidate IDs into the new `comparison_nb0507_14_resequencing/phase_ii_cluster_biology/biology_20261102/` directory. The join and provenance hash checks passed; outputs contain 110,456 joined model/k/contig rows, 28 cluster summaries, 140 Kraken2 class rows, 84 feature-distribution rows, 28 enrichment rows, and two SVG figures. The separate SLURM script is prepared but was not submitted.
+- In the full model at k=5, all 41 candidates occur in cluster 0 (2,659 contigs; 1,414,995 assembled bp), versus 8.85 expected from noncandidate contigs in the candidate length bands (4.63-fold). The GC+coverage and GC+length ablations at k=2 each place all 41 in one high-GC cluster (5.21-fold by the same length-matched definition); the length+coverage k=2 split places 40 in its large short-contig cluster (1.26-fold). Kraken2 labels remain provisional, and candidate labels were selected using Kraken2, so these observations are descriptive rather than independent taxonomic validation.
+- Verified Python compilation, SLURM shell syntax, output row counts, and `git diff --check`. No clustering model was refitted or existing results replaced.
+
+## 2026-11-02 Phase II feature ablation prepared
+
+- Added `scripts/nb0507_14_phase_ii_feature_ablation.py`, its isolated SLURM script, an R comparative plotting script, and a stage README. Four models (full, GC+coverage, GC+length, length+coverage) use standardized baseline transforms, k=2–8, the same seed, and 20 initializations. Outputs include per-model scalers, metrics, sizes, centroids, assignments, all pairwise ARI, and post-fit distribution of the 41 candidates. Inertia is flagged as incomparable across feature dimensions.
+- Input-only validation passed for 13,807 unique contigs, byte-identical master tables (SHA-256 `35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa`), and 41 candidate IDs. Python compilation, SLURM shell syntax, R parsing, and baseline feature tests passed. The cluster `ml-pythondeps-py39-cuda11.8-gcc11/4.12.0` module was locally verified with NumPy 1.22.4 and scikit-learn 1.2.2. No clustering job was run or submitted and there are no numeric ablation results or figures yet.
+
+## 2026-11-02 Phase II K-means baseline prepared
+
+- Verified that `comparison_nb0507_14_resequencing/metrics/downsampled_old.master_contig_table.tsv` and the original downsampled self-mapping master table each contain 13,807 contigs and have identical SHA-256 `35b90fdaa2c48c98aff4251aefaa83b6ecff919c5a880e08b62ccedbbbd22caa`.
+- Added a reproducible Python workflow, SLURM script, and stage README for GC percent, log10 length, and log10(self-mapping coverage + 1) K-means across k=2–8. The 41 previously investigated contigs enter only the post-fit distribution report. The script saves matrices, assignments, centroids, metrics, plots, and provenance in a fresh run directory.
+- No clustering job has been submitted or completed; no cluster metrics or biological interpretation are available yet. The local Python lacks scikit-learn, so model execution awaits a suitable compute-node environment.
+- Input-only validation passed for all 13,807 unique contigs, finite and in-range features, and all 41 candidate IDs. Two feature-validation unit tests, Python compilation, SLURM shell syntax, and `git diff --check` passed.
+
+## 2026-11-02 Independent Reyranella 31-mer workflow prepared
+
+- Added `scripts/reyranella_kmer_validation.py`, its synthetic tests, and an isolated SLURM script and stage README under `comparison_nb0507_14_resequencing/reyranella_validation/kmer_validation/`.
+- The workflow pins the completed matched-mapping manifest, full assembly, 41 candidate IDs, and validated FASTQ hashes; it checks paired FASTQ structure and counts at runtime. It counts exclusive canonical 31-mers and distinguishes markers shared across candidates or with other contigs.
+- No SLURM job has been submitted. No k-mer result values are available yet. The earlier full-depth and matched-depth mapping outputs remain untouched.
+
+## 2026-11-02 Depth-matched Reyranella mapping completed
+
+- Job `1559028` completed successfully (`COMPLETED`, exit `0:0`) after validating gzip integrity and synchronized records for 914,516 pairs in each dataset, the 13,807-contig reference, and 41 candidate IDs.
+- Verified both BAM/BAI pairs are present and both BAMs pass `samtools quickcheck`. Each full-reference coverage table has 13,807 rows; the candidate report has 41 rows; the class summary and input audit each have two rows.
+- Outputs remain isolated under `comparison_nb0507_14_resequencing/reyranella_validation/read_mapping_depth_matched/`; job `1558466` outputs remain under `read_mapping/`. Biological interpretation is pending comparison of the two reports.
+
+## 2026-11-02 Depth-matched Reyranella mapping prepared
+
+- Confirmed full-old-read mapping job `1558466` completed (`COMPLETED`, exit `0:0`) and left all its `read_mapping/` outputs in place.
+- Added a two-row depth-matched manifest for the downsampled old and new `SRR37852095_L7` paired FASTQs, each recorded as 914,516 pairs by existing metrics. Added a separate `read_mapping_depth_matched/` stage and SLURM script with isolated index, BAM, metrics, reports, and logs.
+- Added a compute-node input audit for gzip integrity, synchronized R1/R2 FASTQ records, exact pair counts, full 13,807-contig reference, and 41 unique candidates. The job records paths, checksums, tool versions, and mapping/report parameters and refuses to overwrite existing stage outputs.
+- Reused the existing candidate reporting definitions. The new SLURM job is ready for submission and has not been run; no depth-matched mapping results are available yet.
+
+## 2026-10-31 Reyranella candidate read-mapping workflow prepared
+
+- Identified the old Buck and new SRR37852095_L7 trimmed paired-read inputs; the old reads are related to the downsampled assembly and the SRR reads are the independent resequencing dataset.
+- Validated the complete old downsampled assembly contains 13,807 contigs and all 41 candidate IDs are present; created a two-row read manifest.
+- Added a Bowtie2 2.5.3 / samtools 1.20 SLURM workflow that maps both pairs to the complete assembly and generates full-assembly coverage plus a 41-contig comparison report. The job is ready for submission and has not been run.
+- Extended the candidate report to include >=5x breadth, per-contig proper-pair counts, and explicit MAPQ-based high-confidence, ambiguous, and intermediate read classes with an across-candidate summary. These outputs still await the SLURM job.
+- Inspected failed job `1558410`: it attempted to run the report script from SLURM's spool directory and produced no mapping outputs. Replaced source-path project-root detection with `SLURM_SUBMIT_DIR` plus a project-root guard; the job requires resubmission.
+
 ## 2026-10-31 NB0507-14 comparison figures reviewed and repaired
 
 - Verified the downsampled old assembly and self-mapping metrics are present and its orange series appears in the regenerated assembly and coverage plots.

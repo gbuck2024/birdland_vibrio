@@ -1,0 +1,14 @@
+parameter	value
+k	31
+canonical	min(forward,reverse_complement)
+ambiguous_bases	break 31-mer runs
+marker_definition	occurs in one candidate and no other assembly contig
+pair_count_unit	distinct synchronized pair; max one per candidate
+occurrence_unit	read window including repeats and both mates
+usable_bases	bases in unambiguous runs of at least 31
+reference_sha256	08d26c889f01226f068f3d0882f91716248e2629a25f9575ceae2e5c6eddae6e
+candidates_sha256	10810a094313b52958c0904ae74f684b4bab5177b53df204b53628a59c487984
+manifest_sha256	513804a168d732963a7621e48645b82aee63b22db9b37adabf710b62062da772
+python_version	3.9.25
+expected_pairs_per_sample	914516
+filter	exact sequence only; no base quality threshold

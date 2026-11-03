@@ -1,0 +1,12 @@
+timestamp	2026-04-14 18:48:57 CDT
+project_dir	/work/VibrioVulnificus/gbuck/20260105_Buck-wgs
+stage_dir	/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/kraken2_db
+db_dir	/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/kraken2_db/db
+container_image	/work/VibrioVulnificus/gbuck/20260105_Buck-wgs/kraken2.sif
+singularity_bin	singularity
+threads	16
+clean_after_build	1
+build_extra_args	none
+min_project_free_gb	250
+min_tmp_free_gb	150
+job_tmpdir	/tmp/kraken2_build_1319090

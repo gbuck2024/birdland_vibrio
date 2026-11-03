@@ -1,0 +1,265 @@
+sample	read	module	raw_status	trimmed_status	change
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Basic Statistics	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Per base sequence quality	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Per tile sequence quality	FAIL	FAIL	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Per sequence quality scores	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Per base sequence content	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Per sequence GC content	PASS	WARN	worsened
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Per base N content	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Sequence Length Distribution	PASS	WARN	worsened
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Overrepresented sequences	WARN	PASS	improved
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	1	Adapter Content	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Basic Statistics	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Per base sequence quality	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Per tile sequence quality	WARN	WARN	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Per sequence quality scores	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Per base sequence content	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Per sequence GC content	WARN	WARN	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Per base N content	PASS	PASS	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Sequence Length Distribution	PASS	WARN	worsened
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Overrepresented sequences	FAIL	WARN	improved
+Buck_BI0607_1_WKDL250009588-1A_233TFCLT4	2	Adapter Content	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Basic Statistics	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Per base sequence quality	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Per tile sequence quality	FAIL	FAIL	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Per sequence quality scores	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Per base sequence content	WARN	WARN	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Per sequence GC content	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Per base N content	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Sequence Length Distribution	PASS	WARN	worsened
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Overrepresented sequences	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	1	Adapter Content	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Basic Statistics	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Per base sequence quality	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Per tile sequence quality	WARN	WARN	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Per sequence quality scores	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Per base sequence content	WARN	WARN	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Per sequence GC content	WARN	PASS	improved
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Per base N content	PASS	PASS	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Sequence Length Distribution	PASS	WARN	worsened
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Overrepresented sequences	WARN	PASS	improved
+Buck_BI0607_2_WKDL250009588-1A_233TFCLT4	2	Adapter Content	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Basic Statistics	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Per base sequence quality	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Per tile sequence quality	FAIL	FAIL	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Per sequence quality scores	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Per base sequence content	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Per sequence GC content	WARN	WARN	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Per base N content	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Sequence Length Distribution	PASS	WARN	worsened
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Overrepresented sequences	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	1	Adapter Content	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Basic Statistics	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Per base sequence quality	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Per tile sequence quality	WARN	WARN	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Per sequence quality scores	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Per base sequence content	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Per sequence GC content	WARN	WARN	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Per base N content	PASS	PASS	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Sequence Length Distribution	PASS	WARN	worsened
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Overrepresented sequences	WARN	WARN	unchanged
+Buck_BS0607_9_WKDL250009588-1A_233TFCLT4	2	Adapter Content	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Basic Statistics	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Per base sequence quality	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Per tile sequence quality	FAIL	FAIL	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Per sequence quality scores	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Per base sequence content	WARN	WARN	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Per sequence GC content	WARN	WARN	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Per base N content	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Sequence Length Distribution	PASS	WARN	worsened
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Overrepresented sequences	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	1	Adapter Content	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Basic Statistics	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Per base sequence quality	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Per tile sequence quality	WARN	WARN	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Per sequence quality scores	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Per base sequence content	WARN	WARN	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Per sequence GC content	WARN	WARN	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Per base N content	PASS	PASS	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Sequence Length Distribution	PASS	WARN	worsened
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Overrepresented sequences	WARN	PASS	improved
+Buck_CB0707_82_WKDL250009588-1A_233TFCLT4	2	Adapter Content	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Basic Statistics	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Per base sequence quality	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Per tile sequence quality	FAIL	FAIL	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Per sequence quality scores	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Per base sequence content	WARN	WARN	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Per sequence GC content	WARN	WARN	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Per base N content	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Sequence Length Distribution	PASS	WARN	worsened
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Overrepresented sequences	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	1	Adapter Content	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Basic Statistics	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Per base sequence quality	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Per tile sequence quality	WARN	WARN	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Per sequence quality scores	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Per base sequence content	PASS	WARN	worsened
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Per sequence GC content	FAIL	WARN	improved
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Per base N content	PASS	PASS	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Sequence Length Distribution	PASS	WARN	worsened
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Overrepresented sequences	WARN	PASS	improved
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4	2	Adapter Content	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Basic Statistics	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Per base sequence quality	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Per tile sequence quality	FAIL	FAIL	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Per sequence quality scores	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Per base sequence content	WARN	WARN	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Per sequence GC content	WARN	WARN	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Per base N content	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Sequence Length Distribution	PASS	WARN	worsened
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Overrepresented sequences	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	1	Adapter Content	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Basic Statistics	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Per base sequence quality	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Per tile sequence quality	WARN	WARN	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Per sequence quality scores	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Per base sequence content	WARN	WARN	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Per sequence GC content	WARN	WARN	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Per base N content	PASS	PASS	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Sequence Length Distribution	PASS	WARN	worsened
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Sequence Duplication Levels	FAIL	FAIL	unchanged
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Overrepresented sequences	WARN	PASS	improved
+Buck_NB0507_8_WKDL250009588-1A_233TFCLT4	2	Adapter Content	PASS	PASS	unchanged
+SRR37851509	1	Basic Statistics	PASS	PASS	unchanged
+SRR37851509	1	Per base sequence quality	PASS	PASS	unchanged
+SRR37851509	1	Per tile sequence quality	WARN	WARN	unchanged
+SRR37851509	1	Per sequence quality scores	PASS	PASS	unchanged
+SRR37851509	1	Per base sequence content	FAIL	FAIL	unchanged
+SRR37851509	1	Per sequence GC content	WARN	WARN	unchanged
+SRR37851509	1	Per base N content	PASS	PASS	unchanged
+SRR37851509	1	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37851509	1	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37851509	1	Overrepresented sequences	PASS	PASS	unchanged
+SRR37851509	1	Adapter Content	PASS	PASS	unchanged
+SRR37851509	2	Basic Statistics	PASS	PASS	unchanged
+SRR37851509	2	Per base sequence quality	WARN	PASS	improved
+SRR37851509	2	Per tile sequence quality	FAIL	FAIL	unchanged
+SRR37851509	2	Per sequence quality scores	PASS	PASS	unchanged
+SRR37851509	2	Per base sequence content	FAIL	FAIL	unchanged
+SRR37851509	2	Per sequence GC content	WARN	WARN	unchanged
+SRR37851509	2	Per base N content	WARN	PASS	improved
+SRR37851509	2	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37851509	2	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37851509	2	Overrepresented sequences	PASS	PASS	unchanged
+SRR37851509	2	Adapter Content	PASS	PASS	unchanged
+SRR37851510	1	Basic Statistics	PASS	PASS	unchanged
+SRR37851510	1	Per base sequence quality	PASS	PASS	unchanged
+SRR37851510	1	Per tile sequence quality	WARN	WARN	unchanged
+SRR37851510	1	Per sequence quality scores	PASS	PASS	unchanged
+SRR37851510	1	Per base sequence content	FAIL	FAIL	unchanged
+SRR37851510	1	Per sequence GC content	WARN	WARN	unchanged
+SRR37851510	1	Per base N content	PASS	PASS	unchanged
+SRR37851510	1	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37851510	1	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37851510	1	Overrepresented sequences	PASS	PASS	unchanged
+SRR37851510	1	Adapter Content	PASS	PASS	unchanged
+SRR37851510	2	Basic Statistics	PASS	PASS	unchanged
+SRR37851510	2	Per base sequence quality	WARN	PASS	improved
+SRR37851510	2	Per tile sequence quality	FAIL	WARN	improved
+SRR37851510	2	Per sequence quality scores	PASS	PASS	unchanged
+SRR37851510	2	Per base sequence content	FAIL	FAIL	unchanged
+SRR37851510	2	Per sequence GC content	WARN	WARN	unchanged
+SRR37851510	2	Per base N content	WARN	PASS	improved
+SRR37851510	2	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37851510	2	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37851510	2	Overrepresented sequences	PASS	PASS	unchanged
+SRR37851510	2	Adapter Content	PASS	PASS	unchanged
+SRR37852094	1	Basic Statistics	PASS	PASS	unchanged
+SRR37852094	1	Per base sequence quality	PASS	PASS	unchanged
+SRR37852094	1	Per tile sequence quality	WARN	WARN	unchanged
+SRR37852094	1	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852094	1	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852094	1	Per sequence GC content	WARN	WARN	unchanged
+SRR37852094	1	Per base N content	PASS	PASS	unchanged
+SRR37852094	1	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852094	1	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852094	1	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852094	1	Adapter Content	PASS	PASS	unchanged
+SRR37852094	2	Basic Statistics	PASS	PASS	unchanged
+SRR37852094	2	Per base sequence quality	WARN	PASS	improved
+SRR37852094	2	Per tile sequence quality	FAIL	WARN	improved
+SRR37852094	2	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852094	2	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852094	2	Per sequence GC content	WARN	PASS	improved
+SRR37852094	2	Per base N content	WARN	PASS	improved
+SRR37852094	2	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852094	2	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852094	2	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852094	2	Adapter Content	PASS	PASS	unchanged
+SRR37852095	1	Basic Statistics	PASS	PASS	unchanged
+SRR37852095	1	Per base sequence quality	PASS	PASS	unchanged
+SRR37852095	1	Per tile sequence quality	WARN	WARN	unchanged
+SRR37852095	1	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852095	1	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852095	1	Per sequence GC content	WARN	WARN	unchanged
+SRR37852095	1	Per base N content	PASS	PASS	unchanged
+SRR37852095	1	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852095	1	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852095	1	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852095	1	Adapter Content	PASS	PASS	unchanged
+SRR37852095	2	Basic Statistics	PASS	PASS	unchanged
+SRR37852095	2	Per base sequence quality	WARN	PASS	improved
+SRR37852095	2	Per tile sequence quality	FAIL	WARN	improved
+SRR37852095	2	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852095	2	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852095	2	Per sequence GC content	WARN	WARN	unchanged
+SRR37852095	2	Per base N content	WARN	PASS	improved
+SRR37852095	2	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852095	2	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852095	2	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852095	2	Adapter Content	PASS	PASS	unchanged
+SRR37852096	1	Basic Statistics	PASS	PASS	unchanged
+SRR37852096	1	Per base sequence quality	PASS	PASS	unchanged
+SRR37852096	1	Per tile sequence quality	WARN	WARN	unchanged
+SRR37852096	1	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852096	1	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852096	1	Per sequence GC content	WARN	WARN	unchanged
+SRR37852096	1	Per base N content	PASS	PASS	unchanged
+SRR37852096	1	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852096	1	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852096	1	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852096	1	Adapter Content	PASS	PASS	unchanged
+SRR37852096	2	Basic Statistics	PASS	PASS	unchanged
+SRR37852096	2	Per base sequence quality	WARN	PASS	improved
+SRR37852096	2	Per tile sequence quality	FAIL	FAIL	unchanged
+SRR37852096	2	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852096	2	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852096	2	Per sequence GC content	WARN	PASS	improved
+SRR37852096	2	Per base N content	WARN	PASS	improved
+SRR37852096	2	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852096	2	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852096	2	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852096	2	Adapter Content	PASS	PASS	unchanged
+SRR37852097	1	Basic Statistics	PASS	PASS	unchanged
+SRR37852097	1	Per base sequence quality	PASS	PASS	unchanged
+SRR37852097	1	Per tile sequence quality	WARN	WARN	unchanged
+SRR37852097	1	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852097	1	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852097	1	Per sequence GC content	WARN	WARN	unchanged
+SRR37852097	1	Per base N content	PASS	PASS	unchanged
+SRR37852097	1	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852097	1	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852097	1	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852097	1	Adapter Content	PASS	PASS	unchanged
+SRR37852097	2	Basic Statistics	PASS	PASS	unchanged
+SRR37852097	2	Per base sequence quality	WARN	PASS	improved
+SRR37852097	2	Per tile sequence quality	FAIL	WARN	improved
+SRR37852097	2	Per sequence quality scores	PASS	PASS	unchanged
+SRR37852097	2	Per base sequence content	FAIL	FAIL	unchanged
+SRR37852097	2	Per sequence GC content	WARN	PASS	improved
+SRR37852097	2	Per base N content	WARN	PASS	improved
+SRR37852097	2	Sequence Length Distribution	WARN	WARN	unchanged
+SRR37852097	2	Sequence Duplication Levels	PASS	PASS	unchanged
+SRR37852097	2	Overrepresented sequences	PASS	PASS	unchanged
+SRR37852097	2	Adapter Content	PASS	PASS	unchanged

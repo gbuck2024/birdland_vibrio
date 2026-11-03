@@ -1,0 +1,3 @@
+sample_id	unique_proxy_mapq_ge20_reads	ambiguous_mapq0_reads	intermediate_mapq1_19_reads	proper_pairs	proper_pairs_both_mapq_ge20	unique_proxy_pct_mapped_reads	ambiguous_pct_mapped_reads
+Buck_NB0507_14_WKDL250009588-1A_233TFCLT4_L7	99940	2204	1811	33853	33419	96.1378	2.1201
+SRR37852095_L7	0	0	0	0	0	0	0
