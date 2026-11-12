@@ -1,0 +1,7 @@
+isolate	depth	master_table
+BI0607_1	25x	ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/BI0607_1_25x/metrics/BI0607_1_25x.master_contig_table.tsv
+BI0607_2	25x	ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/BI0607_2_25x/metrics/BI0607_2_25x.master_contig_table.tsv
+BS0607_9	25x	ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/BS0607_9_25x/metrics/BS0607_9_25x.master_contig_table.tsv
+CB0707_82	25x	ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/CB0707_82_25x/metrics/CB0707_82_25x.master_contig_table.tsv
+NB0507_14	25x	ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/NB0507_14_25x/metrics/NB0507_14_25x.master_contig_table.tsv
+NB0507_8	50x	ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/NB0507_8_50x/metrics/NB0507_8_50x.master_contig_table.tsv

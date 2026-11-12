@@ -62,4 +62,10 @@ Selections are BI0607_1 25× (medium), BI0607_2 25× (low), BS0607_9 25× (mediu
 
 The 8.2 MB contig distribution plotting table and the 63 MB combined master table remain reproducible intermediates outside Git; the source per-condition tables are retained on disk. The first figure render was retained separately because rounded stacked-bar percentages produced a clipping warning. The `depth_comparison_reviewed/` figures correct that display issue and render without warnings.
 
-Next, review the six provisional choices, then run reciprocal ANI/AF and other independent QC on the exact selected assemblies before treating species assignments or depth choices as final. Plot the six selected GC-versus-coverage panels with `scripts/plot_poster_gc_coverage_kraken.R` only after the choices are accepted, using a new three-column `isolate/depth/master_table` manifest and an empty output directory. Do not label nominal depth as measured mapped coverage.
+The six provisional selected-depth GC-versus-coverage scatterplots are in `figures/selected_gc_coverage_20261112/` as PNG/PDF pairs. `configs/abrcms_poster_gc_coverage_selected_20261112.tsv` maps each figure to its exact per-condition master table. `scripts/plot_poster_gc_coverage_kraken.R` plots one contig per point, GC percent on x, self-mapping coverage on a log10 y scale, point size by contig length, and broad Kraken2 class by color. Titles and filenames follow `[isolate] at [nominal depth]`. It omits zero-coverage contigs because log10(0) is undefined. The six figures include, respectively, 3,774/3,903, 5,523/5,563, 6,062/6,146, 415/473, 6,095/6,113, and 340/377 positive-coverage contigs in manifest order. Regenerate into a new empty directory with:
+
+```bash
+Rscript scripts/plot_poster_gc_coverage_kraken.R configs/abrcms_poster_gc_coverage_selected_20261112.tsv ani/abrcms_poster/ani/NEW_EMPTY_FIGURE_DIRECTORY
+```
+
+The selected depths remain provisional. Review the six plots and run reciprocal ANI/AF and independent QC on the exact selected assemblies before treating species assignments or depth choices as final. Nominal depth in each title is a downsampling target, not measured mapped coverage.

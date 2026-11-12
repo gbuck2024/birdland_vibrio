@@ -24,7 +24,8 @@ tables <- lapply(seq_len(nrow(manifest)), function(i) {
   if (!all(cols %in% names(x))) stop("Missing plotting column in: ", path)
   if (anyNA(x[, cols]) || any(!is.finite(x$gc_percent)) || any(!is.finite(x$coverage)) ||
       any(x$gc_percent < 0 | x$gc_percent > 100) || any(x$coverage < 0) || any(x$length_bp <= 0)) stop("Invalid plotting values: ", path)
-  if (length(unique(x$short_id)) != 1L || unique(x$short_id) != manifest$isolate[i]) stop("Isolate mismatch: ", path)
+  expected_id <- if (manifest$depth[i] == "full depth") manifest$isolate[i] else paste0(manifest$isolate[i], "_", manifest$depth[i])
+  if (length(unique(x$short_id)) != 1L || unique(x$short_id) != expected_id) stop("Sample/depth mismatch: ", path)
   x
 })
 palette <- c(Vibrio = "#0072B2", Bacillus = "#D55E00", Reyranella = "#009E73",
