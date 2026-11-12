@@ -1,5 +1,16 @@
 # Work Completed
 
+## 2026-11-11 ABRCMS downsampling and multi-species tree jobs
+
+- Slurm array `1564907` (`abrcms_depth`) completed with all 18 tasks at exit code 0. All 18 25×/50×/100× paired FASTQ sets and subsampling metrics files are nonempty; each metrics row reports the planned read-pair count and its matching sample ID. This is nominal coverage based on the configured 5.2 Mb genome and 149 bp mate assumptions; realized usable bases were not calculated in this check.
+- Slurm job `1564985` (`vibrio_mash_nj`) completed at exit code 0. The real Mash stage has 87 genomes, 7,569 directional distance rows, a nonempty Newick tree, and PDF/PNG figures. `tree_qc.tsv` reports one negative neighbor-joining branch; inspect it before interpreting placements. This is an unrooted exploratory genome-distance tree, not a conserved-gene maximum-likelihood result.
+
+## 2026-11-11 Multi-species Vibrio Mash tree stage prepared
+
+- Added `configs/multispecies_mash_panel.tsv` with 76 reference genomes (42 Mullis, 34 other NCBI entries), five selected Buck Vibrio assemblies, and all six newly sequenced SRR assemblies. All 87 paths exist and are nonempty. Buck BI0607_2 is excluded because its available taxonomically filtered assembly is Bacillus.
+- Added `scripts/multispecies_mash_tree.slurm`, `scripts/plot_multispecies_mash_tree.R`, and the stage README under `phylogeny/multispecies_mash/`. The proposed output is an unrooted Mash k=21, sketch-size 10,000 neighbor-joining distance tree with distinct source shapes and colors; ATCC 27562 remains a tip, not a root.
+- Verified Bash/R syntax, Mash 2.3 and R `ape` availability, the stage log directory, and a synthetic 87-tip end-to-end plotting smoke test. The real job has not been submitted and no real tree or biological result exists yet. The script records input SHA-256 hashes and refuses to overwrite an attempted run.
+
 ## 2026-11-02 Frozen Phase II cluster biology completed
 
 - Verified completed baseline and ablation outputs (jobs `1559048` and `1559050` in saved provenance; completion markers present). The baseline full-model partitions agree exactly with the ablation full-model partitions at k=2 and k=5, allowing one four-model comparison without changing frozen assignments.

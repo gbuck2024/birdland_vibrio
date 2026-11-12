@@ -1,0 +1,5 @@
+genomes	87
+pairwise_distances	7569
+negative_nj_branches	1
+rooting	unrooted
+method	Mash k=21 s=10000; neighbor joining

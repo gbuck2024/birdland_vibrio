@@ -1,0 +1,8 @@
+isolate	depth	master_table
+BI0607_1	full depth	ambiguous_isolate_resolution/blobtoolkit/BI0607_1/metrics/BI0607_1.master_contig_table.tsv
+BI0607_2	full depth	ambiguous_isolate_resolution/blobtoolkit/BI0607_2/metrics/BI0607_2.master_contig_table.tsv
+BS0607_9	full depth	ambiguous_isolate_resolution/blobtoolkit/BS0607_9/metrics/BS0607_9.master_contig_table.tsv
+CB0707_82	full depth	ambiguous_isolate_resolution/blobtoolkit/CB0707_82/metrics/CB0707_82.master_contig_table.tsv
+NB0507_14	full depth	ambiguous_isolate_resolution/blobtoolkit/NB0507_14/metrics/NB0507_14.master_contig_table.tsv
+NB0507_8	full depth	ambiguous_isolate_resolution/blobtoolkit/NB0507_8/metrics/NB0507_8.master_contig_table.tsv
+SRR37852095	full depth	ambiguous_isolate_resolution/blobtoolkit_sra/SRR37852095/metrics/SRR37852095.master_contig_table.tsv

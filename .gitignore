@@ -506,6 +506,18 @@
 /comparison_nb0507_14_resequencing/phase_ii_cluster_biology/*/COMPLETE
 
 # Python and notebook artifacts
+# Reproducible intermediates from the multi-species Mash tree stage
+/phylogeny/multispecies_mash/sketches/
+/phylogeny/multispecies_mash/panel.msh
+/phylogeny/multispecies_mash/distances.tsv
+/phylogeny/multispecies_mash/run.lock/
+/phylogeny/multispecies_mash/logs/
+
+# ABRCMS poster depth run: preserve code, manifests, metrics, and figures in Git.
+/ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/subsampled_reads/
+/ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/assembly/
+/ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/logs/
+
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/

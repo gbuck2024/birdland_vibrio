@@ -1,5 +1,16 @@
 # Next Steps
 
+## 2026-11-11 ABRCMS depth comparison after downsampling
+
+- The 18-task downsampling array `1564907` is complete. The next prepared compute step is `sbatch --array=0-17 scripts/abrcms_poster_assemble.slurm` from the project root. The assembly job checks gzipped read-pair synchronization and exact counts before running SPAdes; its Slurm log directory is prepared.
+- After all 18 assemblies finish with exit code 0, verify `contigs.fasta`, `scaffolds.fasta`, `params.txt`, and logs for each condition. Then prepare self-mapping, Kraken2 contig classification, master tables, and assembly-quality comparisons before selecting one depth per isolate for the poster plots.
+
+## 2026-11-11 Multi-species Vibrio tree stage
+
+- From `/work/VibrioVulnificus/gbuck/20260105_Buck-wgs`, submit `sbatch scripts/multispecies_mash_tree.slurm`. Do not submit from the home directory: Slurm must resolve this project root through `SLURM_SUBMIT_DIR`.
+- After Slurm reports exit 0, verify 87 tips, 7,569 directional Mash distances, `phylogeny/multispecies_mash/metadata/tree_qc.tsv`, and the Newick/PDF/PNG outputs. Inspect any negative NJ branches and check Buck/SRR positions against ANI and assembly QC before interpreting the tree.
+- Treat this Mash/NJ result as exploratory genome similarity. A cross-species conserved-marker maximum-likelihood analysis would be a separate follow-up stage.
+
 ## 2026-11-02 Frozen Phase II cluster biology
 
 - Review `comparison_nb0507_14_resequencing/phase_ii_cluster_biology/biology_20261102/report.md`, the five source TSVs, and the two composition SVGs. The exact Kraken2 counts and assembled bp for every cluster are in `kraken_composition.tsv`; GC, length, and self-mapping coverage five-number summaries are in `feature_distributions.tsv`.

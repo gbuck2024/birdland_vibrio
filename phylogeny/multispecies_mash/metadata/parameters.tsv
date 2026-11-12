@@ -1,0 +1,6 @@
+parameter	value
+method	Mash distance plus neighbor joining
+mash_k	21
+mash_sketch_size	10000
+mash_dist_threads	8
+slurm_job_id	1564985
