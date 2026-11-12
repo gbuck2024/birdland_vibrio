@@ -1,0 +1,2 @@
+reference_id	accession	organism	strain	length_bp	contigs	sha256	url	retrieved_date	note
+b_paralicheniformis_atcc_9945a	NC_021362.1	Bacillus paralicheniformis	ATCC 9945a	4376305	1	067a0a231d4a3735af621b2f82849913a0307e7cd73c8b8ab027cced9b23c3f4	https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NC_021362.1&rettype=fasta&retmode=text	2026-11-12	Separate comparator for BI0607_2; Kraken2 label is provisional, not proof of identity.

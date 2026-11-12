@@ -30,6 +30,10 @@ else
 fi
 
 cd "${PROJECT_DIR}"
+if [ ! -s PROJECT_BRIEF.md ] || [ ! -s scripts/summarize_fastani_matrix.py ]; then
+  echo "ERROR: Submit fastANI jobs from the project root" >&2
+  exit 1
+fi
 
 MODE="${ANI_MODE:-compare}"
 QUERY_MANIFEST="${QUERY_MANIFEST:-configs/reference_sequence_manifest.tsv}"
@@ -240,9 +244,15 @@ NORMALIZED_QUERY_MANIFEST="${METRICS_DIR}/query_manifest.normalized.tsv"
 NORMALIZED_REFERENCE_MANIFEST="${METRICS_DIR}/reference_manifest.normalized.tsv"
 REFERENCE_LIST_FILE="${METRICS_DIR}/fastani_reference_list.txt"
 
-normalize_manifest "${QUERY_MANIFEST}" "${EXTRA_QUERY_MANIFEST}" "${NORMALIZED_QUERY_MANIFEST}"
-normalize_manifest "${REFERENCE_MANIFEST}" "${EXTRA_REFERENCE_MANIFEST}" "${NORMALIZED_REFERENCE_MANIFEST}"
-awk -F '\t' 'NR > 1 {print $2}' "${NORMALIZED_REFERENCE_MANIFEST}" > "${REFERENCE_LIST_FILE}"
+if [ "${PREPARED_MANIFESTS:-0}" = 1 ]; then
+  require_file "${NORMALIZED_QUERY_MANIFEST}" "Prepared query manifest"
+  require_file "${NORMALIZED_REFERENCE_MANIFEST}" "Prepared reference manifest"
+  require_file "${REFERENCE_LIST_FILE}" "Prepared fastANI reference list"
+else
+  normalize_manifest "${QUERY_MANIFEST}" "${EXTRA_QUERY_MANIFEST}" "${NORMALIZED_QUERY_MANIFEST}"
+  normalize_manifest "${REFERENCE_MANIFEST}" "${EXTRA_REFERENCE_MANIFEST}" "${NORMALIZED_REFERENCE_MANIFEST}"
+  awk -F '\t' 'NR > 1 {print $2}' "${NORMALIZED_REFERENCE_MANIFEST}" > "${REFERENCE_LIST_FILE}"
+fi
 
 log "START fastani_matrix_array.slurm"
 log "Project directory: ${PROJECT_DIR}"
@@ -264,6 +274,16 @@ done < "${REFERENCE_LIST_FILE}"
 
 if [ "${MODE}" = "matrix" ] || [ "${MODE}" = "summary" ]; then
   require_file "${SUMMARY_SCRIPT}" "ANI matrix summary script"
+  if [ "${SAFE_NEW_STAGE:-0}" = 1 ]; then
+    while IFS=$'\t' read -r query_id rest; do
+      [ "${query_id}" = genome_id ] && continue
+      [ -e "${OUTPUT_DIR}/${query_id}.fastani.tsv" ] || { log "ERROR: Missing raw ANI output for ${query_id}" >&2; exit 1; }
+    done < "${NORMALIZED_QUERY_MANIFEST}"
+    for metric in fastani_matrix_long.tsv fastani_genome_matrix.tsv fastani_alignment_fraction_matrix.tsv fastani_genome_matrix_af_ge_0_50.tsv fastani_species_max_matrix.tsv fastani_species_mean_matrix.tsv; do
+      [ ! -e "${METRICS_DIR}/${metric}" ] || { log "ERROR: Matrix output already exists: ${METRICS_DIR}/${metric}" >&2; exit 1; }
+    done
+    mkdir "${STAGE_DIR}/matrix.lock" || { log "ERROR: Matrix summary already attempted" >&2; exit 1; }
+  fi
   QUERY_MANIFEST="${QUERY_MANIFEST}" \
   REFERENCE_MANIFEST="${REFERENCE_MANIFEST}" \
   EXTRA_QUERY_MANIFEST="${EXTRA_QUERY_MANIFEST}" \
@@ -306,7 +326,12 @@ fi
 require_file "${query_fasta}" "ANI query FASTA"
 
 sample_output="${OUTPUT_DIR}/${sample_id}.fastani.tsv"
-rm -f "${sample_output}"
+if [ "${SAFE_NEW_STAGE:-0}" = 1 ]; then
+  [ ! -e "${sample_output}" ] || { log "ERROR: ANI output already exists: ${sample_output}" >&2; exit 1; }
+  mkdir "${sample_output}.lock" || { log "ERROR: ANI query already attempted: ${sample_id}" >&2; exit 1; }
+else
+  rm -f "${sample_output}"
+fi
 
 log "Query ID: ${sample_id}"
 log "Query species: ${query_species}"

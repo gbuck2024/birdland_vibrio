@@ -1,0 +1,14 @@
+parameter	value
+condition	100x
+reference_count	76
+buck_assembly_count	6
+matrix_dimension	82x82
+assembly_type	SPAdes contigs.fasta
+source_assembly_summary	ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/assembly_summary.tsv
+original_matrix	ani/reference_panel_plus_unknown_matrix/metrics/fastani_genome_matrix.tsv
+fastani_fraglen	3000
+fastani_kmer	16
+fastani_min_fraction	0.2
+af_definition	fragment_mappings/query_fragments (query direction)
+original_query_manifest_sha256	a1ee4a6cd5711f4730e0fb62657854bdc2fa998c1c67307365242a5d35e26547
+assembly_summary_sha256	644c7b592cf65d8c3f3a607551f1da3b5753145616044a1775f12b71ba81ebea

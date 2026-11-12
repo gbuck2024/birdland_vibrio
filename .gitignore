@@ -521,6 +521,25 @@
 /ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/all_conditions.master_contig_table.tsv
 /ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/contig_distribution_plot_data.tsv
 /ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/figures/depth_comparison/
+/ani/abrcms_poster/ani/depth_ani_matrix_20261112/*/outputs/
+/ani/abrcms_poster/ani/depth_ani_matrix_20261112/*/logs/
+/ani/abrcms_poster/ani/depth_ani_matrix_20261112/*/matrix.lock/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/logs/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/coverage/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/fixed_reference_coverage/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/fixed_reference_coverage_cigar/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/bacillus_fastani/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/busco/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/busco_downloads/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/busco_prepare.lock/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/singularity_cache/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/singularity_tmp/
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/*.sif
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/reference/*.fasta
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/BUSCO_PREPARE_COMPLETE
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/bacillus_comparison_manifest.tsv
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/metrics/exact_depth_comparison.tsv
+/ani/abrcms_poster/ani/exact_depth_validation_20261112/metrics/exact_depth_report.md
 
 __pycache__/
 *.py[cod]

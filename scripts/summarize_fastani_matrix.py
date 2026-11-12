@@ -143,8 +143,27 @@ def main() -> int:
     references = load_manifest_set(REFERENCE_MANIFEST, EXTRA_REFERENCE_MANIFEST)
     METRICS_DIR.mkdir(parents=True, exist_ok=True)
 
-    write_normalized_manifest(METRICS_DIR / "query_manifest.normalized.tsv", queries)
-    write_normalized_manifest(METRICS_DIR / "reference_manifest.normalized.tsv", references)
+    if os.environ.get("SAFE_NEW_STAGE") == "1":
+        missing = [str(OUTPUT_DIR / f"{query['genome_id']}.fastani.tsv") for query in queries
+                   if not (OUTPUT_DIR / f"{query['genome_id']}.fastani.tsv").is_file()]
+        if missing:
+            raise SystemExit("ERROR: Missing fastANI query outputs before summary:\n" + "\n".join(missing))
+        for name in ("fastani_matrix_long.tsv", "fastani_genome_matrix.tsv",
+                     "fastani_alignment_fraction_matrix.tsv", "fastani_genome_matrix_af_ge_0_50.tsv",
+                     "fastani_species_max_matrix.tsv", "fastani_species_mean_matrix.tsv"):
+            if (METRICS_DIR / name).exists():
+                raise SystemExit(f"ERROR: Refusing to replace matrix output: {METRICS_DIR / name}")
+    if os.environ.get("PREPARED_MANIFESTS") == "1":
+        for name, expected in (("query_manifest.normalized.tsv", queries),
+                               ("reference_manifest.normalized.tsv", references)):
+            path = METRICS_DIR / name
+            with path.open(newline="", encoding="utf-8") as handle:
+                saved = list(csv.DictReader(handle, delimiter="\t"))
+            if saved != expected:
+                raise SystemExit(f"ERROR: Prepared normalized manifest differs from inputs: {path}")
+    else:
+        write_normalized_manifest(METRICS_DIR / "query_manifest.normalized.tsv", queries)
+        write_normalized_manifest(METRICS_DIR / "reference_manifest.normalized.tsv", references)
 
     reference_by_path = {row["genome_fasta"]: row for row in references}
     long_rows: list[dict[str, str]] = []

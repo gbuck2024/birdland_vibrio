@@ -16,6 +16,22 @@ The job sketches each complete assembly with Mash 2.3 (`k=21`, `s=10000`) and co
 
 Shapes and colors show provenance: gray square = NCBI reference; green diamond = Mullis reference; red circle = Buck isolate; blue triangle = SRR isolate. This provenance classification does not imply distinct biological isolates; check same-isolate metadata before interpreting close pairs.
 
+## Species-colored, sample-labeled view
+
+The completed tree also has a plot-only view in `figures/species_labeled_20261112_v2/`. Reference tip colors encode the species recorded in `configs/reference_sequence_manifest.tsv` (Mullis references are *V. vulnificus*). Squares identify other NCBI references and diamonds identify Mullis references. Buck assemblies are red circles and SRR assemblies are blue triangles; their colors identify the project dataset, **not** an asserted species. Only the 11 Buck/SRR assemblies have name labels. Short leader lines separate nearby names. `tip_style.tsv` gives the exact color, shape, and reference species for every tip.
+
+Open the SVG in a browser or the PDF in a viewer to zoom without pixelation. The PNG is a convenient fixed-resolution preview. This redraw uses the saved Newick tree and does not recalculate Mash distances or change topology. Species labels for references follow the reference manifest; isolate placements remain exploratory, and Buck BI0607_1/NB0507_14 remain provisional or mixed.
+
+To reproduce the view in a **new, empty output directory** from the project root:
+
+```bash
+Rscript scripts/plot_multispecies_mash_tree_species.R \
+  configs/multispecies_mash_panel.tsv \
+  configs/reference_sequence_manifest.tsv \
+  phylogeny/multispecies_mash/tree/unrooted_mash_nj.nwk \
+  phylogeny/multispecies_mash/figures/species_labeled_NEW_RUN
+```
+
 ## Run
 
 From the project root, after reviewing the panel manifest:

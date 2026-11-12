@@ -1,0 +1,88 @@
+genome_id	source_group	reference_species	plotted_color	plotted_shape
+v_alginolyticus	NCBI reference	V. alginolyticus	#C77C00	22
+valginolyticus_e110	NCBI reference	V. alginolyticus	#C77C00	22
+valginolyticus_v208	NCBI reference	V. alginolyticus	#C77C00	22
+valginolyticus_zj_0	NCBI reference	V. alginolyticus	#C77C00	22
+valginolyticus_hlbs_07	NCBI reference	V. alginolyticus	#C77C00	22
+vdiabolicus_fa3	NCBI reference	V. diabolicus	#238B73	22
+vdiabolicus_fdaargos_105	NCBI reference	V. diabolicus	#238B73	22
+vdiabolicus_zf102	NCBI reference	V. diabolicus	#238B73	22
+vdiabolicus_mzt14	NCBI reference	V. diabolicus	#238B73	22
+vdiabolicus_3098	NCBI reference	V. diabolicus	#238B73	22
+vostreicida_cect_7398	NCBI reference	V. ostreicida	#7B8441	22
+vostreicida_ucd_kl16	NCBI reference	V. ostreicida	#7B8441	22
+v_ostreicida_PP203	NCBI reference	V. ostreicida	#7B8441	22
+v_ostreicida_r172	NCBI reference	V. ostreicida	#7B8441	22
+v_parahaemolyticus	NCBI reference	V. parahaemolyticus	#3465B4	22
+vpara_atcc_17802	NCBI reference	V. parahaemolyticus	#3465B4	22
+vpara_vp18	NCBI reference	V. parahaemolyticus	#3465B4	22
+vpara_lvp2	NCBI reference	V. parahaemolyticus	#3465B4	22
+vpara_2012aw_0154	NCBI reference	V. parahaemolyticus	#3465B4	22
+v_vulnificus	NCBI reference	V. vulnificus	#805323	22
+vv_7356	NCBI reference	V. vulnificus	#805323	22
+vv_env1	NCBI reference	V. vulnificus	#805323	22
+vv_2142_77	NCBI reference	V. vulnificus	#805323	22
+vv_24_vb00699	NCBI reference	V. vulnificus	#805323	22
+vcidicii_2423_01	NCBI reference	V. cidicii	#7B61A8	22
+vcidicii_vc01	NCBI reference	V. cidicii	#7B61A8	22
+vcidicii_2020rz130	NCBI reference	V. cidicii	#7B61A8	22
+vcidicii_pnusav005519	NCBI reference	V. cidicii	#7B61A8	22
+vcidicii_2538_88	NCBI reference	V. cidicii	#7B61A8	22
+vnavarrensis_atcc_51183	NCBI reference	V. navarrensis	#B65D8C	22
+vnavarrensis_20_vb00237	NCBI reference	V. navarrensis	#B65D8C	22
+vnavarrensis_2462_79	NCBI reference	V. navarrensis	#B65D8C	22
+vnavarrensis_08_2462	NCBI reference	V. navarrensis	#B65D8C	22
+vnavarrensis_pnusav006652	NCBI reference	V. navarrensis	#B65D8C	22
+mullis2019_18022	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18023	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18024	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18025	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18026	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18027	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18028	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18029	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18030	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18031	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18032	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18033	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18034	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18035	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18036	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18037	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18038	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18039	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18040	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18041	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18042	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18043	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18044	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18045	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18047	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18048	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18049	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18050	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18051	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18052	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18053	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18054	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18055	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18056	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18057	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18058	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18059	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18060	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18061	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18062	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18063	Mullis reference	V. vulnificus	#805323	23
+mullis2019_18064	Mullis reference	V. vulnificus	#805323	23
+Buck_BI0607_1	Buck isolate		#D43F3A	21
+Buck_BS0607_9	Buck isolate		#D43F3A	21
+Buck_CB0707_82	Buck isolate		#D43F3A	21
+Buck_NB0507_14	Buck isolate		#D43F3A	21
+Buck_NB0507_8	Buck isolate		#D43F3A	21
+SRR37851509_L7	SRR isolate		#176BB3	24
+SRR37851510_L7	SRR isolate		#176BB3	24
+SRR37852094_L7	SRR isolate		#176BB3	24
+SRR37852095_L7	SRR isolate		#176BB3	24
+SRR37852096_L7	SRR isolate		#176BB3	24
+SRR37852097_L7	SRR isolate		#176BB3	24

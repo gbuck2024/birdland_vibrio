@@ -1,12 +1,27 @@
 # Next Steps
 
+## 2026-11-12 After exact-depth validation
+
+- Use `ani/abrcms_poster/ani/exact_depth_validation_20261112/metrics/exact_depth_comparison_v2.tsv` and `exact_depth_report_v2.md` for the completed 24-assembly comparison. The earlier unsuffixed table/report used PAF match estimates without CIGAR and underreported coverage; preserve them for audit but do not interpret their coverage values. All three depth ANI/AF matrices, the separate BI0607_2 *Bacillus* comparator, BUSCO markers, and CIGAR-corrected fixed-reference coverage are complete.
+- Revisit the six provisional depth choices with the new BUSCO duplication and fixed-reference coverage columns, especially BI0607_2 and NB0507_14. Do not equate duplicated BUSCO markers with a numerical contaminant fraction or assign a species from one reference comparison. The nominal 25×/50×/100× conditions and the original full trimmed-read assembly are correlated data from each sequencing run.
+- For BI0607_2, compare additional *Bacillus* references and inspect whether the putative *Bacillus* component has consistent read support; the 76-genome *Vibrio* panel gave no depth-assembly hit. For NB0507_14, compare alternative *Vibrio* species and the old-versus-new read evidence before interpreting the *V. diabolicus* comparator result. Consider a dedicated CheckM2 analysis if a compatible tool and database become available; BUSCO duplication is only a contamination signal.
+- Confirm final poster depth choices against per-contig read mapping, assembly errors, and isolate provenance. Record any revised selection in a new decision manifest rather than replacing the prior `selected_depth.tsv`.
+
+## 2026-11-12 Four-condition ANI/AF matrices prepared
+
+- This preparation was subsequently executed and validated; see the completed exact-depth section above. The original and three depth stages each contain checked 82×82 ANI/AF matrices. Do not resubmit their arrays over existing outputs. Interpret 25×/50×/100× as nominal subsampling targets.
+
+## 2026-11-12 Multi-species tree figure review
+
+- Review the revised, zoomable SVG/PDF under `phylogeny/multispecies_mash/figures/species_labeled_20261112_v2/`. The `tip_style.tsv` maps every reference color to its recorded species. Compare the 11 labeled Buck/SRR positions with reciprocal ANI/AF and assembly QC before interpreting species or close branches; the Mash/NJ tree still has one negative branch.
+
 ## 2026-11-11 ABRCMS depth comparison after downsampling
 
 - Downsampling `1564907` and assembly `1564986` are complete: all 18 assembly tasks exited 0 and their required FASTA, parameters, and SPAdes logs are nonempty. Assembly quality still needs comparison.
 - The first post-assembly submission `1565059` failed at sample-ID validation before any condition output was created. The validator was repaired, and corrected array `1565077` completed all 18 tasks.
 - The corrected array `1565077` completed all 18 tasks at exit 0 with the required per-condition coverage and taxonomy files. Finalization `1565565` has also completed; no further processing job is needed before depth comparison.
 - Finalization job `1565565` completed with 18 assembly and read-base rows and 142,493 combined master-contig rows. These tables fed the depth comparison below.
-- The 18-depth comparison and six provisional choices are in `ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/selected_depth.tsv` and `depth_comparison_report.md`. The GC-versus-log-coverage/Kraken2 point plots for those choices are in `figures/selected_gc_coverage_20261112/`; density distributions remain in `figures/depth_comparison_reviewed/`. Inspect the low-confidence BI0607_2 and NB0507_14 choices closely. Run exact-selected-assembly reciprocal ANI/AF and independent completeness/contamination checks before confirming species labels or depth choices.
+- The 18-depth comparison and six provisional choices are in `ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/selected_depth.tsv` and `depth_comparison_report.md`. The GC-versus-log-coverage/Kraken2 point plots for those choices are in `figures/selected_gc_coverage_20261112/`; density distributions remain in `figures/depth_comparison_reviewed/`. The subsequent exact-depth ANI/AF, fixed-reference coverage, and BUSCO checks are reported in the completed validation section above; review them before confirming the low-confidence BI0607_2 and NB0507_14 choices or species labels.
 - Review metrics and each per-condition master table before selecting one depth per isolate for the poster plots. The stage README gives the input/output contract and limitations.
 
 ## 2026-11-11 Multi-species Vibrio tree stage
