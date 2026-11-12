@@ -2,8 +2,12 @@
 
 ## 2026-11-11 ABRCMS depth comparison after downsampling
 
-- The 18-task downsampling array `1564907` is complete. The next prepared compute step is `sbatch --array=0-17 scripts/abrcms_poster_assemble.slurm` from the project root. The assembly job checks gzipped read-pair synchronization and exact counts before running SPAdes; its Slurm log directory is prepared.
-- After all 18 assemblies finish with exit code 0, verify `contigs.fasta`, `scaffolds.fasta`, `params.txt`, and logs for each condition. Then prepare self-mapping, Kraken2 contig classification, master tables, and assembly-quality comparisons before selecting one depth per isolate for the poster plots.
+- Downsampling `1564907` and assembly `1564986` are complete: all 18 assembly tasks exited 0 and their required FASTA, parameters, and SPAdes logs are nonempty. Assembly quality still needs comparison.
+- The first post-assembly submission `1565059` failed at sample-ID validation before any condition output was created. The validator was repaired, and corrected array `1565077` completed all 18 tasks.
+- The corrected array `1565077` completed all 18 tasks at exit 0 with the required per-condition coverage and taxonomy files. Finalization `1565565` has also completed; no further processing job is needed before depth comparison.
+- Finalization job `1565565` completed with 18 assembly and read-base rows and 142,493 combined master-contig rows. These tables fed the depth comparison below.
+- The 18-depth comparison and six provisional choices are now in `ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/selected_depth.tsv` and `depth_comparison_report.md`; reviewed distributions are in `figures/depth_comparison_reviewed/`. Inspect the low-confidence BI0607_2 and NB0507_14 choices closely. Run exact-selected-assembly reciprocal ANI/AF and independent completeness/contamination checks before confirming species labels or making selected-depth poster plots.
+- Review metrics and each per-condition master table before selecting one depth per isolate for the poster plots. The stage README gives the input/output contract and limitations.
 
 ## 2026-11-11 Multi-species Vibrio tree stage
 

@@ -517,6 +517,10 @@
 /ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/subsampled_reads/
 /ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/assembly/
 /ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/logs/
+/ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/
+/ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/all_conditions.master_contig_table.tsv
+/ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/contig_distribution_plot_data.tsv
+/ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/figures/depth_comparison/
 
 __pycache__/
 *.py[cod]
