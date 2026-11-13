@@ -1,5 +1,10 @@
 # Work Completed
 
+## 2026-11-12 ABRCMS original-versus-25× poster figure completed
+
+- Ran `python3 ani/abrcms_poster/ani/figures/assembly_original_vs_25x/assembly_comparison_4panel.py` against the validated `ani/abrcms_poster/ani/exact_depth_validation_20261112/metrics/exact_depth_comparison_v2.tsv`. The script checked exactly one original and one 25× row per isolate, matching selected references within each pair, and valid plotted measurements before creating outputs. No SLURM job was needed for this bounded plotting step.
+- Created the 15 × 11 inch four-panel SVG, vector PDF, 600 DPI PNG (9000 × 6600 pixels), reproducible Python script, and scientific caption under `ani/abrcms_poster/ani/figures/assembly_original_vs_25x/`. Inspected the rendered PNG for text clipping, overlap, spacing, and readable scales; PDF fonts are embedded. ANI uses a labeled 90–100% axis, AF is assembly → reference, and contigs/N50 use labeled logarithmic axes. The six pairs are correlated assemblies from six isolate labels, without significance testing or contaminant-removal claims.
+
 ## 2026-11-12 Exact-depth ANI, fixed-reference coverage, and BUSCO validation completed
 
 - Ran the 25×, 50×, and 100× 82-query fastANI arrays (`1566096`, `1566179`, `1566184`) and summary jobs (`1566178`, `1566344`, `1566345`). Every array task exited `0:0`. `python3 scripts/validate_abrcms_depth_ani_matrices.py --mode complete --depth all` passed for the original full trimmed-read baseline and all three depth panels: 82 raw files, 82×82 ANI/AF matrices, and 6,724 long-table rows per panel. Inputs and fastANI options are recorded in each panel's manifests and `parameters.tsv`; these matrices include the same 76 *Vibrio* references and six condition-specific Buck assemblies.

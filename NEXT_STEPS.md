@@ -1,5 +1,9 @@
 # Next Steps
 
+## 2026-11-12 ABRCMS poster figure review
+
+- Place the completed original-versus-25× four-panel figure from `ani/abrcms_poster/ani/figures/assembly_original_vs_25x/` into the poster at its intended 15-inch width, using the SVG or PDF for print. Keep its caption and fixed-reference caveat with the figure; do not interpret the six paired comparisons as independent assembly replicates or a universal 25× optimum.
+
 ## 2026-11-12 After exact-depth validation
 
 - Use `ani/abrcms_poster/ani/exact_depth_validation_20261112/metrics/exact_depth_comparison_v2.tsv` and `exact_depth_report_v2.md` for the completed 24-assembly comparison. The earlier unsuffixed table/report used PAF match estimates without CIGAR and underreported coverage; preserve them for audit but do not interpret their coverage values. All three depth ANI/AF matrices, the separate BI0607_2 *Bacillus* comparator, BUSCO markers, and CIGAR-corrected fixed-reference coverage are complete.
