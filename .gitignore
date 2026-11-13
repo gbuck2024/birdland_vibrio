@@ -563,3 +563,10 @@ __pycache__/
 # OS junk
 .DS_Store
 Thumbs.db
+
+# NB0507-14 Fig. 2 render iterations retained locally for audit, not publication.
+/Rplots.pdf
+/ani/abrcms_poster/ani/figures/nb0507_14_original_vs_25x_20261112/
+/ani/abrcms_poster/ani/figures/nb0507_14_original_vs_25x_20261112_v2/
+/ani/abrcms_poster/ani/figures/nb0507_14_original_vs_25x_20261112_v3/
+/ani/abrcms_poster/ani/figures/nb0507_14_original_vs_25x_20261112_v4/

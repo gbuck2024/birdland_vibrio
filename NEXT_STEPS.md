@@ -1,5 +1,9 @@
 # Next Steps
 
+## 2026-11-12 NB0507-14 Fig. 2
+
+- Place the reviewed two-panel figure from `ani/abrcms_poster/ani/figures/nb0507_14_original_vs_25x_20261112_v5/` into the poster, preferably using its vector PDF or SVG. Keep `figure_caption.md` with the figure. The two panels share GC/log-coverage scales and broad Kraken2 colors; the inset expands low coverage in the 25× panel. Do not infer contaminant removal from the composition difference.
+
 ## 2026-11-12 ABRCMS poster figure review
 
 - Place the completed original-versus-25× four-panel figure from `ani/abrcms_poster/ani/figures/assembly_original_vs_25x/` into the poster at its intended 15-inch width, using the SVG or PDF for print. Keep its caption and fixed-reference caveat with the figure; do not interpret the six paired comparisons as independent assembly replicates or a universal 25× optimum.

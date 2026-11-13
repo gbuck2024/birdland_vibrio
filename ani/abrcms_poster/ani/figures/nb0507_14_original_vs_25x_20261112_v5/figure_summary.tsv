@@ -1,0 +1,3 @@
+condition	contigs	assembled_bp	plotted_positive_coverage_contigs	omitted_zero_coverage_contigs
+original_full_reads	72565	46406154	72155	410
+nominal_25x	6113	8012250	6095	18

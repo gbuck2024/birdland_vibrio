@@ -1,5 +1,14 @@
 # Work Completed
 
+## 2026-11-12 NB0507-14 two-panel GC × self-coverage × Kraken2 figure
+
+- Ran `Rscript scripts/plot_nb0507_14_gc_coverage_two_panel.R ambiguous_isolate_resolution/blobtoolkit/NB0507_14/metrics/NB0507_14.master_contig_table.tsv ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/postassembly/NB0507_14_25x/metrics/NB0507_14_25x.master_contig_table.tsv ani/abrcms_poster/ani/figures/nb0507_14_original_vs_25x_20261112_v5` on the login node as a bounded plotting task. Input validation confirmed 72,565 original contigs/46,406,154 bp and 6,113 nominal-25× contigs/8,012,250 bp. The final PDF, SVG, 600 DPI PNG, summary TSV, and caption are in the v5 directory. Both main panels use GC 10–100% and logarithmic self-coverage 0.1–10,000×; a labeled inset expands the 25× 0.5–10× region. The shared legend distinguishes Vibrio, Reyranella, Bacillus, other classified, and unclassified contigs. PDF is one 15 × 8.5 inch page; PNG is 9000 × 5100 pixels. Visually checked plot alignment, legend, inset, and text. No heavy analyses or SLURM jobs were run.
+- Earlier render iterations are retained locally for audit and ignored by Git. The first lacked an SVG because `svglite` was unavailable; subsequent iterations exposed PNG resolution and layout issues. The v5 outputs are the reviewed deliverable. Self-mapping and taxonomic interpretation caveats are in the caption.
+
+## 2026-11-12 NB0507-14 GC × coverage × Kraken2 Fig. 2 source review
+
+- Inspected the existing original-full and nominal-25× plot manifests, source master contig tables, self-mapping/Kraken2 parameter records, and plotting script without rerunning compute-heavy work. Recalculated contig counts and assembled-bp Kraken2 composition directly from the two master tables. The original has 72,565 contigs and 46,406,154 bp; the 25× condition has 6,113 contigs and 8,012,250 bp. The source paths, quantitative results, metric comparability, limits, and two-panel recommendation are recorded in `ani/abrcms_poster/ani/gc_coverage_kraken_depth_20261111/metrics/nb0507_14_original_vs_25x_figure_review_20261112.md`. No new figure was generated.
+
 ## 2026-11-12 ABRCMS original-versus-25× poster figure completed
 
 - Ran `python3 ani/abrcms_poster/ani/figures/assembly_original_vs_25x/assembly_comparison_4panel.py` against the validated `ani/abrcms_poster/ani/exact_depth_validation_20261112/metrics/exact_depth_comparison_v2.tsv`. The script checked exactly one original and one 25× row per isolate, matching selected references within each pair, and valid plotted measurements before creating outputs. No SLURM job was needed for this bounded plotting step.
